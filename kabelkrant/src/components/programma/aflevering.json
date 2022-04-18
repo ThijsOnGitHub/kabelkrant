@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_programma_afleverings",
+  "info": {
+    "displayName": "Aflevering",
+    "icon": "video",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "StartingTime": {
+      "type": "datetime",
+      "required": true
+    },
+    "IsActive": {
+      "type": "boolean"
+    }
+  }
+}

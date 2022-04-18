@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "videos",
+  "info": {
+    "singularName": "video",
+    "pluralName": "videos",
+    "displayName": "Video",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Video": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "videos",
+        "audios",
+        "files"
+      ],
+      "pluginOptions": {}
+    },
+    "Afleveringen": {
+      "type": "component",
+      "repeatable": true,
+      "pluginOptions": {},
+      "component": "programma.aflevering",
+      "min": 0
+    },
+    "Name": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
