@@ -1,18 +1,15 @@
 {
   "collectionName": "components_programma_afleverings",
   "info": {
-    "displayName": "Aflevering",
+    "displayName": "Uitzending",
     "icon": "video",
     "description": ""
   },
   "options": {},
   "attributes": {
-    "StartingTime": {
+    "startTime": {
       "type": "datetime",
       "required": true
-    },
-    "IsActive": {
-      "type": "boolean"
     }
   }
 }

@@ -2,10 +2,20 @@ module.exports = ({ env }) => ({
   // ...
   email: {
     config: {
-      provider: 'sendmail',
+      provider: 'nodemailer',
+      providerOptions: {
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: "kabelkrantonline@gmail.com",
+          pass: env('GMAIL_PASSWORD'),
+        },
+        // ... any custom nodemailer options
+      },
       settings: {
-        defaultFrom: 'thijs@thijsgeurts.nl',
-        defaultReplyTo: 'thijsgeurts1@gmail.com',
+        defaultFrom: 'kabelkrantonline@gmail.com',
+        defaultReplyTo: 'kabelkrantonline@gmail.com',
       },
     },
   },
@@ -17,7 +27,7 @@ module.exports = ({ env }) => ({
       },
     },
   },
-  "io": {
+  io: {
     "enabled": false,
     "config": {
       "IOServerOptions" :{

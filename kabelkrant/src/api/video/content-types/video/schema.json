@@ -8,32 +8,26 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
-    "Video": {
+    "file": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
-        "images",
-        "videos",
-        "audios",
-        "files"
-      ],
-      "pluginOptions": {}
+        "videos"
+      ]
     },
-    "Afleveringen": {
-      "type": "component",
-      "repeatable": true,
-      "pluginOptions": {},
-      "component": "programma.aflevering",
-      "min": 0
+    "rotations": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::rotation.rotation",
+      "inversedBy": "videos"
     },
-    "Name": {
-      "type": "string",
-      "required": true
+    "name": {
+      "type": "string"
     }
   }
 }
