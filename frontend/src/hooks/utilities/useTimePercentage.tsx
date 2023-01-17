@@ -7,18 +7,20 @@ export function useTimePercentage(seconds: number): [number, ()=>void] {
     function resetTimer() {
         if(countInterval) {
             clearInterval(countInterval)
+            setPercentage(0)
+            startInterval()
         }
     }
 
     function startInterval() {
         let secondsDone = 0
         const interval = setInterval(() => {
-            secondsDone += 0.001
+            secondsDone += 0.01
             setPercentage(secondsDone / seconds * 100)
             if (secondsDone >= seconds) {
                 clearInterval(interval)
             }
-        }, 1)
+        }, 10)
         setCountInterval(interval)
         return interval
     }
