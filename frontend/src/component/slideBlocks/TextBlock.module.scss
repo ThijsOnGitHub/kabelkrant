@@ -1,0 +1,25 @@
+.textBlock{
+  margin: 30px 35px;
+  max-height: calc(100% - 60px);
+  overflow: hidden;
+}
+
+.title{
+  white-space: pre-line;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 50.9358px;
+  line-height: 60px;
+  padding-bottom: 20px;
+}
+.content{
+  white-space: pre-line;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40.7487px;
+  line-height: 48px;
+  height: 940px;
+  max-height: 100%;
+}

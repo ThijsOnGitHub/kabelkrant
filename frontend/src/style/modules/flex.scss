@@ -1,0 +1,25 @@
+.flex{
+  display: flex;
+  &--col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &--wrap{
+    flex-wrap: wrap;
+  }
+
+  &--gap{
+    gap: 5px
+  }
+  @for $i from 1 through 50 {
+    &--gap-#{$i}{
+      gap: #{$i}px;
+    }
+  }
+
+  &--center{
+    align-items: center;
+    justify-content: center;
+  }
+}

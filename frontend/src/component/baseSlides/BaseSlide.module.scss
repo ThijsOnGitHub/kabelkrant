@@ -1,0 +1,53 @@
+.sideBar{
+  background: white;
+  padding: 70px 45px 32px;
+  border-radius: 10px 0 0 10px;
+  width: 450px;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  &Bottom{
+    width: 100%;
+    // Place this element on the end of the flex container
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+
+    &Time{
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 30.5615px;
+      line-height: 36px;
+    }
+    &Bar{
+      flex: 1;
+    }
+  }
+}
+.background{
+  display: none;
+}
+.body{
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(30.5615px);
+  width: 100%;
+  border-radius: 0 10px 10px 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.slide{
+  display: flex;
+  width: 1920px;
+  height: 1080px;
+  padding: 125px 200px;
+  aspect-ratio: 16/9;
+  transform-origin: 0 0;
+  background-size: cover;
+}
