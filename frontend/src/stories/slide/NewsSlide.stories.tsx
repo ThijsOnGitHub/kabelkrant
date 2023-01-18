@@ -1,26 +1,16 @@
-import {TextSlide, TextSlideProps} from "../../component/slides/TextSlide";
+import {NewsSlide, NewsSlideProps} from "../../component/slides/NewsSlide";
 import {StoryObj} from "@storybook/react";
+import {Scaler} from "../../component/slideUtilities/scaler";
 
 export default {
-    component: TextSlide,
+    component: NewsSlide,
 }
 
-export const TextSlideStory: StoryObj<TextSlideProps> = {
-    decorators: [
-      Story =>
-        <div style={{zoom:0.5}}>
-            <Story/>
-        </div>
 
-    ],
-    args:{
-        subject:{
-            subject: "nieuws",
-            icon: "tv"
-        },
-        backgroundImage: "/watertoren-schoonhoven.png",
-        title: "Dit is een titel",
-        seconds: 5,
+
+export const Default: StoryObj<NewsSlideProps> = {
+    args: {
+        title: "This is a title",
         text: "KRIMPENERWAARD – Wie wordt de ‘Stem van de Waard’? Na een eerste selectieronde\n" +
             "zijn er 24 kandidaten over. Zij gaan vanaf eind januari de uitdaging aan.\n" +
             "Wekelijks bieden Het Kontakt en RTV Krimpenerwaard een nadere kennismaking met\n" +
@@ -56,6 +46,18 @@ export const TextSlideStory: StoryObj<TextSlideProps> = {
             "Gera was laatst te gast in de studio van RTV Krimpenerwaard. Daar trad ze op\n" +
             "tijdens de Kerstmarathon. De video kunt u hieronder bekijken.\n" +
             "\n" +
-            "Foto’s: Janet de Graas"
-    }
+            "Foto’s: Janet de Graas",
+        seconds: 10,
+        backgroundImage: "/watertoren-schoonhoven.png",
+        subject: {
+            subject: "Nieuws",
+            icon: "newspaper",
+        }
+    },
+    argTypes:{
+        onCompleted: {action: "completed"}
+    },
+    decorators: [
+        (Story) => <Scaler scale={0.5}><Story/></Scaler>
+    ]
 }

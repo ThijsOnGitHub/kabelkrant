@@ -44,8 +44,8 @@
 
 .slide{
   display: flex;
-  width: 1920px;
-  height: 1080px;
+  width: calc(1920px - 400px);
+  height: calc(1080px - 250px);
   padding: 125px 200px;
   aspect-ratio: 16/9;
   transform-origin: 0 0;

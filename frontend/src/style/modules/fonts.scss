@@ -17,3 +17,30 @@ div{
     font-family: "Roboto Semibold", sans-serif;
   }
 }
+
+@mixin title{
+  white-space: pre-line;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+
+  padding-bottom: 20px;
+}
+@mixin content{
+  white-space: pre-line;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  height: 940px;
+  max-height: 100%;
+}
+
+
+.title-text{
+    @include title;
+}
+.content-text{
+    @include content;
+}

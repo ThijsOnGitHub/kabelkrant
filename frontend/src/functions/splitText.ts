@@ -4,23 +4,36 @@ const last = (arr:string[][]) => arr.slice(-1)[0]
 
 
 
+export enum BREAK_TYPE {
+    WORD = 'word',
+    SENTENCE = 'sentence',
+}
 
 // main logic
-const createWordSpans = (text: string,) => text
-    .split(/(\n+)/)
-    .map((str, idx) => {
-        if (!str) return null
+const createWordSpans = (text: string,breakType:BREAK_TYPE = BREAK_TYPE.WORD) => {
+    let regex = /(\n+)/
+    switch (breakType) {
+        case BREAK_TYPE.SENTENCE:
+            regex = /(\n+)/
 
-        if (idx % 2) {
-            return document.createTextNode(str)
-        } else {
-            const span = document.createElement('span')
-            span.textContent = str
+    }
 
-            return span
-        }
-    })
-    .filter(Boolean)
+    return text
+        .split(regex)
+        .map((str, idx) => {
+            if (!str) return null
+
+            if (idx % 2) {
+                return document.createTextNode(str)
+            } else {
+                const span = document.createElement('span')
+                span.textContent = str
+
+                return span
+            }
+        })
+        .filter(Boolean)
+}
 
 export const measureTextHeight = (text: string, width:string,element?:Partial<CSSStyleDeclaration>,styleClass?: string) => {
     const container = document.createElement('div')
@@ -36,7 +49,7 @@ export const measureTextHeight = (text: string, width:string,element?:Partial<CS
 
     return height
 }
-export const paginateTextBySize = (width: number, height:number,style?: Partial<CSSStyleDeclaration>,styleClass?: string) => {
+export const paginateTextBySize = (width: number, height:number,style?: Partial<CSSStyleDeclaration>,styleClass?: string, breakType?:BREAK_TYPE) => {
     return (text:string) => {
         const cloneElement = document.createElement("div") as HTMLDivElement
         cloneElement.style.minWidth = width + 'px'
@@ -48,24 +61,24 @@ export const paginateTextBySize = (width: number, height:number,style?: Partial<
         })
         if(styleClass) cloneElement.classList.add(styleClass)
         document.body.appendChild(cloneElement)
-        const res =paginateByBoundingElement(cloneElement,0)(text)
+        const res =paginateByBoundingElement(cloneElement,0,breakType)(text)
         cloneElement.remove()
         return res
     }
 }
 
-export const paginateTextByElement = (parent:HTMLDivElement, paddingY:number)=>{
-    return paginateTextBySize(parent.clientWidth, parent.clientHeight - paddingY,parent.style,parent.className)
+export const paginateTextByElement = (parent:HTMLDivElement, paddingY:number,breakType?:BREAK_TYPE)=>{
+    return paginateTextBySize(parent.clientWidth, parent.clientHeight - paddingY,parent.style,parent.className,breakType)
 }
 
 // note that this rewrites the content of the element
-export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:number) => (text:string) => {
+export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:number, breakType?:BREAK_TYPE) => (text:string) => {
     parent.textContent = ''
     const { bottom } = parent.getBoundingClientRect()
 
     const pages:string[][] = [[]]
 
-    for (const node of createWordSpans(text) as (HTMLSpanElement | Text)[]) {
+    for (const node of createWordSpans(text,breakType) as (HTMLSpanElement | Text)[]) {
             parent.appendChild(node)
             if (node.nodeType === Node.ELEMENT_NODE) {
                     const rect = (node as HTMLSpanElement).getBoundingClientRect()
