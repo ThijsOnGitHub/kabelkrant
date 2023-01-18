@@ -3,6 +3,7 @@ import {SubjectProps} from "../component/slideUtilities/Subject";
 export interface PostSlide {
     title: string,
     content: string,
+    image:string,
     catergoryId: number[],
 }
 

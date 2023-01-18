@@ -24,7 +24,7 @@ export interface WordpressPosts {
     tags:                     any[];
     yoast_head:               string;
     yoast_head_json:          YoastHeadJSON;
-    rttpg_featured_image_url: { [key: string]: Array<boolean | number | string> };
+    rttpg_featured_image_url: { [key: string]: string };
     rttpg_author:             RttpgAuthor;
     rttpg_comment:            number;
     rttpg_category:           string;

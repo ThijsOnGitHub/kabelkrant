@@ -19,7 +19,7 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
 
     useEffect(() => {
         setIndex(0)
-        const height = measureTextHeight(title ?? '', "1100px", {},styles.title)
+        const height = measureTextHeight(title ?? '', "1000px", {},styles.title)
         const array = paginateTextBySize(1000, 770-height,{}, styles.content,BREAK_TYPE.SENTENCE)(text)
         setContentArray(array)
         console.log(array)

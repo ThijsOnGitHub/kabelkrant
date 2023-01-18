@@ -39,6 +39,7 @@ export const Kabelkrant: FC<KabelkrantProps> = (props) => {
                 catergoryId: post.categories,
                 content: convert(post.content.rendered).replaceAll(/\[.*?\]/g, '').trim().replace(/\n\s*\n/g, '\n\n'),
                 title: convert(post.title.rendered),
+                image: post.rttpg_featured_image_url.large[0]
             }
         })
         setPosts(transformedPosts)
@@ -53,8 +54,8 @@ export const Kabelkrant: FC<KabelkrantProps> = (props) => {
     const currentPost = posts[index]
     const currentCategory = categories.find(category => category.id === currentPost?.catergoryId[0])
 
-    return (currentPost && currentCategory) ? <NewsSlide backgroundImage={currentCategory?.image ?? "white"} subject={currentCategory?.subject ?? {
+    return (currentPost && currentCategory) ? <NewsSlide backgroundImage={currentPost.image ?? "white"} subject={currentCategory?.subject ?? {
         subject: "Nieuws",
         icon: "tv"
-    }} seconds={20} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onCompleted={nextSlide} />:<div>Loading...</div>
+    }} seconds={5} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onCompleted={nextSlide} />:<div>Loading...</div>
 }
