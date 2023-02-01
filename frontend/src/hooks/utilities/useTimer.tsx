@@ -19,19 +19,15 @@ export function useTimer(maxSeconds: number, onComplete?: ()=>void, intervalDura
     }
 
     function resetTimer() {
-        console.log("reset")
         stopTimer()
-
         startInterval(new Date())
     }
 
     function startInterval(date: Date) {
         const interval = setInterval(async () => {
             const secondsDone = (new Date().getTime() - date.getTime()) / 1000
-            console.log(secondsDone)
             setSeconds(secondsDone)
             if (secondsDone >= maxSeconds) {
-                console.timeEnd("start")
                 if(onComplete) onComplete()
                 clearInterval(interval)
             }

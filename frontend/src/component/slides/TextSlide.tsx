@@ -26,8 +26,6 @@ export const TextSlide = forwardRef<TextSlideRef,TextSlideProps>(({title,text,du
     },[title,text])
 
     return <BaseSlide ref={baseSlideRef} {...props} percentageDone={seconds/duration * 100}>
-        duration: {duration}
-        seconds: {seconds}
         <TextBlock ref={textBlockRef} content={text} title={title}/>
     </BaseSlide>
 })
