@@ -20,7 +20,7 @@ export const TextSlideStory: StoryObj<TextSlideProps> = {
         },
         backgroundImage: "/watertoren-schoonhoven.png",
         title: "Dit is een titel",
-        seconds: 5,
+        duration: 5,
         text: "KRIMPENERWAARD – Wie wordt de ‘Stem van de Waard’? Na een eerste selectieronde\n" +
             "zijn er 24 kandidaten over. Zij gaan vanaf eind januari de uitdaging aan.\n" +
             "Wekelijks bieden Het Kontakt en RTV Krimpenerwaard een nadere kennismaking met\n" +

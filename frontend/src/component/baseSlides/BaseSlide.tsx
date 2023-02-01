@@ -3,30 +3,27 @@ import {FC, forwardRef, ReactElement, ReactNode, useEffect, useImperativeHandle,
 import {Subject, SubjectProps} from "../slideUtilities/Subject";
 import {useCurrentTime} from "../../hooks/utilities/useCurrentTime";
 import {Bar} from "../slideUtilities/bar";
-import {useTimePercentage} from "../../hooks/utilities/useTimePercentage";
+import {useTimer} from "../../hooks/utilities/useTimer";
 
 export interface BaseSlideProps {
     backgroundImage:string
     subject: SubjectProps
-    seconds: number
     children?: ReactNode
+    percentageDone: number
 }
 
 export interface BaseSlideRef {
-    resetTimer: () => void
-    contentRef: React.RefObject<HTMLDivElement>
+    contentRef: React.RefObject<HTMLDivElement>,
 }
 
 // eslint-disable-next-line react/display-name
 export const BaseSlide = forwardRef<BaseSlideRef,BaseSlideProps>((props, ref) => {
     const backgroundStyle ={backgroundImage: `url(${props.backgroundImage})`}
     const currentTime = useCurrentTime()
-    const [progres,reset] = useTimePercentage(props.seconds);
     const contentRef = useRef<HTMLDivElement>(null)
 
     useImperativeHandle(ref,() => {
         return {
-            resetTimer: () => reset(),
             contentRef
         }
     })
@@ -37,7 +34,7 @@ export const BaseSlide = forwardRef<BaseSlideRef,BaseSlideProps>((props, ref) =>
                 <img className={styles.logo} src="/logo/logoBig.svg" alt="Next.js" />
                 <Subject subject={props.subject.subject} icon={props.subject.icon} />
                 <div className={styles.sideBarBottom}>
-                    <div className={styles.sideBarBottomBar}><Bar percentage={progres}/></div>
+                    <div className={styles.sideBarBottomBar}><Bar percentage={props.percentageDone}/></div>
                     <div ref={contentRef} className={styles.sideBarBottomTime}>{currentTime.toLocaleTimeString('NL-nl',{hour:"2-digit",minute:"2-digit"})}</div>
                 </div>
             </div>

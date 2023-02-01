@@ -57,5 +57,5 @@ export const Kabelkrant: FC<KabelkrantProps> = (props) => {
     return (currentPost && currentCategory) ? <NewsSlide backgroundImage={currentPost.image ?? "white"} subject={currentCategory?.subject ?? {
         subject: "Nieuws",
         icon: "tv"
-    }} seconds={5} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onCompleted={nextSlide} />:<div>Loading...</div>
+    }} duration={5} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onCompleted={nextSlide} />:<div>Loading...</div>
 }

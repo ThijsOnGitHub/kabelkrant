@@ -47,7 +47,7 @@ export const Default: StoryObj<NewsSlideProps> = {
             "tijdens de Kerstmarathon. De video kunt u hieronder bekijken.\n" +
             "\n" +
             "Foto’s: Janet de Graas",
-        seconds: 10,
+        duration: 10,
         backgroundImage: "/watertoren-schoonhoven.png",
         subject: {
             subject: "Nieuws",

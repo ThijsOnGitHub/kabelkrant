@@ -23,7 +23,7 @@ export const Default: StoryObj<BaseSlideProps> = {
             icon: 'tv'
         },
         backgroundImage: '/watertoren-schoonhoven.png',
-        seconds: 2
+        percentageDone: 50
     },
     decorators: [
         (Story) =>
@@ -34,7 +34,7 @@ export const Default: StoryObj<BaseSlideProps> = {
 }
 
 
-export const Text : StoryObj<BaseSlideProps & TextBlockProps> =  {
+export const WithContentText : StoryObj<BaseSlideProps & TextBlockProps> =  {
     render: (args) => {
         return <div style={{zoom:0.5}}>
             <BaseSlide {...args}>
@@ -48,7 +48,7 @@ export const Text : StoryObj<BaseSlideProps & TextBlockProps> =  {
             icon: 'tv'
         },
         backgroundImage: '/watertoren-schoonhoven.png',
-        seconds: 2,
+        percentageDone: 50,
         title: 'De titel',
         content: 'De content'
     }
@@ -84,7 +84,7 @@ export const TextWebsiteMessage : StoryObj<BaseSlideProps & TextBlockProps & {in
         },
         index: 0,
         backgroundImage: '/watertoren-schoonhoven.png',
-        seconds: 2,
+        percentageDone:50,
         title: 'Vaccineren tegen zes soorten kanker in Schoonhoven',
         content: newText
     }
