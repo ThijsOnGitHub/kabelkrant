@@ -22,7 +22,6 @@ export const TextSlide = forwardRef<TextSlideRef,TextSlideProps>(({title,text,du
 
     useEffect(() => {
         resetTimer()
-        console.log("Slide reset")
     },[title,text])
 
     return <BaseSlide ref={baseSlideRef} {...props} percentageDone={seconds/duration * 100}>
