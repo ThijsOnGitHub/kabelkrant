@@ -6,12 +6,16 @@ import {useEffect, useState} from "react";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {random} from "lodash";
 import {WPMedia} from "wordpress-api-client";
+import {useTimer} from "./utilities/useTimer";
 
 export function useWordpressData() : {posts: PostSlide[], categories: PostCategory[]} {
     const [posts, setPosts] = useState<PostSlide[]>([])
     const [categories, setCategories] = useState<PostCategory[]>([])
-    // Update the posts every 10 seconds
-    //useTimer(10000, loadPosts,1000)
+    //Update the posts every 10 seconds
+    const [seconds, resetTimer ]= useTimer(10, ()=>{
+        loadPosts()
+        resetTimer()
+    },1000)
     const wordpressClient = new WordpressClient();
 
 
@@ -57,7 +61,7 @@ export function useWordpressData() : {posts: PostSlide[], categories: PostCatego
                 content: post.acf.tv_settings.text,
                 title: convert(post.title.rendered),
                 postImage: postImageUrl,
-                length: 5,//typeof post.acf.tv_settings.length === "number" ? post.acf.tv_settings.length : 5 ,
+                length: typeof post.acf.tv_settings.length === "number" ? post.acf.tv_settings.length : 5 ,
                 catergoryImage: imageUrl,
             }
         }))
@@ -66,6 +70,7 @@ export function useWordpressData() : {posts: PostSlide[], categories: PostCatego
     }
 
     useEffect(() => {
+        resetTimer()
         loadPosts()
     },[])
 
