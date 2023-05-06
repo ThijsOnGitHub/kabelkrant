@@ -23,6 +23,6 @@ export const TextBlock = forwardRef<TextBlockRef,TextBlockProps>((props, ref) =>
 
     return <div className={styles.textBlock}>
         <div ref={title} className={styles.title}>{props.title}</div>
-        <div ref={content} className={styles.content}>{props.content}</div>
+        <div ref={content} className={styles.content} dangerouslySetInnerHTML={{__html: props.content}}></div>
     </div>
 })

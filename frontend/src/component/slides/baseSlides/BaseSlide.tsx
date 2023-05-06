@@ -1,9 +1,9 @@
 import styles from './BaseSlide.module.scss'
 import {FC, forwardRef, ReactElement, ReactNode, useEffect, useImperativeHandle, useRef, useState} from "react";
-import {Subject, SubjectProps} from "../slideUtilities/Subject";
-import {useCurrentTime} from "../../hooks/utilities/useCurrentTime";
-import {Bar} from "../slideUtilities/bar";
-import {useTimer} from "../../hooks/utilities/useTimer";
+import {Subject, SubjectProps} from "../../slideUtilities/Subject";
+import {useCurrentTime} from "../../../hooks/utilities/useCurrentTime";
+import {Bar} from "../../slideUtilities/bar";
+import {useTimer} from "../../../hooks/utilities/useTimer";
 
 export interface BaseSlideProps {
     backgroundImage:string

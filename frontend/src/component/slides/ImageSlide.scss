@@ -1,0 +1,27 @@
+.image-slide {
+    width: 1920px;
+    height: 1080px;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  &__text-bar{
+    background:white;
+    position: relative;
+    width: 100%;
+    top: 850px;
+    padding: 15px 50px;
+    box-sizing: border-box;
+    display: flex;
+    gap: 75px;
+    align-items: center;
+
+    &-text{
+      font-size: 50px;
+    }
+    &-image{
+      height: 75px;
+    }
+  }
+
+
+}

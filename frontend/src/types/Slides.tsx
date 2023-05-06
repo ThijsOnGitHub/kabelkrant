@@ -1,7 +1,8 @@
 import {TextSlideProps} from "../component/slides/TextSlide";
 
 export enum SlideType {
-    TEXTSLIDE = 'textSlide',
+    TEXTSLIDE = 'default',
+    IMAGE = 'image',
 }
 
 export type TextSlideType = TextSlideProps & {type: SlideType.TEXTSLIDE}

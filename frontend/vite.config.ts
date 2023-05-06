@@ -6,6 +6,10 @@ import autoprefixer from 'autoprefixer'
 export default defineConfig({
   plugins: [react()],
   css: {
+    modules:{
+        localsConvention: 'camelCaseOnly',
+        scopeBehaviour: 'local'
+    },
     postcss: {
       plugins: [
         autoprefixer({}) // add options if needed

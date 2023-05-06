@@ -1,4 +1,4 @@
-import {BaseSlide, BaseSlideProps, BaseSlideRef} from "../../component/baseSlides/BaseSlide";
+import {BaseSlide, BaseSlideProps, BaseSlideRef} from "../../component/slides/baseSlides/BaseSlide";
 import {Story, StoryFn, StoryObj} from "@storybook/react";
 import {TextBlock, TextBlockProps, TextBlockRef} from "../../component/slideBlocks/TextBlock";
 import {compile, convert} from "html-to-text";
@@ -10,6 +10,7 @@ import {
     paginateTextBySize
 } from "../../functions/splitText";
 import styles from "../../component/slideBlocks/TextBlock.module.scss";
+import {ZoomDeclarator} from "../../../.storybook/ZoomDeclarator";
 
 export default {
     component: BaseSlide
@@ -26,10 +27,7 @@ export const Default: StoryObj<BaseSlideProps> = {
         percentageDone: 50
     },
     decorators: [
-        (Story) =>
-            <div style={{zoom: 0.50}}>
-                <Story/>
-            </div>
+        (Story) => <Story />
     ]
 }
 

@@ -1,10 +1,8 @@
 import {FC, useEffect, useState} from "react";
-import axios from "axios";
-import {WordpressPosts} from "../types/wordpressTypes/wordpressPosts";
-import {WordpressCategories} from "../types/wordpressTypes/wordPressCategories";
-import {PostCategory, PostSlide} from "../types/transformedType";
 import {NewsSlide} from "../component/slides/NewsSlide";
-import {convert} from "html-to-text";
+
+import {useWordpressData} from "../hooks/useWordpressData";
+import {NewsItem} from "../items/NewsItem";
 
 export interface KabelkrantProps {
 
@@ -12,50 +10,27 @@ export interface KabelkrantProps {
 
 export const Kabelkrant: FC<KabelkrantProps> = (props) => {
     const [index,setIndex] = useState<number>(0)
+    const {posts,categories} = useWordpressData()
+    const [firstUpdate,setFirstUpdate] = useState<boolean>(true)
+    const [currentPost,setCurrentPost] = useState(posts[index])
+    const [currentCategory,setCurrentCategory] = useState(categories.find(category => category.id === currentPost?.catergoryId[0]))
 
-    const [posts, setPosts] = useState<PostSlide[]>([])
-    const [categories, setCategories] = useState<PostCategory[]>([])
-
-    function nextSlide() {
-        setIndex((index)=> (index+1)%posts.length)
+    function updateCurrentItem(index:number) {
+        setCurrentPost(posts[index])
+        setCurrentCategory(categories.find(category => category.id === posts[index].catergoryId[0]))
     }
 
-    async function loadPosts(){
-        const posts = await axios.get<WordpressPosts[]>("https://www.rtvkrimpenerwaard.nl/site/wp-json/wp/v2/posts")
-        const categories = await axios.get<WordpressCategories[]>("https://www.rtvkrimpenerwaard.nl/site/wp-json/wp/v2/categories")
-        const catergories: PostCategory[] = categories.data.map<PostCategory>(category => {
-            return {
-                id: category.id,
-                subject:{
-                    subject: category.name,
-                    icon: "tv"
-                },
-                image: '/watertoren-schoonhoven.png'
-            }
+    function nextSlide() {
+        setIndex((index)=>{
+                const newIndex = (index+1)%posts.length
+                updateCurrentItem(newIndex)
+                return newIndex
         })
-        const transformedPosts: PostSlide[] = posts.data.map(post => {
-            console.log(post.content.rendered)
-            return {
-                catergoryId: post.categories,
-                content: convert(post.content.rendered).replaceAll(/\[.*?\]/g, '').trim().replace(/\n\s*\n/g, '\n\n'),
-                title: convert(post.title.rendered),
-                image: post.rttpg_featured_image_url.large[0]
-            }
-        })
-        setPosts(transformedPosts)
-        setCategories(catergories)
-
     }
 
     useEffect(() => {
-        loadPosts()
-    },[])
+        updateCurrentItem(index)
+    },[posts,categories])
 
-    const currentPost = posts[index]
-    const currentCategory = categories.find(category => category.id === currentPost?.catergoryId[0])
-
-    return (currentPost && currentCategory) ? <NewsSlide backgroundImage={currentPost.image ?? "white"} subject={currentCategory?.subject ?? {
-        subject: "Nieuws",
-        icon: "tv"
-    }} duration={5} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onCompleted={nextSlide} />:<div>Loading...</div>
+    return (currentPost && currentCategory) ? <NewsItem item={{post:currentPost,category:currentCategory}} nextSlide={nextSlide} />:<div style={{color:"white"}}>Loading...</div>
 }

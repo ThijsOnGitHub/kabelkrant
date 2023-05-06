@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 
 /**
  * Returns a timer that counts up to maxSeconds and then calls onComplete
@@ -18,29 +18,26 @@ export function useTimer(maxSeconds: number, onComplete?: ()=>void, intervalDura
         }
     }
 
-    function resetTimer() {
+    const resetAndStartTimer = () => {
         stopTimer()
         startInterval(new Date())
     }
+
+    useEffect(() => {
+        if (seconds>= maxSeconds) {
+            if(onComplete) onComplete()
+            countInterval.forEach(interval => clearInterval(interval))
+        }
+    },[seconds])
 
     function startInterval(date: Date) {
         const interval = setInterval(async () => {
             const secondsDone = (new Date().getTime() - date.getTime()) / 1000
             setSeconds(secondsDone)
-            if (secondsDone >= maxSeconds) {
-                if(onComplete) onComplete()
-                clearInterval(interval)
-            }
         }, intervalDuration)
         setCountInterval(intervals => [...intervals, interval])
         return interval
     }
 
-    useEffect(() => {
-        resetTimer()
-        return () => stopTimer()
-    }, [maxSeconds])
-
-
-    return [seconds,resetTimer,stopTimer]
+    return [seconds,resetAndStartTimer,stopTimer]
 }

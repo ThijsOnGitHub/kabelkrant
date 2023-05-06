@@ -12,7 +12,6 @@ function App() {
       <FitToScreen baseWidth={1920} baseHeight={1080}>
         <Kabelkrant />
       </FitToScreen>
-
   )
 }
 
