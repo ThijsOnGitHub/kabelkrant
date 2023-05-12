@@ -16,6 +16,6 @@ export type PostSlideWithoutLength = Omit<PostSlide, 'length' | 'category'> & {l
 
 export interface PostCategory {
     id: number,
-    subject: SubjectProps,
+    subject?: SubjectProps,
     image: string[]
 }

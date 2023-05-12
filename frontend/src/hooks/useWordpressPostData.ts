@@ -50,10 +50,10 @@ export function useWordpressPostData() {
     const [categories, setCategories] = useState<PostCategory[]>([])
     const [indexedMedia, setIndexedMedia] = useState<IndexedMedia>({})
     //Update the posts every 10 seconds
-    const { resetAndStartTimer:resetTimer }= useTimer(10, ()=>{
+    const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(10, ()=>{
         loadPosts()
         resetTimer()
-    },1000)
+    },1000,"postdata")
     const wordpressClient = new WordpressClient();
 
     async function loadPosts(){
@@ -85,6 +85,9 @@ export function useWordpressPostData() {
     useEffect(() => {
         resetTimer()
         loadPosts()
+        return () => {
+            stopTimer()
+        }
     },[])
 
     return {posts, categories, indexedMedia}

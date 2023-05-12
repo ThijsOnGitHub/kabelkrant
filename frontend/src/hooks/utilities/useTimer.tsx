@@ -7,18 +7,17 @@ import {useCallback, useEffect, useMemo, useState} from "react";
  * @param intervalDuration How often the timer should update in miliseconds
  */
 
-export function useTimer(maxSeconds: number, onComplete?: ()=>void, intervalDuration = 10) {
+export function useTimer(maxSeconds: number, onComplete?: ()=>void, intervalDuration = 10,tag?: string) {
     const [seconds, setSeconds] = useState(0)
     const [countInterval, setCountInterval] = useState<NodeJS.Timeout[] >([])
 
     function stopTimer() {
-        if(countInterval) {
-            countInterval.forEach(interval => clearInterval(interval))
-            setCountInterval([])
-        }
+        countInterval.forEach(interval => clearInterval(interval))
+        setCountInterval([])
     }
 
     const resetAndStartTimer = () => {
+        console.log("resetting timer",tag)
         stopTimer()
         startInterval(new Date())
     }
@@ -29,6 +28,12 @@ export function useTimer(maxSeconds: number, onComplete?: ()=>void, intervalDura
             countInterval.forEach(interval => clearInterval(interval))
         }
     },[seconds])
+
+    useEffect(() => {
+        return () => {
+            stopTimer()
+        }
+    },[])
 
     function startInterval(date: Date) {
         const interval = setInterval(async () => {

@@ -2,55 +2,55 @@ import {useEffect, useState} from "react";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {PostCategory, PostSlideWithoutLength} from "../types/transformedType";
 import {useTimer} from "./utilities/useTimer";
-import {IndexedMedia, Slide, SlideTypes, TextSlide, WPSlide} from "../types/Slides";
-import {convert} from "html-to-text";
+import {ImageSlide, IndexedMedia, Slide, SlideTypes, TextSlide, WPSlide} from "../types/Slides";
 
 export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutLength[],categories: PostCategory[]){
     const [slides, setSlides] = useState<Slide[]>([])
     const [wpSlides, setWpSlides] = useState<WPSlide[]>([])
-    const {resetAndStartTimer} =  useTimer(10, loadSlides, 10000)
+    const {resetAndStartTimer,stopTimer} =  useTimer(10, ()=> {
+        loadSlides()
+        resetAndStartTimer()
+    }, 10000,"slides")
 
     async function loadSlides(){
         const wordpressClient = new WordpressClient();
         const slides = await wordpressClient.slide().dangerouslyFindAll(new URLSearchParams({"order":"asc", "orderby": "menu_order"}))
-        console.log("Loading slides", slides )
         setWpSlides(slides)
-        resetAndStartTimer()
     }
 
     function updateSlides(){
-        const processedSlides =wpSlides.map<Slide>(slide => {
+        const processedSlides =wpSlides.map<Slide[]>(slide => {
             const acfSlide = slide.acf
             if(acfSlide.type === SlideTypes.IMAGE){
-                return {
+                return acfSlide[SlideTypes.IMAGE].images.map<ImageSlide>(image => ({
                     type: SlideTypes.IMAGE,
-                    imageUrl: acfSlide[SlideTypes.IMAGE].images.map(id => images[id]?.source_url).filter(url => url != undefined) as string[],
+                    imageUrl: images[image]?.source_url ?? "",
                     length: acfSlide[SlideTypes.IMAGE].length
-                }
+                }))
+                .filter(slide => slide.imageUrl !== "")
             }
             if(acfSlide.type === SlideTypes.TEXT_SLIDE){
                 const textSlide = acfSlide[SlideTypes.TEXT_SLIDE]
-                console.log(images[textSlide.backgroundImage]?.source_url ?? "")
                 const res: TextSlide = {
                     type: SlideTypes.TEXT_SLIDE,
-                        title: textSlide.title,
+                    title: textSlide.title,
                     length: textSlide.length,
                     categoryImage: images[textSlide.backgroundImage]?.source_url ?? "" ,
                     category: {
                         id: 0,
-                        subject: {
+                        subject: textSlide.showCategory ? {
                             subject: textSlide.category.text,
                             icon: textSlide.category.icon
-                        },
+                        } : undefined,
                         image: []
                     },
                     content: textSlide.text,
                     postImage: "",
                     categoryId: 0,
                 }
-                return res
+                return [res]
             }
-            return {
+            return [{
                 type: SlideTypes.POSTBLOCK,
                 categoryId: acfSlide[SlideTypes.POSTBLOCK].category,
                 slides: posts
@@ -60,10 +60,10 @@ export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutL
                         length:typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
                         category: categories.find(category => category.id === post.categoryId) as PostCategory
                     })),
-            }
+            }]
         })
         console.log("slides",processedSlides)
-        setSlides(processedSlides.filter(slide =>
+        setSlides(processedSlides.flat().filter(slide =>
             (slide.type === SlideTypes.IMAGE && slide.imageUrl.length >0) ||
             (slide.type === SlideTypes.POSTBLOCK && slide.slides.length > 0) || (slide.type === SlideTypes.TEXT_SLIDE) ))
     }
@@ -71,6 +71,9 @@ export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutL
     useEffect(()=>{
         loadSlides()
         resetAndStartTimer()
+        return () => {
+            stopTimer()
+        }
     },[])
 
     useEffect(()=>{

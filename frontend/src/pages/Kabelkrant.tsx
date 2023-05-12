@@ -1,6 +1,4 @@
 import {FC, useEffect, useState} from "react";
-import {NewsSlide} from "../component/slides/NewsSlide";
-
 import {useWordpressPostData} from "../hooks/useWordpressPostData";
 import {NewsItem} from "../items/NewsItem";
 import {useWordpressSlides} from "../hooks/useWordpressSlides";
@@ -19,6 +17,7 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
 
     const [currentSlides,setCurrentSlides] = useState(slides)
     const [currentSlide,setCurrentSlide] = useState(currentSlides[index])
+    const [isPaused,setIsPaused] = useState(false)
 
 
     function updateCurrentItem(index:number) {
@@ -31,6 +30,9 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
     }
 
     function nextSlide() {
+        if(currentSlides.length < 2){
+            setIsPaused(true)
+        }
         setIndex((index)=>(index+1)%currentSlides.length)
     }
 
@@ -39,9 +41,13 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
     }, [index])
 
     useEffect(() => {
-        if(currentSlides.length < 1 ){
+        if(currentSlides.length < 2 ){
             setCurrentSlides(slides)
             updateCurrentItem(index)
+        }
+        if(currentSlides.length > 1 && isPaused){
+            setIsPaused(false)
+            nextSlide()
         }
     }, [slides])
 
@@ -50,9 +56,11 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
             case SlideTypes.POSTBLOCK:
                 return <PostBlockSlide posts={slide.slides} onCompleted={nextSlide}/>
             case SlideTypes.IMAGE:
-                return <ImageSlide title={""} showText={false}  backgroundImageURL={slide.imageUrl[0]} length={slide.length} onCompleted={nextSlide}/>
+                return <ImageSlide title={""} showText={false}  backgroundImageURL={slide.imageUrl} length={slide.length} onCompleted={nextSlide}/>
             case SlideTypes.TEXT_SLIDE:
                 return <NewsItem post={slide} nextSlide={nextSlide} />
+            case SlideTypes.VOID:
+                return <div style={{color: "black"}}> </div>
         }
     }
 

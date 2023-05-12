@@ -36,9 +36,6 @@ export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
 
     return showImage ?
         <ImageSlide backgroundImageURL={currentPost.postImage} title={currentPost.title} /> :
-        <NewsSlide backgroundImage={post.categoryImage ?? "white"} subject={post.category?.subject ?? {
-        subject: "Nieuws",
-        icon: "tv"
-    }} duration={post.length} title={post.title ?? ""} text={post.content ?? ""} onCompleted={nextSlide} />
+        <NewsSlide backgroundImage={post.categoryImage ?? "white"} subject={post.category?.subject} duration={post.length} title={post.title ?? ""} text={post.content ?? ""} onCompleted={nextSlide} />
 
 }

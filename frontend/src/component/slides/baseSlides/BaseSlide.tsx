@@ -7,7 +7,7 @@ import {useTimer} from "../../../hooks/utilities/useTimer";
 
 export interface BaseSlideProps {
     backgroundImage:string
-    subject: SubjectProps
+    subject?: SubjectProps
     children?: ReactNode
     percentageDone: number
 }
@@ -32,7 +32,10 @@ export const BaseSlide = forwardRef<BaseSlideRef,BaseSlideProps>((props, ref) =>
         <div className={styles.slide} style={backgroundStyle} >
             <div className={styles.sideBar}>
                 <img className={styles.logo} src="/logo/logoBig.svg" alt="Next.js" />
-                <Subject subject={props.subject.subject} icon={props.subject.icon} />
+                {
+                    props.subject &&
+                    <Subject subject={props.subject.subject} icon={props.subject.icon} />
+                }
                 <div className={styles.sideBarBottom}>
                     <div className={styles.sideBarBottomBar}><Bar percentage={props.percentageDone}/></div>
                     <div ref={contentRef} className={styles.sideBarBottomTime}>{currentTime.toLocaleTimeString('NL-nl',{hour:"2-digit",minute:"2-digit"})}</div>

@@ -1,9 +1,12 @@
 @import "../src/style/global";
 
 .textBlock{
-  margin: 30px 35px;
-  max-height: calc(100% - 60px);
+  padding: 30px 35px;
+  box-sizing:border-box;
   overflow: hidden;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
 }
 
 .title{
@@ -11,4 +14,18 @@
 }
 .content{
  @include content;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  &p{
+    margin: 0;
+  }
+  &ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    &li{
+      margin: 0;
+      padding: 0;
+    }
+  }
 }

@@ -8,12 +8,14 @@ export type IndexedMedia = { [key: string]: WPMedia }
 export enum SlideTypes {
     IMAGE = "image",
     POSTBLOCK = "postblock",
-    TEXT_SLIDE = "textSlide"
+    TEXT_SLIDE = "textSlide",
+
+    VOID = "void"
 }
 
 export interface ImageSlide {
     type: SlideTypes.IMAGE
-    imageUrl: string[]
+    imageUrl: string
     length: number
 }
 
@@ -26,7 +28,11 @@ export type TextSlide = PostSlide &  {
     type: SlideTypes.TEXT_SLIDE
 }
 
-export type Slide = ImageSlide | PostBlockSlide | TextSlide
+export type VoidSlide = {
+    type: SlideTypes.VOID
+}
+
+export type Slide = ImageSlide | PostBlockSlide | TextSlide | VoidSlide
 
 export type WPSlide = WPPost<{
     type: SlideTypes,
