@@ -3,9 +3,10 @@ import {NewsSlide} from "../component/slides/NewsSlide";
 
 import {useWordpressPostData} from "../hooks/useWordpressPostData";
 import {NewsItem} from "../items/NewsItem";
-import {Slide, SlideTypes, useWordpressSlides} from "../hooks/useWordpressSlides";
+import {useWordpressSlides} from "../hooks/useWordpressSlides";
 import {ImageSlide} from "../component/slides/ImageSlide";
 import {PostBlockSlide} from "../component/slides/PostBlockSlide";
+import {Slide, SlideTypes} from "../types/Slides";
 
 export interface TextBlockSlideProps {
 
@@ -22,7 +23,6 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
 
     function updateCurrentItem(index:number) {
         if(index == 0){
-            console.log("updating current slides",slides)
             setCurrentSlides(slides)
             setCurrentSlide(slides[index])
             return
@@ -51,6 +51,8 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
                 return <PostBlockSlide posts={slide.slides} onCompleted={nextSlide}/>
             case SlideTypes.IMAGE:
                 return <ImageSlide title={""} showText={false}  backgroundImageURL={slide.imageUrl[0]} length={slide.length} onCompleted={nextSlide}/>
+            case SlideTypes.TEXT_SLIDE:
+                return <NewsItem post={slide} nextSlide={nextSlide} />
         }
     }
 

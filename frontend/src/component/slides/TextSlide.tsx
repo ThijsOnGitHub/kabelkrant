@@ -1,7 +1,6 @@
-import {createRef, FC, forwardRef, useEffect, useRef, useState} from "react";
+import { forwardRef, useRef} from "react";
 import {BaseSlide, BaseSlideProps, BaseSlideRef} from "./baseSlides/BaseSlide";
-import {TextBlock, TextBlockProps, TextBlockRef} from "../slideBlocks/TextBlock";
-import {useTimer} from "../../hooks/utilities/useTimer";
+import {TextBlock,  TextBlockRef} from "../slideBlocks/TextBlock";
 
 export type TextSlideProps = Omit<BaseSlideProps,'children'| 'percentageDone'> &{
     title: string

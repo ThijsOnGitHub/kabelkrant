@@ -1,27 +1,9 @@
 import {useEffect, useState} from "react";
-import {WordpressClient, WPSlide} from "../types/wordpressTypes/WorpressClient";
-import {PostCategory, PostSlide, PostSlideWithoutLength} from "../types/transformedType";
-import {WPMedia} from "wordpress-api-client";
+import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
+import {PostCategory, PostSlideWithoutLength} from "../types/transformedType";
 import {useTimer} from "./utilities/useTimer";
-
-export type IndexedMedia = {[key:string]:WPMedia}
-
-export enum SlideTypes{
-    IMAGE="image",
-    POSTBLOCK = "postblock"
-}
-export interface ImageSlide{
-    type: SlideTypes.IMAGE
-    imageUrl: string[]
-    length: number
-}
-
-export interface PostBlockSlide{
-    type: SlideTypes.POSTBLOCK
-    categoryId: number[]
-    slides: PostSlide[]
-}
-export type Slide = ImageSlide | PostBlockSlide
+import {IndexedMedia, Slide, SlideTypes, TextSlide, WPSlide} from "../types/Slides";
+import {convert} from "html-to-text";
 
 export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutLength[],categories: PostCategory[]){
     const [slides, setSlides] = useState<Slide[]>([])
@@ -46,20 +28,44 @@ export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutL
                     length: acfSlide[SlideTypes.IMAGE].length
                 }
             }
+            if(acfSlide.type === SlideTypes.TEXT_SLIDE){
+                const textSlide = acfSlide[SlideTypes.TEXT_SLIDE]
+                console.log(images[textSlide.backgroundImage]?.source_url ?? "")
+                const res: TextSlide = {
+                    type: SlideTypes.TEXT_SLIDE,
+                        title: textSlide.title,
+                    length: textSlide.length,
+                    categoryImage: images[textSlide.backgroundImage]?.source_url ?? "" ,
+                    category: {
+                        id: 0,
+                        subject: {
+                            subject: textSlide.category.text,
+                            icon: textSlide.category.icon
+                        },
+                        image: []
+                    },
+                    content: textSlide.text,
+                    postImage: "",
+                    categoryId: 0,
+                }
+                return res
+            }
             return {
                 type: SlideTypes.POSTBLOCK,
                 categoryId: acfSlide[SlideTypes.POSTBLOCK].category,
                 slides: posts
-                    .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.catergoryId))
+                    .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.categoryId))
                     .map(post => ({
                         ...post,
                         length:typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
-                        category: categories.find(category => category.id === post.catergoryId) as PostCategory
+                        category: categories.find(category => category.id === post.categoryId) as PostCategory
                     })),
             }
         })
         console.log("slides",processedSlides)
-        setSlides(processedSlides.filter(slide => (slide.type === SlideTypes.IMAGE && slide.imageUrl.length >0) || (slide.type === SlideTypes.POSTBLOCK && slide.slides.length > 0)))
+        setSlides(processedSlides.filter(slide =>
+            (slide.type === SlideTypes.IMAGE && slide.imageUrl.length >0) ||
+            (slide.type === SlideTypes.POSTBLOCK && slide.slides.length > 0) || (slide.type === SlideTypes.TEXT_SLIDE) ))
     }
 
     useEffect(()=>{

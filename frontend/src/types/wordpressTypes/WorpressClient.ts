@@ -1,20 +1,7 @@
-
 import {WordpressPost} from "./wordpressPost";
-import WpApiClient, {DefaultEndpoint, DefaultEndpointWithRevision, WPCategory, WPPost} from "../../wordpress-package";
+import WpApiClient, {DefaultEndpoint, DefaultEndpointWithRevision} from "../../wordpress-package";
 import {WordpressCategory} from "./wordPressCategories";
-import {SlideTypes} from "../../hooks/useWordpressSlides";
-
-export type WPSlide = WPPost<{
-    type: SlideTypes,
-    [SlideTypes.POSTBLOCK]: {
-        category: number[],
-        standardLength: number
-    }
-    [SlideTypes.IMAGE]: {
-        images: number[],
-        length: number
-    }
-}>
+import {WPSlide} from "../Slides";
 
 export class WordpressClient extends WpApiClient{
     constructor() {

@@ -25,7 +25,6 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
     const {seconds, resetAndStartTimer:resetTimer} = useTimer(props.duration,nextSlide)
 
     useEffect(() => {
-        console.log("update text")
         const height = measureTextHeight(title ?? '', "1000px", {},styles.title)
         const array = paginateTextBySize(1000, 770-height,{}, styles.content,BREAK_TYPE.SENTENCE)(text)
         resetTimer()
@@ -35,7 +34,7 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
 
 
     return <div>
-        <div style={{position:"absolute", left:1645,top: 900, zIndex:1}} className={"content-text"} >{index+1}/{contentArray.length}</div>
+        <div style={{position:"absolute", left:1775,top: 975, zIndex:1}} className={"content-text"} >{index+1}/{contentArray.length}</div>
         <TextSlide {...{...props, title, text}} seconds={seconds} duration={props.duration} text={contentArray[index]}/>
     </div>
 }

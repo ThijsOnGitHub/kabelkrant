@@ -5,9 +5,9 @@ import {useEffect, useState} from "react";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {random} from "lodash";
 import {useTimer} from "./utilities/useTimer";
-import {IndexedMedia} from "./useWordpressSlides";
 import {ACFCategory} from "../types/wordpressTypes/wordPressCategories";
 import {WPCategory, WPPost} from "../wordpress-package";
+import {IndexedMedia} from "../types/Slides";
 
 function transFormWordpressCategory(category:WPCategory<ACFCategory>, imagesIndexed: IndexedMedia){
         // Check if the category has an image
@@ -24,7 +24,7 @@ function transFormWordpressCategory(category:WPCategory<ACFCategory>, imagesInde
         }] as [number,PostCategory]
 }
 
-function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, imagesIndexed: IndexedMedia){
+function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, imagesIndexed: IndexedMedia): PostSlideWithoutLength{
         const category = categoriesObject[post.acf.tv_settings.category]
         let imageUrl = ""
         if(category.image != undefined && category.image.length > 0){
@@ -36,12 +36,12 @@ function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: st
         }
 
         return {
-            catergoryId: post.acf.tv_settings.category ?? -1,
+            categoryId: post.acf.tv_settings.category ?? -1,
             content: post.acf.tv_settings.text,
             title: convert(post.title.rendered),
             postImage: postImageUrl,
             length: post.acf.tv_settings.length,
-            catergoryImage: imageUrl,
+            categoryImage: imageUrl,
         }
 }
 
@@ -78,7 +78,7 @@ export function useWordpressPostData() {
 
         // Update all properties
         setIndexedMedia(imagesIndexed)
-        setPosts(transformedPosts.sort((a,b) => a.catergoryId - b.catergoryId))
+        setPosts(transformedPosts.sort((a,b) => a.categoryId - b.categoryId))
         setCategories(catergories.map(category => category[1]))
     }
 

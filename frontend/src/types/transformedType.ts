@@ -7,8 +7,8 @@ export interface PostSlide {
     content: string,
     postImage: string,
     length: number,
-    catergoryImage:string,
-    catergoryId: number,
+    categoryImage:string,
+    categoryId: number,
     category: PostCategory
 }
 
