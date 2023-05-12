@@ -1,51 +1,58 @@
 import {FC, useEffect, useState} from "react";
 import {NewsSlide} from "../component/slides/NewsSlide";
 
-import {useWordpressData} from "../hooks/useWordpressData";
+import {useWordpressPostData} from "../hooks/useWordpressPostData";
 import {NewsItem} from "../items/NewsItem";
+import {Slide, SlideTypes, useWordpressSlides} from "../hooks/useWordpressSlides";
+import {ImageSlide} from "../component/slides/ImageSlide";
+import {PostBlockSlide} from "../component/slides/PostBlockSlide";
 
-export interface KabelkrantProps {
+export interface TextBlockSlideProps {
 
 }
 
-export const Kabelkrant: FC<KabelkrantProps> = (props) => {
+export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
     const [index,setIndex] = useState<number>(0)
-    const {posts,categories} = useWordpressData()
-    const [currentPosts,setCurrentPosts] = useState(posts)
-    const [currentCategories,setCurrentCategories] = useState(categories)
-    const [currentPost,setCurrentPost] = useState(currentPosts[index])
-    const [currentCategory,setCurrentCategory] = useState(categories.find(category => category.id === currentPost?.catergoryId[0]))
+    const {posts,categories,indexedMedia} = useWordpressPostData()
+    const {slides} = useWordpressSlides(indexedMedia,posts,categories)
 
-    const [isFirstUpdate,setIsFirstUpdate] = useState(true)
+    const [currentSlides,setCurrentSlides] = useState(slides)
+    const [currentSlide,setCurrentSlide] = useState(currentSlides[index])
+
 
     function updateCurrentItem(index:number) {
         if(index == 0){
-            setCurrentPosts(posts)
-            setCurrentCategories(categories)
-
-            setCurrentPost(posts[index])
-            setCurrentCategory(categories.find(category => category.id === posts[index].catergoryId[0]))
+            console.log("updating current slides",slides)
+            setCurrentSlides(slides)
+            setCurrentSlide(slides[index])
             return
         }
-        setCurrentPost(currentPosts[index])
-        setCurrentCategory(currentCategories.find(category =>  category.id === currentPosts[index].catergoryId[0]))
+        setCurrentSlide(currentSlides[index])
     }
 
     function nextSlide() {
-        setIndex((index)=>(index+1)%currentPosts.length)
+        setIndex((index)=>(index+1)%currentSlides.length)
     }
 
     useEffect(() => {
         updateCurrentItem(index)
-    }, [index,currentPosts,currentCategories])
+    }, [index])
 
     useEffect(() => {
-        if(categories.length > 0 && posts.length > 0  && isFirstUpdate){
-            setCurrentPosts(posts)
-            setCurrentCategories(categories)
-            setIsFirstUpdate(false)
+        if(currentSlides.length < 1 ){
+            setCurrentSlides(slides)
+            updateCurrentItem(index)
         }
-    }, [posts,categories])
+    }, [slides])
 
-    return (currentPost && currentCategory) ? <NewsItem item={{post:currentPost,category:currentCategory}} nextSlide={nextSlide} />:<div style={{color:"white"}}>Loading... {JSON.stringify(currentPost)} {!!currentPost} {JSON.stringify(currentCategory)} {!!currentCategory}</div>
+    function renderCorrectSlide(slide: Slide): JSX.Element {
+        switch (slide.type) {
+            case SlideTypes.POSTBLOCK:
+                return <PostBlockSlide posts={slide.slides} onCompleted={nextSlide}/>
+            case SlideTypes.IMAGE:
+                return <ImageSlide title={""} showText={false}  backgroundImageURL={slide.imageUrl[0]} length={slide.length} onCompleted={nextSlide}/>
+        }
+    }
+
+    return currentSlide ? renderCorrectSlide(currentSlide) : <div style={{color: "white"}}>Loading... </div>
 }

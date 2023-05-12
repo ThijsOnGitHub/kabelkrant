@@ -6,17 +6,13 @@ import {useTimer} from "../hooks/utilities/useTimer";
 
 
 interface NewsItemsProps {
-    item: {
-        post: PostSlide
-        category: PostCategory
-    }
+    post: PostSlide
+
     nextSlide: () => void
 }
 
-export const NewsItem: FC<NewsItemsProps> = ({item,...props}) => {
-    const [currentItem,setCurrentItem] = useState(item)
-    const {post,category} = currentItem
-    const {post:currentPost,category:currentCategory} = item
+export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
+    const [currentPost,setCurrentPost] = useState(post)
     const [showImage,setShowImage] = useState(false)
 
     function nextSlide() {
@@ -30,17 +26,17 @@ export const NewsItem: FC<NewsItemsProps> = ({item,...props}) => {
             setShowImage(true)
             setTimeout(() => {
                 setShowImage(false)
-                setCurrentItem(item)
-            },item.post.length * 1000)
+                setCurrentPost(post)
+            },post.length * 1000)
         }else{
-            setCurrentItem(item)
+            setCurrentPost(post)
         }
     },[currentPost])
 
 
     return showImage ?
         <ImageSlide backgroundImageURL={currentPost.postImage} title={currentPost.title} /> :
-        <NewsSlide backgroundImage={post.catergoryImage ?? "white"} subject={category?.subject ?? {
+        <NewsSlide backgroundImage={post.catergoryImage ?? "white"} subject={post.category?.subject ?? {
         subject: "Nieuws",
         icon: "tv"
     }} duration={post.length} title={post.title ?? ""} text={post.content ?? ""} onCompleted={nextSlide} />

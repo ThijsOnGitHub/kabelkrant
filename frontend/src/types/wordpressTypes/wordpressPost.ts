@@ -4,7 +4,7 @@ import {WPPost} from "wordpress-api-client";
 export interface ACFPost {
     show_on_tv: boolean;
     tv_settings:{
-        category: string;
+        category: number
         end_date: string;
         images: number | string;
         length: number | string;

@@ -22,7 +22,7 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
         }
     }
 
-    const [seconds,resetTimer] = useTimer(props.duration,nextSlide)
+    const {seconds, resetAndStartTimer:resetTimer} = useTimer(props.duration,nextSlide)
 
     useEffect(() => {
         console.log("update text")
