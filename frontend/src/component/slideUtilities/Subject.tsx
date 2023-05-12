@@ -1,5 +1,4 @@
 import { FC, ReactNode} from "react";
-import Icon from '@mui/material/Icon';
 
 
 export interface SubjectProps {
