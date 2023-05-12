@@ -5,7 +5,7 @@ import {WPSlide} from "../Slides";
 
 export class WordpressClient extends WpApiClient{
     constructor() {
-        super("http://localhost");
+        super(import.meta.env.VITE_API_URL as string);
     }
 
     post<P = WordpressPost>(): DefaultEndpointWithRevision<P> {
