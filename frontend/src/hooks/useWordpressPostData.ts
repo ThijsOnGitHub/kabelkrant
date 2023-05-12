@@ -83,8 +83,8 @@ export function useWordpressPostData() {
     }
 
     useEffect(() => {
-        resetTimer()
         loadPosts()
+        resetTimer()
         return () => {
             stopTimer()
         }

@@ -9,40 +9,47 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 
 export function useTimer(maxSeconds: number, onComplete?: ()=>void, intervalDuration = 10,tag?: string) {
     const [seconds, setSeconds] = useState(0)
-    const [countInterval, setCountInterval] = useState<NodeJS.Timeout[] >([])
+    const [done, setDone] = useState(false)
+    const [date, setDate] = useState(new Date())
+    const [isRunning, setIsRunning] = useState(false)
 
     function stopTimer() {
-        countInterval.forEach(interval => clearInterval(interval))
-        setCountInterval([])
+        setIsRunning(false)
     }
 
     const resetAndStartTimer = () => {
-        console.log("resetting timer",tag)
-        stopTimer()
-        startInterval(new Date())
+        setDate(new Date())
+        setDone(false)
+        setIsRunning(true)
     }
 
     useEffect(() => {
-        if (seconds>= maxSeconds) {
+        if(done){
             if(onComplete) onComplete()
-            countInterval.forEach(interval => clearInterval(interval))
+        }
+    },[done])
+
+    useEffect(() => {
+        if (seconds>= maxSeconds) {
+            setIsRunning(false)
+            setDone(true)
         }
     },[seconds])
 
-    useEffect(() => {
-        return () => {
-            stopTimer()
-        }
-    },[])
 
-    function startInterval(date: Date) {
+    useEffect(() => {
+        if(!isRunning) return
         const interval = setInterval(async () => {
             const secondsDone = (new Date().getTime() - date.getTime()) / 1000
             setSeconds(secondsDone)
         }, intervalDuration)
-        setCountInterval(intervals => [...intervals, interval])
-        return interval
-    }
+        console.log(interval,tag)
+        return () => {
+            console.log("clearing interval"+interval,tag)
+            clearInterval(interval)
+        }
+    }, [isRunning])
+
 
     return {seconds, resetAndStartTimer, stopTimer}
 }

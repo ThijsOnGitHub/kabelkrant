@@ -10,7 +10,7 @@ export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutL
     const {resetAndStartTimer,stopTimer} =  useTimer(10, ()=> {
         loadSlides()
         resetAndStartTimer()
-    }, 10000,"slides")
+    }, 1000,"slides")
 
     async function loadSlides(){
         const wordpressClient = new WordpressClient();
