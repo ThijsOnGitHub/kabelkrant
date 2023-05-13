@@ -4,7 +4,7 @@ import {NewsItem} from "../items/NewsItem";
 import {useWordpressSlides} from "../hooks/useWordpressSlides";
 import {ImageSlide} from "../component/slides/ImageSlide";
 import {PostBlockSlide} from "../component/slides/PostBlockSlide";
-import {Slide, SlideTypes} from "../types/Slides";
+import { Slide, SlideTypes} from "../types/Slides";
 
 export interface TextBlockSlideProps {
 
@@ -12,8 +12,8 @@ export interface TextBlockSlideProps {
 
 export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
     const [index,setIndex] = useState<number>(0)
-    const {posts,categories,indexedMedia} = useWordpressPostData()
-    const {slides} = useWordpressSlides(indexedMedia,posts,categories)
+    const {posts,categories} = useWordpressPostData()
+    const {slides} = useWordpressSlides(posts, categories)
 
     const [currentSlides,setCurrentSlides] = useState(slides)
     const [currentSlide,setCurrentSlide] = useState(currentSlides[index])

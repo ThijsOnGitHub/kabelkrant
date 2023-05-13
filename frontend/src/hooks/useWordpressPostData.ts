@@ -1,18 +1,19 @@
 import {ACFPost, WordpressPost} from "../types/wordpressTypes/wordpressPost";
 import {PostCategory, PostSlide, PostSlideWithoutLength} from "../types/transformedType";
 import {convert} from "html-to-text";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {random} from "lodash";
 import {useTimer} from "./utilities/useTimer";
 import {ACFCategory} from "../types/wordpressTypes/wordPressCategories";
-import {WPCategory, WPPost} from "../wordpress-package";
+import {WPCategory, WPMedia, WPPost} from "../wordpress-package";
 import {IndexedMedia} from "../types/Slides";
+import {ImageContext} from "../context/imageContext";
 
-function transFormWordpressCategory(category:WPCategory<ACFCategory>, imagesIndexed: IndexedMedia){
+async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getImages: (ids: number) => Promise<WPMedia | null>): Promise<[number, PostCategory]>{
         // Check if the category has an image
         const imageIds = (category.acf?.tv_background ?? [])
-        const images = imageIds.map(id => imagesIndexed[id])
+        const images = await Promise.all(imageIds.map(async (id) => getImages(id)))
         const imageUrls = images.map(image => image?.source_url).filter(image => image != undefined) as string[]
         return [category.id,{
             id: category.id,
@@ -24,16 +25,14 @@ function transFormWordpressCategory(category:WPCategory<ACFCategory>, imagesInde
         }] as [number,PostCategory]
 }
 
-function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, imagesIndexed: IndexedMedia): PostSlideWithoutLength{
+async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => Promise<WPMedia | null> ): Promise<PostSlideWithoutLength>{
         const category = categoriesObject[post.acf.tv_settings.category]
         let imageUrl = ""
         if(category.image != undefined && category.image.length > 0){
             imageUrl = category.image[random(0,category.image.length-1)]
         }
-        var postImageUrl = ""
-        if(imagesIndexed.hasOwnProperty(post.acf.tv_settings.images)){
-            postImageUrl = (imagesIndexed[post.acf.tv_settings.images]?.media_details as any).sizes.full.source_url as string ?? ""
-        }
+
+        var postImageUrl =typeof post.acf.tv_settings.images == "number" ?  (await getImages(post.acf.tv_settings.images))?.source_url ?? "" : ""
 
         return {
             categoryId: post.acf.tv_settings.category ?? -1,
@@ -48,36 +47,32 @@ function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: st
 export function useWordpressPostData() {
     const [posts, setPosts] = useState<PostSlideWithoutLength[]>([])
     const [categories, setCategories] = useState<PostCategory[]>([])
-    const [indexedMedia, setIndexedMedia] = useState<IndexedMedia>({})
     //Update the posts every 10 seconds
     const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(10, ()=>{
         loadPosts()
         resetTimer()
     },1000,"postdata")
     const wordpressClient = new WordpressClient();
+    const getImages = useContext(ImageContext)
 
     async function loadPosts(){
         // Create all the promises
         const postsPromise = wordpressClient.post().find(new URLSearchParams({"tv-filter": "true"}));
         const categoriesPromise = wordpressClient.postCategory().dangerouslyFindAll();
-        const imagesPromise = wordpressClient.media().find()
 
         // Wait for all the promises to resolve
-        const [posts,categories,images]  = await Promise.all([postsPromise,categoriesPromise,imagesPromise])
+        const [posts,categories]  = await Promise.all([postsPromise,categoriesPromise])
 
-        // Create an index of the images
-        const imagesIndexed: IndexedMedia = Object.fromEntries(images.map(image => [image?.id,image]))|| {}
 
         // Format all the categories
-        const catergories: [number,PostCategory][] = categories.map((category)=>transFormWordpressCategory(category,imagesIndexed))
+        const catergories: [number,PostCategory][] = await Promise.all(categories.map((category)=>transFormWordpressCategory(category,getImages)))
 
         // Create an object of the categories
         const categoriesObject = Object.fromEntries(catergories);
         const correctPosts=  posts.filter(post => post!= null) as unknown as WordpressPost[]
-        const transformedPosts = correctPosts.map((post)=>transformWordpressPost(post,categoriesObject,imagesIndexed))
+        const transformedPosts =  await Promise.all(correctPosts.map((post)=>transformWordpressPost(post,categoriesObject,getImages)))
 
         // Update all properties
-        setIndexedMedia(imagesIndexed)
         setPosts(transformedPosts.sort((a,b) => a.categoryId - b.categoryId))
         setCategories(catergories.map(category => category[1]))
     }
@@ -90,5 +85,5 @@ export function useWordpressPostData() {
         }
     },[])
 
-    return {posts, categories, indexedMedia}
+    return {posts, categories}
 }

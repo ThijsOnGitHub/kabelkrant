@@ -1,16 +1,18 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {PostCategory, PostSlideWithoutLength} from "../types/transformedType";
 import {useTimer} from "./utilities/useTimer";
 import {ImageSlide, IndexedMedia, Slide, SlideTypes, TextSlide, WPSlide} from "../types/Slides";
+import {ImageContext} from "../context/imageContext";
 
-export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutLength[],categories: PostCategory[]){
+export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: PostCategory[]){
     const [slides, setSlides] = useState<Slide[]>([])
     const [wpSlides, setWpSlides] = useState<WPSlide[]>([])
     const {resetAndStartTimer,stopTimer} =  useTimer(10, ()=> {
         loadSlides()
         resetAndStartTimer()
     }, 1000,"slides")
+    const getImages = useContext(ImageContext)
 
     async function loadSlides(){
         const wordpressClient = new WordpressClient();
@@ -18,15 +20,15 @@ export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutL
         setWpSlides(slides)
     }
 
-    function updateSlides(){
-        const processedSlides =wpSlides.map<Slide[]>(slide => {
+    async function updateSlides(){
+        const processedSlides =await Promise.all(wpSlides.map<Promise<Slide[]> >( async slide => {
             const acfSlide = slide.acf
             if(acfSlide.type === SlideTypes.IMAGE){
-                return acfSlide[SlideTypes.IMAGE].images.map<ImageSlide>(image => ({
+                return (await Promise.all(acfSlide[SlideTypes.IMAGE].images.map<Promise<ImageSlide>>( async image => ({
                     type: SlideTypes.IMAGE,
-                    imageUrl: images[image]?.source_url ?? "",
+                    imageUrl:(await getImages(image))?.source_url ?? "",
                     length: acfSlide[SlideTypes.IMAGE].length
-                }))
+                }))))
                 .filter(slide => slide.imageUrl !== "")
             }
             if(acfSlide.type === SlideTypes.TEXT_SLIDE){
@@ -35,7 +37,7 @@ export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutL
                     type: SlideTypes.TEXT_SLIDE,
                     title: textSlide.title,
                     length: textSlide.length,
-                    categoryImage: images[textSlide.backgroundImage]?.source_url ?? "" ,
+                    categoryImage: (await getImages(textSlide.backgroundImage))?.source_url ?? "" ,
                     category: {
                         id: 0,
                         subject: textSlide.showCategory ? {
@@ -61,7 +63,7 @@ export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutL
                         category: categories.find(category => category.id === post.categoryId) as PostCategory
                     })),
             }]
-        })
+        }))
         console.log("slides",processedSlides)
         setSlides(processedSlides.flat().filter(slide =>
             (slide.type === SlideTypes.IMAGE && slide.imageUrl.length >0) ||
@@ -78,7 +80,7 @@ export function useWordpressSlides(images: IndexedMedia,posts: PostSlideWithoutL
 
     useEffect(()=>{
         updateSlides()
-    },[wpSlides,images,posts,categories])
+    },[wpSlides,posts,categories])
 
     return {slides}
 }
