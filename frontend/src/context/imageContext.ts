@@ -1,16 +1,28 @@
 import {createContext} from "react";
-import {IndexedMedia} from "../types/Slides";
 import {WPMedia} from "../wordpress-package";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 
-export interface ImageContextProps {
-    getImages(ids: number[]): WPMedia[]
 
+export type getImageMediaObject = (ids: number) => Promise<WPMedia | null>
+export interface ImageContext{
+    getImageMediaObject: getImageMediaObject
+    getImageUrl: (imageId:number) => string
 }
 
-export const ImageContext = createContext<(ids: number) => Promise<(WPMedia<unknown> | null)> >(
-    async function getImage(imageId:number){
-        const wordPressClient = new WordpressClient()
-        return (await wordPressClient.media().find(imageId))[0]
+async function getImageMediaObject(imageId:number){
+    const wordPressClient = new WordpressClient()
+    return (await wordPressClient.media().find(imageId))[0]
+}
+
+export function getImageUrlByBaseUrl(imageId:number){
+    return import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId
+}
+
+
+export const ImageContext = createContext<ImageContext>(
+    {
+        getImageMediaObject,
+        getImageUrl: getImageUrlByBaseUrl
     }
+
 )

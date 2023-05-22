@@ -12,7 +12,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
         loadSlides()
         resetAndStartTimer()
     }, 1000,"slides")
-    const getImages = useContext(ImageContext)
+    const {getImageMediaObject,getImageUrl:getImages} = useContext(ImageContext)
 
     async function loadSlides(){
         const wordpressClient = new WordpressClient();
@@ -26,7 +26,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
             if(acfSlide.type === SlideTypes.IMAGE){
                 return (await Promise.all(acfSlide[SlideTypes.IMAGE].images.map<Promise<ImageSlide>>( async image => ({
                     type: SlideTypes.IMAGE,
-                    imageUrl:(await getImages(image))?.source_url ?? "",
+                    imageUrl:getImages(image) ?? "",
                     length: acfSlide[SlideTypes.IMAGE].length
                 }))))
                 .filter(slide => slide.imageUrl !== "")
@@ -37,7 +37,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                     type: SlideTypes.TEXT_SLIDE,
                     title: textSlide.title,
                     length: textSlide.length,
-                    categoryImage: (await getImages(textSlide.backgroundImage))?.source_url ?? "" ,
+                    categoryImage:  getImages(textSlide.backgroundImage) ?? "" ,
                     category: {
                         id: 0,
                         subject: textSlide.showCategory ? {
