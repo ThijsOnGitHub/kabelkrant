@@ -6,7 +6,7 @@ import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 export type getImageMediaObject = (ids: number) => Promise<WPMedia | null>
 export interface ImageContext{
     getImageMediaObject: getImageMediaObject
-    getImageUrl: (imageId:number) => string
+    getImageUrl: (imageId:number) => Promise<string>
 }
 
 async function getImageMediaObject(imageId:number){
@@ -22,7 +22,7 @@ export function getImageUrlByBaseUrl(imageId:number){
 export const ImageContext = createContext<ImageContext>(
     {
         getImageMediaObject,
-        getImageUrl: getImageUrlByBaseUrl
+        getImageUrl: async (id)=>getImageUrlByBaseUrl(id)
     }
 
 )

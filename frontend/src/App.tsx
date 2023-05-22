@@ -11,6 +11,8 @@ function App() {
     const [count, setCount] = useState(0)
 
     const [cashedImages,setCashedImages] = useState<IndexedMedia>({})
+
+    const [cashedImageUrls,setCashedImageUrls] = useState<{ [key: string]: typeof Image }>({})
     /*async function getImage(imageId:number){
         if(cashedImages.hasOwnProperty(imageId)){
             return cashedImages[imageId]
@@ -30,7 +32,7 @@ function App() {
                 id: imageId
             } as WPMedia
         },
-        getImageUrl:getImageUrlByBaseUrl
+        getImageUrl:async (id)=>getImageUrlByBaseUrl(id)
     }
 
 

@@ -26,8 +26,8 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
             if(acfSlide.type === SlideTypes.IMAGE){
                 return (await Promise.all(acfSlide[SlideTypes.IMAGE].images.map<Promise<ImageSlide>>( async image => ({
                     type: SlideTypes.IMAGE,
-                    imageUrl:getImages(image) ?? "",
-                    length: acfSlide[SlideTypes.IMAGE].length
+                    imageUrl: await getImages(image) ?? "",
+                    length: import.meta.env.DEV ? 2 : acfSlide[SlideTypes.IMAGE].length
                 }))))
                 .filter(slide => slide.imageUrl !== "")
             }
@@ -37,7 +37,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                     type: SlideTypes.TEXT_SLIDE,
                     title: textSlide.title,
                     length: textSlide.length,
-                    categoryImage:  getImages(textSlide.backgroundImage) ?? "" ,
+                    categoryImage:  await getImages(textSlide.backgroundImage) ?? "" ,
                     category: {
                         id: 0,
                         subject: textSlide.showCategory ? {
@@ -59,7 +59,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                     .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.categoryId))
                     .map(post => ({
                         ...post,
-                        length:typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
+                        length: import.meta.env.DEV ? 2 : typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
                         category: categories.find(category => category.id === post.categoryId) as PostCategory
                     })),
             }]
