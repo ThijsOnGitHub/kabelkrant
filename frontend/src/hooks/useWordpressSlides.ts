@@ -8,7 +8,7 @@ import {ImageContext} from "../context/imageContext";
 export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: PostCategory[]){
     const [slides, setSlides] = useState<Slide[]>([])
     const [wpSlides, setWpSlides] = useState<WPSlide[]>([])
-    const {resetAndStartTimer,stopTimer} =  useTimer(10, ()=> {
+    const {resetAndStartTimer,stopTimer} =  useTimer(120, ()=> {
         loadSlides()
         resetAndStartTimer()
     }, 1000,"slides")

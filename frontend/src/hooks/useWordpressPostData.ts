@@ -48,7 +48,7 @@ export function useWordpressPostData() {
     const [posts, setPosts] = useState<PostSlideWithoutLength[]>([])
     const [categories, setCategories] = useState<PostCategory[]>([])
     //Update the posts every 10 seconds
-    const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(10, ()=>{
+    const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(120, ()=>{
         loadPosts()
         resetTimer()
     },1000,"postdata")
