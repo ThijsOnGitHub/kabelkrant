@@ -27,7 +27,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                 return (await Promise.all(acfSlide[SlideTypes.IMAGE].images.map<Promise<ImageSlide>>( async image => ({
                     type: SlideTypes.IMAGE,
                     imageUrl: await getImages(image) ?? "",
-                    length: import.meta.env.DEV ? 2 : acfSlide[SlideTypes.IMAGE].length
+                    length:  acfSlide[SlideTypes.IMAGE].length,
                 }))))
                 .filter(slide => slide.imageUrl !== "")
             }
@@ -37,6 +37,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                     type: SlideTypes.TEXT_SLIDE,
                     title: textSlide.title,
                     length: textSlide.length,
+                    imageLength: textSlide.imageLength,
                     categoryImage:  await getImages(textSlide.backgroundImage) ?? "" ,
                     category: {
                         id: 0,
@@ -59,12 +60,12 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                     .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.categoryId))
                     .map(post => ({
                         ...post,
-                        length: import.meta.env.DEV ? 2 : typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
+                        length:  typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
+                        imageLength: typeof post.imageLength === "number" ? post.imageLength :acfSlide[SlideTypes.POSTBLOCK].standardImageLength,
                         category: categories.find(category => category.id === post.categoryId) as PostCategory
                     })),
             }]
         }))
-        console.log("slides",processedSlides)
         setSlides(processedSlides.flat().filter(slide =>
             (slide.type === SlideTypes.IMAGE && slide.imageUrl.length >0) ||
             (slide.type === SlideTypes.POSTBLOCK && slide.slides.length > 0) || (slide.type === SlideTypes.TEXT_SLIDE) ))

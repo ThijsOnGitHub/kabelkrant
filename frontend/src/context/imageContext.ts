@@ -1,7 +1,8 @@
 import {createContext} from "react";
 import {WPMedia} from "../wordpress-package";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
-
+import axios from "axios";
+import { set } from "lodash";
 
 export type getImageMediaObject = (ids: number) => Promise<WPMedia | null>
 export interface ImageContext{
@@ -14,8 +15,29 @@ async function getImageMediaObject(imageId:number){
     return (await wordPressClient.media().find(imageId))[0]
 }
 
-export function getImageUrlByBaseUrl(imageId:number){
-    return import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId
+export async function getImageUrlByBaseUrl(imageId:number, cacheObject: {[key:number]:string} = {}, setCacheObject: (cacheObject: {[key:number]:string})=>void = ()=>{}){
+    console.log(import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId)
+    // add no cors to the request
+    if(cacheObject.hasOwnProperty(imageId)){
+        return cacheObject[imageId]
+    }
+    let imageUrl = ""
+    try{
+        const result = await axios.get(import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId,{
+            responseType: 'arraybuffer',
+        })
+        let blob = new Blob(
+            [result.data], 
+            { type: result.headers['content-type'] }
+          )
+          let image = window.URL.createObjectURL(blob)
+        
+        imageUrl = image
+    }catch(e){
+        imageUrl = import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId
+    }
+    setCacheObject({...cacheObject, [imageId]: imageUrl})
+    return imageUrl
 }
 
 

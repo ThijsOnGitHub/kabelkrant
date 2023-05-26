@@ -10,7 +10,7 @@ import {WPCategory, WPMedia, WPPost} from "../wordpress-package";
 import {IndexedMedia} from "../types/Slides";
 import {getImageUrlByBaseUrl, ImageContext} from "../context/imageContext";
 
-async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getImages: (ids: number) => string): Promise<[number, PostCategory]>{
+async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getImages: (ids: number) => Promise<string>): Promise<[number, PostCategory]>{
         // Check if the category has an image
         const imageIds = (category.acf?.tv_background ?? [])
         const images = await Promise.all(imageIds.map(async (id) => getImages(id)))
@@ -25,14 +25,14 @@ async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getI
         }] as [number,PostCategory]
 }
 
-async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => string ): Promise<PostSlideWithoutLength>{
+async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => Promise<string> ): Promise<PostSlideWithoutLength>{
         const category = categoriesObject[post.acf.tv_settings.category]
         let imageUrl = ""
         if(category.image != undefined && category.image.length > 0){
             imageUrl = category.image[random(0,category.image.length-1)]
         }
 
-        var postImageUrl =typeof post.acf.tv_settings.images == "number" ?  getImages(post.acf.tv_settings.images) ?? "" : ""
+        var postImageUrl =typeof post.acf.tv_settings.images == "number" ?  await getImages(post.acf.tv_settings.images) ?? "" : ""
 
         return {
             categoryId: post.acf.tv_settings.category ?? -1,
@@ -41,6 +41,7 @@ async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {
             postImage: postImageUrl,
             length: post.acf.tv_settings.length,
             categoryImage: imageUrl,
+            imageLength: post.acf.tv_settings.imageLength
         }
 }
 

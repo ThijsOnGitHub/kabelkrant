@@ -1,18 +1,15 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './style/global.scss'
 import {Kabelkrant} from "./pages/Kabelkrant";
 import {FitToScreen} from "./component/slideUtilities/fitToScreen";
-import {IndexedMedia} from "./types/Slides";
 import {getImageUrlByBaseUrl, ImageContext} from './context/imageContext';
 import {WPMedia} from "./wordpress-package";
 
 function App() {
     const [count, setCount] = useState(0)
 
-    const [cashedImages,setCashedImages] = useState<IndexedMedia>({})
+    const [cashedImages,setCashedImages] = useState<{[key:string]:string}>({})
 
-    const [cashedImageUrls,setCashedImageUrls] = useState<{ [key: string]: typeof Image }>({})
     /*async function getImage(imageId:number){
         if(cashedImages.hasOwnProperty(imageId)){
             return cashedImages[imageId]
@@ -28,11 +25,11 @@ function App() {
     const imageContext: ImageContext = {
         async getImageMediaObject(imageId:number){
             return {
-                source_url: import.meta.env.BASE_URL+ "/?attachment_id="+imageId,
+                source_url: import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId,
                 id: imageId
             } as WPMedia
         },
-        getImageUrl:async (id)=>getImageUrlByBaseUrl(id)
+        getImageUrl: (id:number) => getImageUrlByBaseUrl(id,cashedImages,setCashedImages)
     }
 
 

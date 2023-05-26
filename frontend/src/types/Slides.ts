@@ -39,6 +39,7 @@ export type WPSlide = WPPost<{
     [SlideTypes.POSTBLOCK]: {
         category: number[],
         standardLength: number
+        standardImageLength: number
     }
     [SlideTypes.IMAGE]: {
         images: number[],
@@ -52,7 +53,15 @@ export type WPSlide = WPPost<{
             text: string
         }
         length: number
+        imageLength: number
         text: string;
         title: string;
     }
+    hasTimespan: boolean
+    timespan: {
+        startTime: string,
+        endTime: string,
+        days: string[]
+    }
+        
 }>

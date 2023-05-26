@@ -22,20 +22,21 @@ export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
 
 
     useEffect(() => {
-        if(currentPost.postImage != ""){
+        console.log("currentPost",currentPost)
+        if(post.postImage != ""){
             setShowImage(true)
             setTimeout(() => {
                 setShowImage(false)
                 setCurrentPost(post)
-            },post.length * 1000)
+            },post.imageLength * 1000)
         }else{
             setCurrentPost(post)
         }
-    },[currentPost])
+    },[post])
 
 
     return showImage ?
-        <ImageSlide backgroundImageURL={currentPost.postImage} title={currentPost.title} /> :
+        <ImageSlide backgroundImageURL={post.postImage} title={post.title} /> :
         <NewsSlide backgroundImage={post.categoryImage ?? "white"} subject={post.category?.subject} duration={post.length} title={post.title ?? ""} text={post.content ?? ""} onCompleted={nextSlide} />
 
 }

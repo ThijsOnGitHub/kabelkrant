@@ -10,9 +10,10 @@ export interface PostSlide {
     categoryImage:string,
     categoryId: number,
     category: PostCategory
+    imageLength: number
 }
 
-export type PostSlideWithoutLength = Omit<PostSlide, 'length' | 'category'> & {length: string | number}
+export type PostSlideWithoutLength = Omit<PostSlide, 'length' | 'category' | 'imageLength'> & {length: string | number, imageLength: (string | number)} 
 
 export interface PostCategory {
     id: number,
