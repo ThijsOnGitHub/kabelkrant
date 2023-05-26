@@ -1,7 +1,6 @@
 import {WPMedia} from "wordpress-api-client";
 import {PostSlide} from "./transformedType";
 import {WPPost} from "../wordpress-package";
-import {WordpressPost} from "./wordpressTypes/wordpressPost";
 
 export type IndexedMedia = { [key: string]: WPMedia }
 

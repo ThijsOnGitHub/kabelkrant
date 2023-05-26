@@ -37,7 +37,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                     type: SlideTypes.TEXT_SLIDE,
                     title: textSlide.title,
                     length: textSlide.length,
-                    imageLength: textSlide.imageLength,
+                    imageLength: 0,
                     categoryImage:  await getImages(textSlide.backgroundImage) ?? "" ,
                     category: {
                         id: 0,
@@ -58,12 +58,14 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                 categoryId: acfSlide[SlideTypes.POSTBLOCK].category,
                 slides: posts
                     .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.categoryId))
-                    .map(post => ({
+                    .map(post => {
+                    
+                        return ({
                         ...post,
                         length:  typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
                         imageLength: typeof post.imageLength === "number" ? post.imageLength :acfSlide[SlideTypes.POSTBLOCK].standardImageLength,
                         category: categories.find(category => category.id === post.categoryId) as PostCategory
-                    })),
+                    })}),
             }]
         }))
         setSlides(processedSlides.flat().filter(slide =>

@@ -22,7 +22,6 @@ export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
 
 
     useEffect(() => {
-        console.log("currentPost",currentPost)
         if(post.postImage != ""){
             setShowImage(true)
             setTimeout(() => {
