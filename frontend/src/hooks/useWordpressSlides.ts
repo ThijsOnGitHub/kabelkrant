@@ -4,6 +4,7 @@ import {PostCategory, PostSlideWithoutLength} from "../types/transformedType";
 import {useTimer} from "./utilities/useTimer";
 import {ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData} from "../types/Slides";
 import {ImageContext} from "../context/imageContext";
+import _ from "lodash";
 
 function getGlobalSlideData(slide: WPSlide): globalSlideData{
     return {
@@ -63,18 +64,20 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                 }
                 return [res]
             }
+            const resPosts = posts
+            .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.categoryId))
+            .map(post => {
+                return ({
+                ...post,
+                length:  typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
+                imageLength: typeof post.imageLength === "number" ? post.imageLength :acfSlide[SlideTypes.POSTBLOCK].standardImageLength,
+                category: categories.find(category => category.id === post.categoryId) as PostCategory
+            })})
+            
             return [{
                 type: SlideTypes.POSTBLOCK,
                 categoryId: acfSlide[SlideTypes.POSTBLOCK].category,
-                slides: posts
-                    .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.categoryId))
-                    .map(post => {
-                        return ({
-                        ...post,
-                        length:  typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
-                        imageLength: typeof post.imageLength === "number" ? post.imageLength :acfSlide[SlideTypes.POSTBLOCK].standardImageLength,
-                        category: categories.find(category => category.id === post.categoryId) as PostCategory
-                    })}),
+                slides: _.shuffle(resPosts),
                 ...getGlobalSlideData(slide)
             }]
         }))

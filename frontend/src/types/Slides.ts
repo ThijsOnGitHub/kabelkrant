@@ -49,6 +49,7 @@ export type WPSlide = WPPost<{
         category: number[],
         standardLength: number
         standardImageLength: number
+        mixSlides: boolean
     }
     [SlideTypes.IMAGE]: {
         images: number[],
