@@ -5,9 +5,21 @@ import {useWordpressSlides} from "../hooks/useWordpressSlides";
 import {ImageSlide} from "../component/slides/ImageSlide";
 import {PostBlockSlide} from "../component/slides/PostBlockSlide";
 import { Slide, SlideTypes} from "../types/Slides";
+import { getDate, getDay, getHours } from "date-fns";
+import { FitToScreen } from "../component/slideUtilities/fitToScreen";
 
 export interface TextBlockSlideProps {
 
+}
+
+export function filterSlides(slides: Slide[], date: Date){
+    console.log(slides,getDate(date).toString(),getHours(date).toString())
+    return slides
+    //Filter if slide are in the current hour
+    .filter((slide) => {
+        if(!slide.hasTimespan) return true;
+        return slide.timespan.days.includes(getDay(date).toString()) && slide.timespan.hours.includes(getHours(date).toString())
+    })
 }
 
 export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
@@ -15,15 +27,17 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
     const {posts,categories} = useWordpressPostData()
     const {slides} = useWordpressSlides(posts, categories)
 
-    const [currentSlides,setCurrentSlides] = useState(slides)
+
+    const [currentSlides,setCurrentSlides] = useState(filterSlides(slides,new Date()))
     const [currentSlide,setCurrentSlide] = useState(currentSlides[index])
     const [isPaused,setIsPaused] = useState(false)
 
 
     function updateCurrentItem(index:number) {
         if(index == 0){
-            setCurrentSlides(slides)
-            setCurrentSlide(slides[index])
+            const filteredSlides = filterSlides(slides, new Date())
+            setCurrentSlides(filteredSlides)
+            setCurrentSlide(filteredSlides[index])
             return
         }
         setCurrentSlide(currentSlides[index])
@@ -42,7 +56,7 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
 
     useEffect(() => {
         if(currentSlides.length < 2 ){
-            setCurrentSlides(slides)
+            setCurrentSlides(filterSlides(slides, new Date()))
             updateCurrentItem(index)
         }
         if(currentSlides.length > 1 && isPaused){
@@ -64,5 +78,8 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
         }
     }
 
-    return currentSlide ? renderCorrectSlide(currentSlide) : <div style={{color: "white"}}>Loading... </div>
+    return<FitToScreen baseWidth={1920} baseHeight={1080}>
+        {currentSlide ? renderCorrectSlide(currentSlide) : <div style={{color: "white"}}>Loading... </div>}
+    </FitToScreen>
+    
 }

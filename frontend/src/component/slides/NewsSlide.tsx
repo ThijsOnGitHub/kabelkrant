@@ -34,7 +34,7 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
     },[text])
 
 
-    return <div>
+    return <div style={{position:"relative"}}>
         <div style={{position:"absolute", left:1755,top: 960, zIndex:1}} className={"content-text"} >{index+1}/{contentArray.length}</div>
         <TextSlide ref={textSlideRef} {...{...props, title, text}} seconds={seconds} duration={props.duration} text={contentArray[index]}/>
     </div>

@@ -12,26 +12,36 @@ export enum SlideTypes {
     VOID = "void"
 }
 
-export interface ImageSlide {
+export type  ImageSlide = {
     type: SlideTypes.IMAGE
     imageUrl: string
     length: number
-}
+} & globalSlideData
 
-export interface PostBlockSlide {
+export type  PostBlockSlide = {
     type: SlideTypes.POSTBLOCK
     categoryId: number[]
     slides: PostSlide[]
-}
+} & globalSlideData
+
 export type TextSlide = PostSlide &  {
     type: SlideTypes.TEXT_SLIDE
-}
+} & globalSlideData
 
 export type VoidSlide = {
     type: SlideTypes.VOID
+} & globalSlideData
+
+export type globalSlideData = {
+    menuOrder: number
+    hasTimespan: boolean
+    timespan: {
+        days: string,
+        hours: string
+    }    
 }
 
-export type Slide = ImageSlide | PostBlockSlide | TextSlide | VoidSlide
+export type Slide = (ImageSlide | PostBlockSlide | TextSlide | VoidSlide)
 
 export type WPSlide = WPPost<{
     type: SlideTypes,
@@ -55,12 +65,5 @@ export type WPSlide = WPPost<{
         imageLength: number
         text: string;
         title: string;
-    }
-    hasTimespan: boolean
-    timespan: {
-        startTime: string,
-        endTime: string,
-        days: string[]
-    }
-        
-}>
+    }   
+} & globalSlideData>

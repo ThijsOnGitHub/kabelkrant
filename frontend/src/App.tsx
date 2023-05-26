@@ -4,6 +4,20 @@ import {Kabelkrant} from "./pages/Kabelkrant";
 import {FitToScreen} from "./component/slideUtilities/fitToScreen";
 import {getImageUrlByBaseUrl, ImageContext} from './context/imageContext';
 import {WPMedia} from "./wordpress-package";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Overview } from './pages/Overview';
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Kabelkrant />
+
+    },
+    {
+        path: '/overview',
+        element: <Overview />
+    }
+])
 
 function App() {
     const [count, setCount] = useState(0)
@@ -32,12 +46,9 @@ function App() {
         getImageUrl: (id:number) => getImageUrlByBaseUrl(id,cashedImages,setCashedImages)
     }
 
-
   return (
       <ImageContext.Provider value={imageContext}>
-          <FitToScreen baseWidth={1920} baseHeight={1080}>
-            <Kabelkrant />
-          </FitToScreen>
+        <RouterProvider router={router}/>
       </ImageContext.Provider>
   )
 }

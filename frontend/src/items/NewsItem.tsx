@@ -1,8 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {NewsSlide} from "../component/slides/NewsSlide";
-import {PostCategory, PostSlide} from "../types/transformedType";
+import {PostSlide} from "../types/transformedType";
 import {ImageSlide} from "../component/slides/ImageSlide";
-import {useTimer} from "../hooks/utilities/useTimer";
 
 
 interface NewsItemsProps {

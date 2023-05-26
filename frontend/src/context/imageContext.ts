@@ -2,7 +2,6 @@ import {createContext} from "react";
 import {WPMedia} from "../wordpress-package";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import axios from "axios";
-import { set } from "lodash";
 
 export type getImageMediaObject = (ids: number) => Promise<WPMedia | null>
 export interface ImageContext{
