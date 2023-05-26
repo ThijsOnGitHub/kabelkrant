@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import './style/global.scss'
 import {Kabelkrant} from "./pages/Kabelkrant";
-import {FitToScreen} from "./component/slideUtilities/fitToScreen";
 import {getImageUrlByBaseUrl, ImageContext} from './context/imageContext';
 import {WPMedia} from "./wordpress-package";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -20,8 +19,6 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-    const [count, setCount] = useState(0)
-
     const [cashedImages,setCashedImages] = useState<{[key:string]:string}>({})
 
     /*async function getImage(imageId:number){
