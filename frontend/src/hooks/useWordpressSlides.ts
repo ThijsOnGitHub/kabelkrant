@@ -2,17 +2,26 @@ import {useContext, useEffect, useState} from "react";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {PostCategory, PostSlideWithoutLength} from "../types/transformedType";
 import {useTimer} from "./utilities/useTimer";
-import {ImageSlide, IndexedMedia, Slide, SlideTypes, TextSlide, WPSlide} from "../types/Slides";
+import {ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData} from "../types/Slides";
 import {ImageContext} from "../context/imageContext";
+import _ from "lodash";
+
+function getGlobalSlideData(slide: WPSlide): globalSlideData{
+    return {
+        menuOrder: slide.menu_order as number,
+        hasTimespan: slide.acf.hasTimespan,
+        timespan: slide.acf.timespan
+    }
+}
 
 export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: PostCategory[]){
     const [slides, setSlides] = useState<Slide[]>([])
     const [wpSlides, setWpSlides] = useState<WPSlide[]>([])
-    const {resetAndStartTimer,stopTimer} =  useTimer(10, ()=> {
+    const {resetAndStartTimer,stopTimer} =  useTimer(120, ()=> {
         loadSlides()
         resetAndStartTimer()
     }, 1000,"slides")
-    const getImages = useContext(ImageContext)
+    const {getImageMediaObject,getImageUrl:getImages} = useContext(ImageContext)
 
     async function loadSlides(){
         const wordpressClient = new WordpressClient();
@@ -26,8 +35,9 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
             if(acfSlide.type === SlideTypes.IMAGE){
                 return (await Promise.all(acfSlide[SlideTypes.IMAGE].images.map<Promise<ImageSlide>>( async image => ({
                     type: SlideTypes.IMAGE,
-                    imageUrl:(await getImages(image))?.source_url ?? "",
-                    length: acfSlide[SlideTypes.IMAGE].length
+                    imageUrl: await getImages(image) ?? "",
+                    length:  acfSlide[SlideTypes.IMAGE].length,
+                    ...getGlobalSlideData(slide)
                 }))))
                 .filter(slide => slide.imageUrl !== "")
             }
@@ -37,7 +47,8 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                     type: SlideTypes.TEXT_SLIDE,
                     title: textSlide.title,
                     length: textSlide.length,
-                    categoryImage: (await getImages(textSlide.backgroundImage))?.source_url ?? "" ,
+                    imageLength: 0,
+                    categoryImage:  await getImages(textSlide.backgroundImage) ?? "" ,
                     category: {
                         id: 0,
                         subject: textSlide.showCategory ? {
@@ -49,25 +60,30 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                     content: textSlide.text,
                     postImage: "",
                     categoryId: 0,
+                    ...getGlobalSlideData(slide)
                 }
                 return [res]
             }
+            const resPosts = posts
+            .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.categoryId))
+            .map(post => {
+                return ({
+                ...post,
+                length:  typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
+                imageLength: typeof post.imageLength === "number" ? post.imageLength :acfSlide[SlideTypes.POSTBLOCK].standardImageLength,
+                category: categories.find(category => category.id === post.categoryId) as PostCategory
+            })})
+            
             return [{
                 type: SlideTypes.POSTBLOCK,
                 categoryId: acfSlide[SlideTypes.POSTBLOCK].category,
-                slides: posts
-                    .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.categoryId))
-                    .map(post => ({
-                        ...post,
-                        length:typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
-                        category: categories.find(category => category.id === post.categoryId) as PostCategory
-                    })),
+                slides: _.shuffle(resPosts),
+                ...getGlobalSlideData(slide)
             }]
         }))
-        console.log("slides",processedSlides)
         setSlides(processedSlides.flat().filter(slide =>
             (slide.type === SlideTypes.IMAGE && slide.imageUrl.length >0) ||
-            (slide.type === SlideTypes.POSTBLOCK && slide.slides.length > 0) || (slide.type === SlideTypes.TEXT_SLIDE) ))
+            (slide.type === SlideTypes.POSTBLOCK && slide.slides.length > 0) || (slide.type === SlideTypes.TEXT_SLIDE) ).sort((a,b) => a.menuOrder - b.menuOrder))
     }
 
     useEffect(()=>{

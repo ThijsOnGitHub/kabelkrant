@@ -10,7 +10,7 @@ const RADIO_INPUT = "Radio"
 
 const testvideo1 ="C:\\Users\\thijs\\Videos\\2021-10-09 11-15-14.mp4"
 const testvideo2 = "C:\\Users\\thijs\\Videos\\2d character.mp4"
-const filePath = "C:\\Users\\thijs\\Videos\\RTV\\Intro Talk D'huzes.mp4"
+const filePath = testvideo2
 
 async function wait(ms: number) {
     return new Promise(resolve => {
@@ -20,7 +20,7 @@ async function wait(ms: number) {
 async function main(){
 
 // Connect to obs-ws running on 192.168.0.4
-    await obs.connect('ws://localhost:4455');
+    await obs.connect('ws://localhost:4455', 'rtvserver');
 
     obs.on('MediaInputPlaybackEnded', async (data) => {
         if(data.inputName != KABELKRANT_MEDIA_SOURCE) return

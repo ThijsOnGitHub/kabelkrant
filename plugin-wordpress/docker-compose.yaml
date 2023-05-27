@@ -34,7 +34,7 @@ services:
       - '80:80'
     volumes: [
       "./site-data/wordpress:/var/www/html",
-      "./plugin:/var/www/html/wp-content/plugins/kabelkrant_api",
+      "./kabelkrant_api:/var/www/html/wp-content/plugins/kabelkrant_api",
     ]
     environment:
       WORDPRESS_DB_HOST: db:3306

@@ -2,8 +2,9 @@
 /*
  * Plugin Name: Kabelkrant API
  * Description: Plugin voor het aanmaken van de Kabelkrant API
- * Version: 1.0
+ * Version: 1.0.2
  * Author: Kabelkrant
+ * Folder: kabelkrant_api
  */
 // import code from CustomPostApi.php
 require_once 'CustomPostApi.php';

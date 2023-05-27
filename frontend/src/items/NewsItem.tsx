@@ -1,8 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {NewsSlide} from "../component/slides/NewsSlide";
-import {PostCategory, PostSlide} from "../types/transformedType";
+import {PostSlide} from "../types/transformedType";
 import {ImageSlide} from "../component/slides/ImageSlide";
-import {useTimer} from "../hooks/utilities/useTimer";
 
 
 interface NewsItemsProps {
@@ -22,20 +21,20 @@ export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
 
 
     useEffect(() => {
-        if(currentPost.postImage != ""){
+        if(post.postImage != ""){
             setShowImage(true)
             setTimeout(() => {
                 setShowImage(false)
                 setCurrentPost(post)
-            },post.length * 1000)
+            },post.imageLength * 1000)
         }else{
             setCurrentPost(post)
         }
-    },[currentPost])
+    },[post])
 
 
     return showImage ?
-        <ImageSlide backgroundImageURL={currentPost.postImage} title={currentPost.title} /> :
+        <ImageSlide backgroundImageURL={post.postImage} title={post.title} /> :
         <NewsSlide backgroundImage={post.categoryImage ?? "white"} subject={post.category?.subject} duration={post.length} title={post.title ?? ""} text={post.content ?? ""} onCompleted={nextSlide} />
 
 }

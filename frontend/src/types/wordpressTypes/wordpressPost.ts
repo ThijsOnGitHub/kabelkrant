@@ -9,6 +9,7 @@ export interface ACFPost {
         images: number | string;
         length: number | string;
         text: string;
+        imageLength: number | string;
     }
 }
 export type WordpressPost = WPPost<ACFPost>;

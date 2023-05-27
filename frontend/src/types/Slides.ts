@@ -1,7 +1,6 @@
 import {WPMedia} from "wordpress-api-client";
 import {PostSlide} from "./transformedType";
 import {WPPost} from "../wordpress-package";
-import {WordpressPost} from "./wordpressTypes/wordpressPost";
 
 export type IndexedMedia = { [key: string]: WPMedia }
 
@@ -13,32 +12,44 @@ export enum SlideTypes {
     VOID = "void"
 }
 
-export interface ImageSlide {
+export type  ImageSlide = {
     type: SlideTypes.IMAGE
     imageUrl: string
     length: number
-}
+} & globalSlideData
 
-export interface PostBlockSlide {
+export type  PostBlockSlide = {
     type: SlideTypes.POSTBLOCK
     categoryId: number[]
     slides: PostSlide[]
-}
+} & globalSlideData
+
 export type TextSlide = PostSlide &  {
     type: SlideTypes.TEXT_SLIDE
-}
+} & globalSlideData
 
 export type VoidSlide = {
     type: SlideTypes.VOID
+} & globalSlideData
+
+export type globalSlideData = {
+    menuOrder: number
+    hasTimespan: boolean
+    timespan: {
+        days: string,
+        hours: string
+    }    
 }
 
-export type Slide = ImageSlide | PostBlockSlide | TextSlide | VoidSlide
+export type Slide = (ImageSlide | PostBlockSlide | TextSlide | VoidSlide)
 
 export type WPSlide = WPPost<{
     type: SlideTypes,
     [SlideTypes.POSTBLOCK]: {
         category: number[],
         standardLength: number
+        standardImageLength: number
+        mixSlides: boolean
     }
     [SlideTypes.IMAGE]: {
         images: number[],
@@ -52,7 +63,8 @@ export type WPSlide = WPPost<{
             text: string
         }
         length: number
+        imageLength: number
         text: string;
         title: string;
-    }
-}>
+    }   
+} & globalSlideData>

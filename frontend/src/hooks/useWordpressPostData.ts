@@ -8,13 +8,13 @@ import {useTimer} from "./utilities/useTimer";
 import {ACFCategory} from "../types/wordpressTypes/wordPressCategories";
 import {WPCategory, WPMedia, WPPost} from "../wordpress-package";
 import {IndexedMedia} from "../types/Slides";
-import {ImageContext} from "../context/imageContext";
+import {getImageUrlByBaseUrl, ImageContext} from "../context/imageContext";
 
-async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getImages: (ids: number) => Promise<WPMedia | null>): Promise<[number, PostCategory]>{
+async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getImages: (ids: number) => Promise<string>): Promise<[number, PostCategory]>{
         // Check if the category has an image
         const imageIds = (category.acf?.tv_background ?? [])
         const images = await Promise.all(imageIds.map(async (id) => getImages(id)))
-        const imageUrls = images.map(image => image?.source_url).filter(image => image != undefined) as string[]
+        const imageUrls = images.map(image => image).filter(image => image != undefined) as string[]
         return [category.id,{
             id: category.id,
             subject:{
@@ -25,14 +25,14 @@ async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getI
         }] as [number,PostCategory]
 }
 
-async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => Promise<WPMedia | null> ): Promise<PostSlideWithoutLength>{
+async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => Promise<string> ): Promise<PostSlideWithoutLength>{
         const category = categoriesObject[post.acf.tv_settings.category]
         let imageUrl = ""
         if(category.image != undefined && category.image.length > 0){
             imageUrl = category.image[random(0,category.image.length-1)]
         }
 
-        var postImageUrl =typeof post.acf.tv_settings.images == "number" ?  (await getImages(post.acf.tv_settings.images))?.source_url ?? "" : ""
+        var postImageUrl =typeof post.acf.tv_settings.images == "number" ?  await getImages(post.acf.tv_settings.images) ?? "" : ""
 
         return {
             categoryId: post.acf.tv_settings.category ?? -1,
@@ -41,6 +41,7 @@ async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {
             postImage: postImageUrl,
             length: post.acf.tv_settings.length,
             categoryImage: imageUrl,
+            imageLength: post.acf.tv_settings.imageLength
         }
 }
 
@@ -48,7 +49,7 @@ export function useWordpressPostData() {
     const [posts, setPosts] = useState<PostSlideWithoutLength[]>([])
     const [categories, setCategories] = useState<PostCategory[]>([])
     //Update the posts every 10 seconds
-    const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(10, ()=>{
+    const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(120, ()=>{
         loadPosts()
         resetTimer()
     },1000,"postdata")
@@ -65,12 +66,12 @@ export function useWordpressPostData() {
 
 
         // Format all the categories
-        const catergories: [number,PostCategory][] = await Promise.all(categories.map((category)=>transFormWordpressCategory(category,getImages)))
+        const catergories: [number,PostCategory][] = await Promise.all(categories.map((category)=>transFormWordpressCategory(category,getImageUrlByBaseUrl)))
 
         // Create an object of the categories
         const categoriesObject = Object.fromEntries(catergories);
         const correctPosts=  posts.filter(post => post!= null) as unknown as WordpressPost[]
-        const transformedPosts =  await Promise.all(correctPosts.map((post)=>transformWordpressPost(post,categoriesObject,getImages)))
+        const transformedPosts =  await Promise.all(correctPosts.map((post)=>transformWordpressPost(post,categoriesObject,getImageUrlByBaseUrl)))
 
         // Update all properties
         setPosts(transformedPosts.sort((a,b) => a.categoryId - b.categoryId))
