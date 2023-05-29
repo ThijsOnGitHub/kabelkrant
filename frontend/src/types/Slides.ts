@@ -8,13 +8,13 @@ export enum SlideTypes {
     IMAGE = "image",
     POSTBLOCK = "postblock",
     TEXT_SLIDE = "textSlide",
-
     VOID = "void"
 }
 
 export type  ImageSlide = {
     type: SlideTypes.IMAGE
     imageUrl: string
+    text: string
     length: number
 } & globalSlideData
 
@@ -38,6 +38,8 @@ export type globalSlideData = {
     timespan: {
         days: string,
         hours: string
+        fromDate: null | string
+        toDate: null | string
     }    
 }
 
@@ -53,6 +55,8 @@ export type WPSlide = WPPost<{
     }
     [SlideTypes.IMAGE]: {
         images: number[],
+        text: string,
+        textOnlyFirstImage: boolean,
         length: number
     }
     [SlideTypes.TEXT_SLIDE]: {

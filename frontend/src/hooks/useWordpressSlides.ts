@@ -33,9 +33,11 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
         const processedSlides =await Promise.all(wpSlides.map<Promise<Slide[]> >( async slide => {
             const acfSlide = slide.acf
             if(acfSlide.type === SlideTypes.IMAGE){
-                return (await Promise.all(acfSlide[SlideTypes.IMAGE].images.map<Promise<ImageSlide>>( async image => ({
+                const text =  acfSlide[SlideTypes.IMAGE].text
+                return (await Promise.all(acfSlide[SlideTypes.IMAGE].images.map<Promise<ImageSlide>>( async (image,index) => ({
                     type: SlideTypes.IMAGE,
                     imageUrl: await getImages(image) ?? "",
+                    text: acfSlide[SlideTypes.IMAGE].textOnlyFirstImage ? index === 0 ? text : "" : text,
                     length:  acfSlide[SlideTypes.IMAGE].length,
                     ...getGlobalSlideData(slide)
                 }))))

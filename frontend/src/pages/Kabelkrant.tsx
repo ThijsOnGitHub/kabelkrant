@@ -18,6 +18,8 @@ export function filterSlides(slides: Slide[], date: Date){
     //Filter if slide are in the current hour
     .filter((slide) => {
         if(!slide.hasTimespan) return true;
+        if(slide.timespan.toDate != null && new Date(slide.timespan.toDate).getTime() < date.getTime()) return false;
+        if(slide.timespan.fromDate != null && new Date(slide.timespan.fromDate).getTime() > date.getTime()) return false;
         return slide.timespan.days.includes(getDay(date).toString()) && slide.timespan.hours.includes(getHours(date).toString())
     })
 }
@@ -70,7 +72,7 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
             case SlideTypes.POSTBLOCK:
                 return <PostBlockSlide posts={slide.slides} onCompleted={nextSlide}/>
             case SlideTypes.IMAGE:
-                return <ImageSlide title={""} showText={false}  backgroundImageURL={slide.imageUrl} length={slide.length} onCompleted={nextSlide}/>
+                return <ImageSlide title={slide.text}  backgroundImageURL={slide.imageUrl} length={slide.length} onCompleted={nextSlide}/>
             case SlideTypes.TEXT_SLIDE:
                 return <NewsItem post={slide} nextSlide={nextSlide} />
             case SlideTypes.VOID:
