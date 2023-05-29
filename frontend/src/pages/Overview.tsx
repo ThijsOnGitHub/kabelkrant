@@ -73,7 +73,7 @@ export const Overview: FC<OverviewProps> = (props) => {
                             break;
                     }
                     return <div style={{overflow: "hidden", background: "white", color: "black",borderRadius: 10,width: 340}}> 
-                        <div style={{   }}>
+                        <div style={{ background: "black"  }}>
                             <FitToScreen rerender={false} element={"container"} baseHeight={1080} baseWidth={1920}  >{
                                 element
                             }</FitToScreen>
