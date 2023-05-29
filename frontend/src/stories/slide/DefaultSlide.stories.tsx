@@ -64,7 +64,7 @@ export const TextWebsiteMessage : StoryObj<BaseSlideProps & TextBlockProps & {in
         useEffect(() => {
             if(textBlockRef.current?.content) {
                 const height = measureTextHeight(args.title ?? '', "1400px", {},styles.title)
-                const array = paginateTextBySize(1400, 1020-height,{}, styles.content)(args.content)
+                const array = paginateTextBySize(1400, 1020-height,{}, styles.content)(args.content,"test")	
                 setContent(array[args.index])
             }
         },[textBlockRef])
