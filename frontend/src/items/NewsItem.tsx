@@ -21,12 +21,21 @@ export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
 
 
     useEffect(() => {
+        if(!showImage) return
+        const timeout = setTimeout(() => {
+            setShowImage(false)
+            setCurrentPost(post)
+        },post.imageLength * 1000)
+        return ()=>{
+            setCurrentPost(post)
+            setShowImage(false)
+            clearTimeout(timeout)
+        } 
+    },[showImage])
+
+    useEffect(() => {
         if(post.postImage != ""){
             setShowImage(true)
-            setTimeout(() => {
-                setShowImage(false)
-                setCurrentPost(post)
-            },post.imageLength * 1000)
         }else{
             setCurrentPost(post)
         }
@@ -35,6 +44,6 @@ export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
 
     return showImage ?
         <ImageSlide backgroundImageURL={post.postImage} title={post.title} /> :
-        <NewsSlide backgroundImage={post.categoryImage ?? "white"} subject={post.category?.subject} duration={post.length} title={post.title ?? ""} text={post.content ?? ""} onCompleted={nextSlide} />
+        <NewsSlide backgroundImage={currentPost.categoryImage ?? "white"} subject={currentPost.category?.subject} duration={currentPost.length} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onCompleted={nextSlide} />
 
 }

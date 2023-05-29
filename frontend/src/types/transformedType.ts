@@ -10,7 +10,8 @@ export interface PostSlide {
     categoryImage:string,
     categoryId: number,
     category: PostCategory
-    imageLength: number
+    imageLength: number,
+    endDate?: Date,
 }
 
 export type PostSlideWithoutLength = Omit<PostSlide, 'length' | 'category' | 'imageLength'> & {length: string | number, imageLength: (string | number)} 

@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { FC, useMemo, useState } from "react"
 import { useWordpressPostData } from "../hooks/useWordpressPostData"
 import { useWordpressSlides } from "../hooks/useWordpressSlides"
 import { SlideTypes } from "../types/Slides"
@@ -17,8 +17,36 @@ export const Overview: FC<OverviewProps> = (props) => {
     const { slides } = useWordpressSlides(posts, categories)
     const [date, setDate] = useState(new Date())
 
-    const filteredSlides = filterSlides(slides, date)
+    const filteredSlides = useMemo( ()=> filterSlides(slides, date).map((slide) => {
+      if(slide.type === SlideTypes.POSTBLOCK){
+        return {
+          ...slide,
+          slides: slide.slides.filter((slide) => {
+            if(!slide?.endDate) return true
+            return slide.endDate.getTime() > date.getTime()
+          })
+        }
+      }
+      return slide
+    }).filter(item => {
+        if(!(item.type === SlideTypes.POSTBLOCK)) return true
+        return item.slides.length > 0
 
+    }),[slides,date])
+
+
+    function translateTypes(type: SlideTypes){
+        switch(type){
+            case SlideTypes.POSTBLOCK:
+                return "Nieuws Items"
+            case SlideTypes.IMAGE:
+                return "Afbeelding"
+            case SlideTypes.TEXT_SLIDE:
+                return "Tekst Dia"
+            case SlideTypes.VOID:
+                return "Void" 
+        }
+    }
 
     return (
         <div>
@@ -28,6 +56,7 @@ export const Overview: FC<OverviewProps> = (props) => {
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 20, padding: 30 }}>
                 {filteredSlides.map((slide) => {
+                    console.log("Rendering slide", slide)
                     let element = <div></div>
                     switch (slide.type) {
                         case SlideTypes.POSTBLOCK:
@@ -43,12 +72,22 @@ export const Overview: FC<OverviewProps> = (props) => {
                             element = <div style={{ color: "black" }}> </div>
                             break;
                     }
-                    return <div style={{ width: 340, borderRadius: 10, overflow: "hidden" }}>
-                        <FitToScreen rerender={false} element={"container"} baseHeight={1080} baseWidth={1920}  >{
-                            element
-                        }</FitToScreen>
+                    return <div style={{overflow: "hidden", background: "white", color: "black",borderRadius: 10,width: 340}}> 
+                        <div style={{   }}>
+                            <FitToScreen rerender={false} element={"container"} baseHeight={1080} baseWidth={1920}  >{
+                                element
+                            }</FitToScreen>
+                        </div>
+                        <div style={{padding: 10}}>
+                            Type: {translateTypes(slide.type)}
+                            {
+                                slide.type === SlideTypes.POSTBLOCK ?
+                                <ul>{slide.slides.map(item => <li>{item.title}</li>)}</ul>: ""
+                            }
+                            
+                        </div>
+                        
                     </div>
-
                 })}
             </div>
         </div>
