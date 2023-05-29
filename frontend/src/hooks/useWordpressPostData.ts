@@ -37,7 +37,7 @@ async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {
         return {
             categoryId: post.acf.tv_settings.category ?? -1,
             content: post.acf.tv_settings.text,
-            title: convert(post.title.rendered),
+            title: post.acf.tv_settings.title != "" ? post.acf.tv_settings.title : convert(post.title.rendered),
             postImage: postImageUrl,
             length: post.acf.tv_settings.length,
             categoryImage: imageUrl,
