@@ -12,10 +12,8 @@ export const PostBlockSlide: FC<TextBlockSlideProps> = ({posts,onCompleted}) => 
     const [index,setIndex] = useState<number>(0)
 
     function nextSlide() {
-        console.log("next slide", index, posts.length, index < posts.length, posts)
         if(index < posts.length-1){
             setIndex(index+1)
-            console.log("setting current post",posts[index+1])
             setCurrentPost(posts[index+1])
             return
         }

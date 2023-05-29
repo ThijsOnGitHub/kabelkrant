@@ -24,14 +24,13 @@ export const FitToScreen: FC<FitToScreenProps> = ({rerender = true,...props}) =>
         }
         //const zoom = Math.min(width/props.baseWidth, height/props.baseHeight)
         const zoom = width/props.baseWidth
-        console.log("zoom",width,props.baseWidth,element.current?.clientWidth,element.current?.clientHeight, zoom)
+
         setZoom(parseFloat(zoom.toFixed(2)) )
     }
 
     useEffect(() => {
         setZoomCorrect()
         if(rerender){
-            console.log("rerender")
             window.addEventListener("resize", setZoomCorrect)
             return () => {
                 window.removeEventListener("resize", setZoomCorrect)

@@ -43,9 +43,7 @@ export function useTimer(maxSeconds: number, onComplete?: ()=>void, intervalDura
             const secondsDone = (new Date().getTime() - date.getTime()) / 1000
             setSeconds(secondsDone)
         }, intervalDuration)
-        console.log(interval,tag)
         return () => {
-            console.log("clearing interval"+interval,tag)
             clearInterval(interval)
         }
     }, [isRunning])

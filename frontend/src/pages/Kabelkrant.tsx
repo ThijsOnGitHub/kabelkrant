@@ -13,7 +13,6 @@ export interface TextBlockSlideProps {
 }
 
 export function filterSlides(slides: Slide[], date: Date){
-    console.log(slides,getDate(date).toString(),getHours(date).toString())
     return slides
     //Filter if slide are in the current hour
     .filter((slide) => {

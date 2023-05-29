@@ -15,7 +15,6 @@ async function getImageMediaObject(imageId:number){
 }
 
 export async function getImageUrlByBaseUrl(imageId:number, cacheObject: {[key:number]:string} = {}, setCacheObject: (cacheObject: {[key:number]:string})=>void = ()=>{}){
-    console.log(import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId)
     // add no cors to the request
     if(cacheObject.hasOwnProperty(imageId)){
         return cacheObject[imageId]
