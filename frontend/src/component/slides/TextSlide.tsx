@@ -18,6 +18,7 @@ export const TextSlide = forwardRef<TextSlideRef,TextSlideProps>(({title,text,du
     useImperativeHandle(ref,() => ({
         content: textBlockRef.current?.content ?? null,
         title: textBlockRef.current?.title ?? null,
+        parent: textBlockRef.current?.parent ?? null
     }))
 
     return <BaseSlide ref={baseSlideRef} {...props} percentageDone={seconds/duration * 100}>

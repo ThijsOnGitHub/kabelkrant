@@ -25,9 +25,21 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
 
     const {seconds, resetAndStartTimer:resetTimer} = useTimer(props.duration,nextSlide)
 
+    /*
+
+        */
     useEffect(() => {
-        const height = measureTextHeight(title ?? '', "1000px", {},styles.title)
-        const array = paginateTextBySize(textSlideRef.current?.content?.clientWidth ?? 1000, textSlideRef.current?.content?.clientHeight ?? 10,{}, styles.content,BREAK_TYPE.SENTENCE)(text)
+        const width = textSlideRef.current?.content?.clientWidth
+
+        const parent = textSlideRef.current?.parent
+        // get the height of the parent without padding
+        const parentComputedStyle = window.getComputedStyle(parent ?? document.body)
+        const parentHeight = ((parent?.clientHeight ?? 20) - parseFloat(parentComputedStyle.paddingTop) - parseFloat(parentComputedStyle.paddingBottom) )
+        const titleHeight = textSlideRef.current?.title?.offsetHeight ?? 10
+        console.log("clientParentHeight",parent?.clientHeight,"parentHeight",parentHeight, "titleHeight",titleHeight)
+        const height = parentHeight - titleHeight // measureTextHeight(title ?? '', "1000px", {},styles.title)
+        console.log("height",height)
+        const array = paginateTextBySize(width ?? 1000, height,{}, styles.content,BREAK_TYPE.SENTENCE)(text)
         resetTimer()
         setIndex(0)
         setContentArray(array)

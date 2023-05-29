@@ -9,19 +9,22 @@ export interface TextBlockProps{
 export interface TextBlockRef{
     title: HTMLDivElement | null
     content: HTMLDivElement | null
+    parent: HTMLDivElement | null
 }
 
 
 export const TextBlock = forwardRef<TextBlockRef,TextBlockProps>((props, ref) => {
     const title = useRef<HTMLDivElement>(null)
     const content = useRef<HTMLDivElement>(null)
+    const parent = useRef<HTMLDivElement>(null)
 
     useImperativeHandle(ref,() => ({
         title: title.current,
-        content: content.current
+        content: content.current,
+        parent: parent.current
     }))
 
-    return <div className={styles.textBlock}>
+    return <div ref={parent} className={styles.textBlock}>
         <div ref={title} className={styles.title}>{props.title}</div>
         <div ref={content} className={styles.content} dangerouslySetInnerHTML={{__html: props.content}}></div>
     </div>

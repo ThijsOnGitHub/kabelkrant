@@ -1,3 +1,6 @@
+import { fill, max } from "lodash"
+import { createElement } from "react"
+
 // utils
 const mod = (n:number, modulus:number) => ((n % modulus) + modulus) % modulus
 const last = (arr:string[][]) => arr.slice(-1)[0]
@@ -49,19 +52,18 @@ export const measureTextHeight = (text: string, width:string,element?:Partial<CS
 
     return height
 }
+
 export const paginateTextBySize = (width: number, height:number,style?: Partial<CSSStyleDeclaration>,styleClass?: string, breakType?:BREAK_TYPE) => {
     return (text:string) => {
         const cloneElement = document.createElement("div") as HTMLDivElement
         cloneElement.style.minWidth = width + 'px'
-        cloneElement.style.minHeight = height + 'px'
         cloneElement.style.maxWidth = width + 'px'
-        cloneElement.style.maxHeight = height + 'px'
         Object.entries(cloneElement.style).forEach(([key,value]) => {
             cloneElement.style.setProperty(key,value)
         })
         if(styleClass) cloneElement.classList.add(styleClass)
         document.body.appendChild(cloneElement)
-        const res =paginateByBoundingElement(cloneElement,0,breakType)(text)
+        const res =paginateByBoundingElement(cloneElement,0,height,breakType)(text)
         cloneElement.remove()
         return res
     }
@@ -72,26 +74,26 @@ export const paginateTextByElement = (parent:HTMLDivElement, paddingY:number,bre
 }
 
 // note that this rewrites the content of the element
-export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:number, breakType?:BREAK_TYPE) => (text:string) => {
-    parent.textContent = ''
-    const { bottom } = parent.getBoundingClientRect()
+export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:number,maxHeight:number, breakType?:BREAK_TYPE, ) => (text:string) => {
+    // Parse html string to DOM
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(text, 'text/html')
+    const { body } = doc
+    
+    // Create a empty element to fill with the content
 
-    const pages:string[][] = [[]]
-
-    for (const node of createWordSpans(text,breakType) as (HTMLSpanElement | Text)[]) {
-            parent.appendChild(node)
-            if (node.nodeType === Node.ELEMENT_NODE) {
-                    const rect = (node as HTMLSpanElement).getBoundingClientRect()
-                    if (rect.bottom + paddingY > bottom) {
-                        pages.push([node.textContent || ''])
-                        parent.textContent = ''
-                        parent.appendChild(node)
-                    } else {
-                        last(pages).push(node.textContent||'')
-                    }
-            } else {
-                last(pages).push((node as Text).data)
-            }
+    const pages: string[] = []
+    for (const child of Array.from(body.childNodes)) {
+        parent.appendChild(child)
+        if(parent.getBoundingClientRect().height > maxHeight){
+            parent.removeChild(child)
+            pages.push(parent.innerHTML)
+            parent.textContent = '' //parent.cloneNode(true) as HTMLDivElement
+            parent.appendChild(child)
+        }else{
+            parent.appendChild(child)
+        }
     }
-    return pages.map(page => page.join(''))
+    pages.push(parent.innerHTML)
+    return pages
 }
