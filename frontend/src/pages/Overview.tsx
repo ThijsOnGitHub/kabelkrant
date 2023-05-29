@@ -66,7 +66,7 @@ export const Overview: FC<OverviewProps> = (props) => {
 
 
     if(selectedSlide != null){
-        return <SelectedSlide slide={selectedSlide} onCompleted={() => setSelectedSlide(null)} />
+        return <SelectedSlide slide={selectedSlide} onClose={() => setSelectedSlide(null)} />
     }
 
     return (

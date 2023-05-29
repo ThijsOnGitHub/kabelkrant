@@ -4,11 +4,11 @@ import { FitToScreen } from "./slideUtilities/fitToScreen"
 
 export interface selectedSlideProps {
     slide: Slide
-    onCompleted: () => void
+    onClose: () => void
 }
 
 
-export const SelectedSlide: React.FC<selectedSlideProps> = ({ slide, onCompleted }) => {
+export const SelectedSlide: React.FC<selectedSlideProps> = ({ slide, onClose }) => {
 
     const renderData = () => {
         switch (slide.type) {
@@ -62,10 +62,10 @@ export const SelectedSlide: React.FC<selectedSlideProps> = ({ slide, onCompleted
         <div>
             <div style={{ background: "white" }}>
                 {renderData()}
-                <button onClick={onCompleted}>Terug</button>
+                <button onClick={onClose}>Terug</button>
             </div>
             <FitToScreen baseHeight={1080} baseWidth={1920}>
-                {renderSlide(slide, onCompleted)}
+                {renderSlide(slide, ()=>{})}
             </FitToScreen>
         </div>
     )
