@@ -41,29 +41,33 @@ const createWordSpans = (text: string,breakType:BREAK_TYPE = BREAK_TYPE.WORD) =>
 export const measureTextHeight = (text: string, width:string,element?:Partial<CSSStyleDeclaration>,styleClass?: string) => {
     const container = document.createElement('div')
     container.innerHTML = text
+    container.style.maxWidth = width
     container.style.width = width
+    container.style.minWidth = width
     Object.entries(container.style).forEach(([key,value]) => {
         container.style.setProperty(key,value)
     })
     if(styleClass) container.classList.add(styleClass)
+
     document.body.appendChild(container)
-    const height = container.offsetHeight
+    const height = container.getBoundingClientRect().height
     document.body.removeChild(container)
 
     return height
 }
 
 export const paginateTextBySize = (width: number, height:number,style?: Partial<CSSStyleDeclaration>,styleClass?: string, breakType?:BREAK_TYPE) => {
-    return (text:string) => {
+    return (text:string,title:string) => {
         const cloneElement = document.createElement("div") as HTMLDivElement
         cloneElement.style.minWidth = width + 'px'
         cloneElement.style.maxWidth = width + 'px'
         Object.entries(cloneElement.style).forEach(([key,value]) => {
             cloneElement.style.setProperty(key,value)
         })
+        cloneElement.style.color = "white"
         if(styleClass) cloneElement.classList.add(styleClass)
         document.body.appendChild(cloneElement)
-        const res =paginateByBoundingElement(cloneElement,0,height,breakType)(text)
+        const res =paginateByBoundingElement(cloneElement,0,height,breakType)(text,title)
         cloneElement.remove()
         return res
     }
@@ -74,7 +78,8 @@ export const paginateTextByElement = (parent:HTMLDivElement, paddingY:number,bre
 }
 
 // note that this rewrites the content of the element
-export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:number,maxHeight:number, breakType?:BREAK_TYPE, ) => (text:string) => {
+export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:number,maxHeight:number, breakType?:BREAK_TYPE, ) => (text:string,title:string) => {
+    console.log(title)
     // Parse html string to DOM
     const parser = new DOMParser()
     const doc = parser.parseFromString(text, 'text/html')
@@ -91,6 +96,7 @@ export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:numbe
     const pages: string[] = []
     for (const child of nodes) {
         parent.appendChild(child)
+        console.log(parent.getBoundingClientRect().height ,maxHeight)
         if(parent.getBoundingClientRect().height > maxHeight){
             parent.removeChild(child)
             pages.push(parent.innerHTML)

@@ -3,6 +3,7 @@ import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {BREAK_TYPE, measureTextHeight, paginateTextBySize} from "../../functions/splitText";
 import styles from "../slideBlocks/TextBlock.module.scss";
 import {useTimer} from "../../hooks/utilities/useTimer";
+import { set } from "lodash";
 
 export type NewsSlideProps= Omit<TextSlideProps,'seconds'> & {
     onCompleted: () => void
@@ -25,20 +26,19 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
 
     const {seconds, resetAndStartTimer:resetTimer} = useTimer(props.duration,nextSlide)
 
+
     /*
 
         */
     useEffect(() => {
-        const width = textSlideRef.current?.content?.clientWidth
-
+        const width = 1250
         const parent = textSlideRef.current?.parent
         // get the height of the parent without padding
         const parentComputedStyle = window.getComputedStyle(parent ?? document.body)
         const parentHeight = ((parent?.clientHeight ?? 20) - parseFloat(parentComputedStyle.paddingTop) - parseFloat(parentComputedStyle.paddingBottom) )
-        const titleHeight = textSlideRef.current?.title?.offsetHeight ?? 10
+        const titleHeight = measureTextHeight(title, width+"px", {}, styles.title)
         const height = parentHeight - titleHeight // measureTextHeight(title ?? '', "1000px", {},styles.title)
-        console.log("height",height)
-        const array = paginateTextBySize(width ?? 1000, height,{}, styles.content,BREAK_TYPE.SENTENCE)(text)
+        const array = paginateTextBySize(width ?? 1000, height,{color:"white"}, styles.content,BREAK_TYPE.SENTENCE)(text,title)
         resetTimer()
         setIndex(0)
         setContentArray(array)
