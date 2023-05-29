@@ -34,12 +34,13 @@ export type VoidSlide = {
 
 export type globalSlideData = {
     menuOrder: number
+    fromDate: null | string
+    toDate: null | string
     hasTimespan: boolean
     timespan: {
         days: string,
         hours: string
-        fromDate: null | string
-        toDate: null | string
+ 
     }    
 }
 

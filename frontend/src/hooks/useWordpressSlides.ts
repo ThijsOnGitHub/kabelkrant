@@ -10,6 +10,8 @@ function getGlobalSlideData(slide: WPSlide): globalSlideData{
     return {
         menuOrder: slide.menu_order as number,
         hasTimespan: slide.acf.hasTimespan,
+        fromDate: slide.acf.fromDate,
+        toDate: slide.acf.toDate,
         timespan: slide.acf.timespan
     }
 }
