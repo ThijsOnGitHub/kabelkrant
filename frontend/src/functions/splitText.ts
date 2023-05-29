@@ -81,9 +81,15 @@ export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:numbe
     const { body } = doc
     
     // Create a empty element to fill with the content
-
+    let nodes: (Node | ChildNode)[] = Array.from(body.childNodes)
+    nodes = nodes.map(node=> {
+        if (node instanceof Text) {
+            return createWordSpans(node.textContent ?? '',breakType) as Node[]
+        }
+        return node
+    }).flat()
     const pages: string[] = []
-    for (const child of Array.from(body.childNodes)) {
+    for (const child of nodes) {
         parent.appendChild(child)
         if(parent.getBoundingClientRect().height > maxHeight){
             parent.removeChild(child)
