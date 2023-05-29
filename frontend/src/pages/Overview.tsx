@@ -82,7 +82,7 @@ export const Overview: FC<OverviewProps> = (props) => {
                             Type: {translateTypes(slide.type)}
                             {
                                 slide.type === SlideTypes.POSTBLOCK ?
-                                <ul>{slide.slides.map(item => <li>{item.title}</li>)}</ul>: ""
+                                <ul>{slide.slides.map(item => <li><strong>{item.category.subject?.subject}</strong>: {item.title} </li>)}</ul>: ""
                             }
                             
                         </div>
