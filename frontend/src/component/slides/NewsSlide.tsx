@@ -36,7 +36,6 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
         const parentComputedStyle = window.getComputedStyle(parent ?? document.body)
         const parentHeight = ((parent?.clientHeight ?? 20) - parseFloat(parentComputedStyle.paddingTop) - parseFloat(parentComputedStyle.paddingBottom) )
         const titleHeight = textSlideRef.current?.title?.offsetHeight ?? 10
-        console.log("clientParentHeight",parent?.clientHeight,"parentHeight",parentHeight, "titleHeight",titleHeight)
         const height = parentHeight - titleHeight // measureTextHeight(title ?? '', "1000px", {},styles.title)
         console.log("height",height)
         const array = paginateTextBySize(width ?? 1000, height,{}, styles.content,BREAK_TYPE.SENTENCE)(text)

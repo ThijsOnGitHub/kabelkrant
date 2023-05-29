@@ -90,8 +90,6 @@ export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:numbe
             pages.push(parent.innerHTML)
             parent.textContent = '' //parent.cloneNode(true) as HTMLDivElement
             parent.appendChild(child)
-        }else{
-            parent.appendChild(child)
         }
     }
     pages.push(parent.innerHTML)
