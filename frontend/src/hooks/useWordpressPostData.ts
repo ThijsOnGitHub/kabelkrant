@@ -41,7 +41,8 @@ async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {
             postImage: postImageUrl,
             length: post.acf.tv_settings.length,
             categoryImage: imageUrl,
-            imageLength: post.acf.tv_settings.imageLength
+            imageLength: post.acf.tv_settings.imageLength,
+            endDate: post.acf.tv_settings.end_date ? new Date(post.acf.tv_settings.end_date) : undefined
         }
 }
 
@@ -52,7 +53,7 @@ export function useWordpressPostData() {
     const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(120, ()=>{
         loadPosts()
         resetTimer()
-    },1000,"postdata")
+    },120000,"postdata")
     const wordpressClient = new WordpressClient();
     const getImages = useContext(ImageContext)
 
