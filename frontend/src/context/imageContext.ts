@@ -19,21 +19,22 @@ export async function getImageUrlByBaseUrl(imageId:number, cacheObject: {[key:nu
     if(cacheObject.hasOwnProperty(imageId)){
         return cacheObject[imageId]
     }
-    let imageUrl = ""
-    try{
-        const result = await axios.get(import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId,{
-            responseType: 'arraybuffer',
-        })
-        let blob = new Blob(
-            [result.data], 
-            { type: result.headers['content-type'] }
-          )
-          let image = window.URL.createObjectURL(blob)
-        
-        imageUrl = image
-    }catch(e){
-        imageUrl = import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId
-    }
+    let imageUrl = import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId
+    if(import.meta.env.VITE_CACHE_IMAGES === "true"){
+        try{
+            const result = await axios.get(import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId,{
+                responseType: 'arraybuffer',
+            })
+            let blob = new Blob(
+                [result.data], 
+                { type: result.headers['content-type'] }
+            )
+            let image = window.URL.createObjectURL(blob)
+            
+            imageUrl = image
+        }catch(e){
+        }
+    }   
     setCacheObject({...cacheObject, [imageId]: imageUrl})
     return imageUrl
 }

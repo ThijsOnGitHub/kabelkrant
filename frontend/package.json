@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "dev:staging": "vite --host --mode staging",
+    "dev:production": "vite --host --mode live",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
