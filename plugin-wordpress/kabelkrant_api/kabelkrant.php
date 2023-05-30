@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Kabelkrant API
  * Description: Plugin voor het aanmaken van de Kabelkrant API
- * Version: 1.0.3
+ * Version: 1.0.5
  * Author: Kabelkrant
  * Folder: kabelkrant_api
  */

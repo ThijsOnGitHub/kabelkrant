@@ -79,7 +79,6 @@ export const paginateTextByElement = (parent:HTMLDivElement, paddingY:number,bre
 
 // note that this rewrites the content of the element
 export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:number,maxHeight:number, breakType?:BREAK_TYPE, ) => (text:string,title:string) => {
-    console.log(title)
     // Parse html string to DOM
     const parser = new DOMParser()
     const doc = parser.parseFromString(text, 'text/html')
@@ -96,7 +95,6 @@ export const  paginateByBoundingElement = (parent:HTMLDivElement, paddingY:numbe
     const pages: string[] = []
     for (const child of nodes) {
         parent.appendChild(child)
-        console.log(parent.getBoundingClientRect().height ,maxHeight)
         if(parent.getBoundingClientRect().height > maxHeight){
             parent.removeChild(child)
             pages.push(parent.innerHTML)

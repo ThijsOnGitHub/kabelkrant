@@ -28,7 +28,7 @@ async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getI
 async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => Promise<string> ): Promise<PostSlideWithoutLength>{
         const category = categoriesObject[post.acf.tv_settings.category]
         let imageUrl = ""
-        if(category.image != undefined && category.image.length > 0){
+        if(category?.image != undefined && category.image.length > 0){
             imageUrl = category.image[random(0,category.image.length-1)]
         }
 
