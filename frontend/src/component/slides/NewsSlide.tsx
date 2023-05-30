@@ -27,10 +27,9 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
     const {seconds, resetAndStartTimer:resetTimer} = useTimer(props.duration,nextSlide)
 
 
-    /*
 
-        */
-    useEffect(() => {
+    function setHeight(){
+        // Check if fonts are loaded
         const width = 1250
         const parent = textSlideRef.current?.parent
         // get the height of the parent without padding
@@ -42,6 +41,15 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
         resetTimer()
         setIndex(0)
         setContentArray(array)
+    }
+    /*
+
+        */
+    useEffect(() => {
+        setHeight()
+        document.fonts.ready.then(() => {
+            setHeight()
+        })
     },[text])
 
 
