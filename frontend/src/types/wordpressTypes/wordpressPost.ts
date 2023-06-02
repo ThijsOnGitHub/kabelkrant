@@ -7,7 +7,8 @@ export interface ACFPost {
         title: string;
         category: number
         end_date: string;
-        images: number | string;
+        images: number[] | string;
+        titleOnlyFirstImage: boolean;
         length: number | string;
         text: string;
         imageLength: number | string;

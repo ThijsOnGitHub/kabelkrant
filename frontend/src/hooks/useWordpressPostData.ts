@@ -32,7 +32,7 @@ async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {
             imageUrl = category.image[random(0,category.image.length-1)]
         }
 
-        var postImageUrl =typeof post.acf.tv_settings.images == "number" ?  await getImages(post.acf.tv_settings.images) ?? "" : ""
+        let postImageUrl =typeof post.acf.tv_settings.images == "string" ? []  : await Promise.all(post.acf.tv_settings.images.map(async image => await getImages(image)))   ?? "" 
 
         return {
             categoryId: post.acf.tv_settings.category ?? -1,
@@ -41,6 +41,7 @@ async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {
             postImage: postImageUrl,
             length: post.acf.tv_settings.length,
             categoryImage: imageUrl,
+            titleOnlyFirstImage: post.acf.tv_settings.titleOnlyFirstImage,
             imageLength: post.acf.tv_settings.imageLength,
             endDate: post.acf.tv_settings.end_date ? new Date(post.acf.tv_settings.end_date) : undefined
         }

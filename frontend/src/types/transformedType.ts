@@ -5,7 +5,8 @@ import {SubjectProps} from "../component/slideUtilities/Subject";
 export interface PostSlide {
     title: string,
     content: string,
-    postImage: string,
+    postImage: string[],
+    titleOnlyFirstImage: boolean;
     length: number,
     categoryImage:string,
     categoryId: number,

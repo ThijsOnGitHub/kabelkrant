@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Kabelkrant API
  * Description: Plugin voor het aanmaken van de Kabelkrant API
- * Version: 1.0.5
+ * Version: 1.0.7
  * Author: Kabelkrant
  * Folder: kabelkrant_api
  */
@@ -30,6 +30,12 @@ class KabelkrantAPI {
         add_filter('acf/settings/load_json', [$this,'my_acf_json_load_point']);
 
         add_filter('rest_post_query', [$this, 'filterPosts'], 10, 2);
+
+        add_filter('acf/load_field/name=end_date', function ($field) {
+            // set defualt value to next week  
+            $field['default_value'] = date('Ymd', strtotime('+1 week'));
+            return $field;
+        });
     }
 
     function filterPosts($args, $request) {

@@ -87,6 +87,28 @@
                     "delay": 0
                 },
                 {
+                    "key": "field_640c81d36ab18",
+                    "label": "Lengte tekst",
+                    "name": "length",
+                    "aria-label": "",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "min": "",
+                    "max": "",
+                    "placeholder": "",
+                    "step": "",
+                    "prepend": "",
+                    "append": "Seconden"
+                },
+                {
                     "key": "field_63db08021a492",
                     "label": "Categorie",
                     "name": "category",
@@ -110,32 +132,22 @@
                     "multiple": 0
                 },
                 {
-                    "key": "field_63e656765ad90",
-                    "label": "Einddatum",
-                    "name": "end_date",
-                    "aria-label": "",
-                    "type": "date_time_picker",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "display_format": "Y-m-d H:i:s",
-                    "return_format": "Y-m-d H:i:s",
-                    "first_day": 1
-                },
-                {
                     "key": "field_640c816c9818c",
                     "label": "Afbeeldingen",
-                    "name": "images",
+                    "name": "image",
                     "aria-label": "",
                     "type": "image",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_63daae2e861d2",
+                                "operator": "!=",
+                                "value": "1"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "",
                         "class": "",
@@ -153,11 +165,11 @@
                     "preview_size": "medium"
                 },
                 {
-                    "key": "field_640c81d36ab18",
-                    "label": "Lengte tekst",
-                    "name": "length",
+                    "key": "field_6479f9e517c54",
+                    "label": "Afbeeldingen",
+                    "name": "images",
                     "aria-label": "",
-                    "type": "number",
+                    "type": "post_object",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
@@ -166,13 +178,14 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "",
-                    "min": "",
-                    "max": "",
-                    "placeholder": "",
-                    "step": "",
-                    "prepend": "",
-                    "append": "Seconden"
+                    "post_type": [
+                        "attachment"
+                    ],
+                    "taxonomy": "",
+                    "return_format": "object",
+                    "multiple": 1,
+                    "allow_null": 0,
+                    "ui": 1
                 },
                 {
                     "key": "field_6470b95799973",
@@ -195,6 +208,45 @@
                     "step": "",
                     "prepend": "",
                     "append": "Seconden"
+                },
+                {
+                    "key": "field_6479fdab9f850",
+                    "label": "Titel alleen op eerste afbeelding weergeven",
+                    "name": "titleOnlyFirstImage",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_63e656765ad90",
+                    "label": "Einddatum",
+                    "name": "end_date",
+                    "aria-label": "",
+                    "type": "date_time_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "display_format": "Y-m-d H:i:s",
+                    "return_format": "Y-m-d H:i:s",
+                    "first_day": 1,
+                    "default_value": "20230609"
                 }
             ]
         }
@@ -217,5 +269,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "modified": 1685484111
+    "modified": 1685716786
 }
