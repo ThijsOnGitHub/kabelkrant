@@ -63,6 +63,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
                     },
                     content: textSlide.text,
                     postImage: [],
+                    titleOnlyFirstImage: false,
                     categoryId: 0,
                     ...getGlobalSlideData(slide)
                 }
