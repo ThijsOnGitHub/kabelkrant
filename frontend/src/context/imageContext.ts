@@ -34,7 +34,11 @@ export async function getImageUrlByBaseUrl(imageId:number, cacheObject: {[key:nu
             imageUrl = image
         }catch(e){
         }
-    }   
+    } else {
+        // preload the image
+        const image = new Image()
+        image.src = imageUrl
+    }
     setCacheObject({...cacheObject, [imageId]: imageUrl})
     return imageUrl
 }
