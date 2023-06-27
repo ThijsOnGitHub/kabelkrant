@@ -22,7 +22,7 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
     const {resetAndStartTimer,stopTimer} =  useTimer(120, ()=> {
         loadSlides()
         resetAndStartTimer()
-    }, 120000,"slides")
+    }, 900000,"slides")
     const {getImageMediaObject,getImageUrl:getImages} = useContext(ImageContext)
 
     async function loadSlides(){
