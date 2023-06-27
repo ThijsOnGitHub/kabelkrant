@@ -1,0 +1,16 @@
+[
+    {
+        "type": "folder",
+        "id": "b0a8c0e0-1b0a-4b0e-8b0a-0e1b0a4b0e8b",
+        "play": 1,
+        "path": "/weekuitzending",
+        "startingTime": "23:34:30"
+    },
+    {
+        "type": "file",
+        "id": "b0a8c0e0-1b0a-4b0e-8b0a-0e1b0a4b0e8b",
+        "play": 1,
+        "path": "/weekuitzending/2021-10-09 11-15-14.mp4",
+        "startingTime": "23:49:55"
+    }
+]
