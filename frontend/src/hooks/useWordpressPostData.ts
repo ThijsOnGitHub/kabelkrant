@@ -54,7 +54,7 @@ export function useWordpressPostData() {
     const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(120, ()=>{
         loadPosts()
         resetTimer()
-    },120000,"postdata")
+    },900000,"postdata")
     const wordpressClient = new WordpressClient();
     const getImages = useContext(ImageContext)
 
