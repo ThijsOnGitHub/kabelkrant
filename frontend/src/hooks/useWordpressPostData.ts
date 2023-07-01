@@ -26,24 +26,26 @@ async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getI
 }
 
 async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => Promise<string> ): Promise<PostSlideWithoutLength>{
-        const category = categoriesObject[post.acf.tv_settings.category]
+        const acfFields = f    
+        const category = categoriesObject[acfFields.tv_settings.category]
         let imageUrl = ""
         if(category?.image != undefined && category.image.length > 0){
             imageUrl = category.image[random(0,category.image.length-1)]
         }
 
-        let postImageUrl =typeof post.acf.tv_settings.images == "string" ? []  : await Promise.all(post.acf.tv_settings.images.map(async image => await getImages(image)))   ?? "" 
+        let postImageUrl =typeof acfFields.tv_settings.images == "string" ? []  : await Promise.all(acfFields.tv_settings.images.map(async image => await getImages(image)))   ?? "" 
 
+      
         return {
-            categoryId: post.acf.tv_settings.category ?? -1,
-            content: post.acf.tv_settings.text,
-            title: post.acf.tv_settings.title != "" ? post.acf.tv_settings.title : convert(post.title.rendered),
+            categoryId: acfFields.tv_settings.category ?? -1,
+            content: acfFields.tv_settings.text,
+            title: acfFields.tv_settings.title != "" ? acfFields.tv_settings.title : convert(post.title.rendered),
             postImage: postImageUrl,
-            length: post.acf.tv_settings.length,
+            length: acfFields.tv_settings.length,
             categoryImage: imageUrl,
-            titleOnlyFirstImage: post.acf.tv_settings.titleOnlyFirstImage,
-            imageLength: post.acf.tv_settings.imageLength,
-            endDate: post.acf.tv_settings.end_date ? new Date(post.acf.tv_settings.end_date) : undefined
+            titleOnlyFirstImage: acfFields.tv_settings.titleOnlyFirstImage,
+            imageLength: acfFields.tv_settings.imageLength,
+            endDate: acfFields.tv_settings.end_date ? new Date(acfFields.tv_settings.end_date) : undefined
         }
 }
 
