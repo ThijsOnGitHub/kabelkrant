@@ -6,8 +6,7 @@ import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {random} from "lodash";
 import {useTimer} from "./utilities/useTimer";
 import {ACFCategory} from "../types/wordpressTypes/wordPressCategories";
-import {WPCategory, WPMedia, WPPost} from "../wordpress-package";
-import {IndexedMedia} from "../types/Slides";
+import {WPCategory, WPPost} from "../wordpress-package";
 import {getImageUrlByBaseUrl, ImageContext} from "../context/imageContext";
 
 async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getImages: (ids: number) => Promise<string>): Promise<[number, PostCategory]>{
@@ -26,7 +25,7 @@ async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getI
 }
 
 async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => Promise<string> ): Promise<PostSlideWithoutLength>{
-        const acfFields = f    
+        const acfFields = post.acf  
         const category = categoriesObject[acfFields.tv_settings.category]
         let imageUrl = ""
         if(category?.image != undefined && category.image.length > 0){
