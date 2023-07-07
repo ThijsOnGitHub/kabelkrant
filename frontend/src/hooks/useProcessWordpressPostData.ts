@@ -1,12 +1,11 @@
-import { WordpressPost} from "../types/wordpressTypes/wordpressPost";
+import { RequiredWordpressPost, WordpressPost} from "../types/wordpressTypes/wordpressPost";
 import {PostCategory,  PostSlideWithoutLength} from "../types/transformedType";
-import {useEffect, useState} from "react";
-import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
-import {getImageUrlByBaseUrl, ImageContext} from "../context/imageContext";
+import {useEffect, useState } from "react";
+import {getImageUrlByBaseUrl } from "../context/imageContext";
 import { transFormWordpressCategory, transformWordpressPost } from "../functions/transformFunctions";
-import { WordpressCategory } from "../types/wordpressTypes/wordPressCategories";
+import { RequiredWordpressCategory } from "../types/wordpressTypes/wordPressCategories";
 
-export function useProcessWordpressPostData(wordPressPosts: WordpressPost[], wordPressCategories: WordpressCategory[] ) {
+export function useProcessWordpressPostData(wordPressPosts: RequiredWordpressPost[], wordPressCategories: RequiredWordpressCategory[] ) {
     const [posts, setPosts] = useState<PostSlideWithoutLength[]>([])
     const [categories, setCategories] = useState<PostCategory[]>([])
 

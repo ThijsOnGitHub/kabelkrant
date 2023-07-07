@@ -1,11 +1,10 @@
 import { convert } from "html-to-text"
 import { random } from "lodash"
-import { WPCategory, WPPost } from "wordpress-api-client"
 import { PostCategory, PostSlideWithoutLength } from "../types/transformedType"
-import { ACFCategory } from "../types/wordpressTypes/wordPressCategories"
-import { ACFPost } from "../types/wordpressTypes/wordpressPost"
+import { RequiredWordpressCategory } from "../types/wordpressTypes/wordPressCategories"
+import { RequiredWordpressPost } from "../types/wordpressTypes/wordpressPost"
 
-export async function transFormWordpressCategory(category:WPCategory<ACFCategory>, getImages: (ids: number) => Promise<string>): Promise<[number, PostCategory]>{
+export async function transFormWordpressCategory(category:RequiredWordpressCategory, getImages: (ids: number) => Promise<string>): Promise<[number, PostCategory]>{
     // Check if the category has an image
     const imageIds = (category.acf?.tv_background ?? [])
     const images = await Promise.all(imageIds.map(async (id) => getImages(id)))
@@ -20,7 +19,7 @@ export async function transFormWordpressCategory(category:WPCategory<ACFCategory
     }] as [number,PostCategory]
 }
 
-export async function transformWordpressPost(post:  WPPost<ACFPost>,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => Promise<string> ): Promise<PostSlideWithoutLength>{
+export async function transformWordpressPost(post:  RequiredWordpressPost,categoriesObject: {[p: string]: PostCategory}, getImages:(ids: number) => Promise<string> ): Promise<PostSlideWithoutLength>{
     const acfFields = post.acf  
     const category = categoriesObject[acfFields.tv_settings.category]
     let imageUrl = ""

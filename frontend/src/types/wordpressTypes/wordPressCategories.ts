@@ -6,3 +6,5 @@ export interface ACFCategory {
 }
 
 export type WordpressCategory = WPCategory<ACFCategory>
+
+export type RequiredWordpressCategory = Pick<WordpressCategory,'acf'|'name'|'id'>

@@ -1,4 +1,3 @@
-import {ACFCategory} from "./wordPressCategories";
 import {WPPost} from "wordpress-api-client";
 
 export interface ACFPost {
@@ -15,3 +14,5 @@ export interface ACFPost {
     }
 }
 export type WordpressPost = WPPost<ACFPost>;
+
+export type RequiredWordpressPost=  Pick<WordpressPost,'acf'|'title'>
