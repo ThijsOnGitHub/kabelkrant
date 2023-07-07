@@ -1,4 +1,5 @@
-import { renderSlide, translateTypes } from "../pages/Overview"
+import { renderSlide } from "../functions/renderSlide"
+import { translateTypes } from "../pages/Overview"
 import { Slide, SlideTypes } from "../types/Slides"
 import { FitToScreen } from "./slideUtilities/fitToScreen"
 
