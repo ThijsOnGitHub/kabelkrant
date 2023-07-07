@@ -7,6 +7,7 @@ import {PostBlockSlide} from "../component/slides/PostBlockSlide";
 import { Slide, SlideTypes} from "../types/Slides";
 import { getDate, getDay, getHours } from "date-fns";
 import { FitToScreen } from "../component/slideUtilities/fitToScreen";
+import { renderSlide } from "../functions/renderSlide";
 
 export interface TextBlockSlideProps {
 
@@ -22,7 +23,6 @@ export function filterSlides(slides: Slide[], date: Date){
         return slide.timespan.days.includes(getDay(date).toString()) && slide.timespan.hours.includes(getHours(date).toString())
     })
 }
-
 export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
     const [index,setIndex] = useState<number>(0)
     const {posts,categories} = useWordpressPostData()
@@ -66,21 +66,10 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
         }
     }, [slides])
 
-    function renderCorrectSlide(slide: Slide): JSX.Element {
-        switch (slide.type) {
-            case SlideTypes.POSTBLOCK:
-                return <PostBlockSlide posts={slide.slides} onCompleted={nextSlide}/>
-            case SlideTypes.IMAGE:
-                return <ImageSlide title={slide.text}  backgroundImageURL={slide.imageUrl} length={slide.length} onCompleted={nextSlide}/>
-            case SlideTypes.TEXT_SLIDE:
-                return <NewsItem post={slide} nextSlide={nextSlide} />
-            case SlideTypes.VOID:
-                return <div style={{color: "black"}}> </div>
-        }
-    }
+
 
     return<FitToScreen baseWidth={1920} baseHeight={1080}>
-        {currentSlide ? renderCorrectSlide(currentSlide) : <div style={{color: "white"}}>Loading... </div>}
+        {currentSlide ? renderSlide(currentSlide,nextSlide) : <div style={{color: "white"}}>Loading... </div>}
     </FitToScreen>
     
 }

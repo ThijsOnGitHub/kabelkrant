@@ -2,30 +2,16 @@ import { FC, useMemo, useState } from "react"
 import { useWordpressPostData } from "../hooks/useWordpressPostData"
 import { useWordpressSlides } from "../hooks/useWordpressSlides"
 import { Slide, SlideTypes } from "../types/Slides"
-import { PostBlockSlide } from "../component/slides/PostBlockSlide"
-import { ImageSlide } from "../component/slides/ImageSlide"
-import { NewsItem } from "../items/NewsItem"
 import { FitToScreen } from "../component/slideUtilities/fitToScreen"
 import { filterSlides } from "./Kabelkrant"
 import { format } from "date-fns"
 import { SelectedSlide } from "../component/SelectedSlide"
+import { renderSlide } from "../functions/renderSlide"
 
 export interface OverviewProps {
 }
 
 
-export const renderSlide = (slide: Slide, onComplete: ()=> void = ()=>{}) => {
-    switch (slide.type) {
-        case SlideTypes.POSTBLOCK:
-            return <PostBlockSlide posts={slide.slides} onCompleted={onComplete} />
-        case SlideTypes.IMAGE:
-            return <ImageSlide title={slide.text} backgroundImageURL={slide.imageUrl} length={slide.length} onCompleted={onComplete} />
-        case SlideTypes.TEXT_SLIDE:
-            return <NewsItem post={slide} nextSlide={onComplete} />
-        case SlideTypes.VOID:
-            return  <div style={{ color: "black" }}> </div>
-    }
-}
 
 export function translateTypes(type: SlideTypes){
     switch(type){
