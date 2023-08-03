@@ -7,6 +7,7 @@ import { useProcessWordpressSlides } from "../hooks/useProcessWordpressSlides";
 import { FitToScreen } from "../component/slideUtilities/fitToScreen";
 import { SlideTypes, WPSlide } from "../types/Slides";
 import { NextPrevContext } from "../context/nextContext";
+import { NextPrevProvider } from "../component/NextPrevProvider";
 
 export interface PreviewProps {
 }
@@ -58,7 +59,6 @@ export function Preview(props: PreviewProps) {
     }
 
     useEffect(()=>{
-        PrevNextContext.setAutoGoNext(false)
         window.addEventListener("message", procesMessage)
         return () => {
             window.removeEventListener("message", procesMessage)
@@ -72,14 +72,15 @@ export function Preview(props: PreviewProps) {
 
     return (    
         <div>
-            <FitToScreen baseHeight={1080} baseWidth={1920} >
-                {renderSlide(slides[0])}
-            </FitToScreen>
-            <div style={{display:"flex", justifyContent: "space-between", alignContent: "center", margin: "2px 10px"}}>
-                <button onClick={PrevNextContext.prev}>{"<"}</button>
-                <button onClick={PrevNextContext.next}>{">"}</button>
-            </div>
-            
+            <NextPrevProvider defaultAutoGoNext={false}>            
+                <FitToScreen baseHeight={1080} baseWidth={1920} >
+                    {renderSlide(slides[0])}
+                </FitToScreen>
+                <div style={{display:"flex", justifyContent: "space-between", alignContent: "center", margin: "2px 10px"}}>
+                    <button onClick={PrevNextContext.prev}>{"<"}</button>
+                    <button onClick={PrevNextContext.next}>{">"}</button>
+                </div>
+            </NextPrevProvider>
         </div>
     )
 }
