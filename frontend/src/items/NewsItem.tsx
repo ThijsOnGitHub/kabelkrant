@@ -38,11 +38,12 @@ export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
     const {seconds, resetAndStartTimer:resetTimer} = useTimer(post.imageLength,nextImage,post.imageLength)
 
     const prevImage = useCallback(()=>{
-        if(imageIndex == 0) {return}
+        console.log("prev image")
         if(!showImage){
             setShowImage(true)
             return
         }
+        if(imageIndex == 0) {return}
         setImageIndex(imageIndex-1)
     },[imageIndex,showImage])
 
