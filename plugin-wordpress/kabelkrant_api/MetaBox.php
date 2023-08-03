@@ -28,19 +28,20 @@ class MetaBox{
 
         $fieldOfCategory = get_fields('category_'.$category_id);
 
+
         $site_url = get_site_url();
-        $preview_url= "http://localhost:5173/preview"
-        switch ($preview_url) {
-            case 'https://www.rtvkrimpenerwaard.com':
-                $preview_url = "https://staging-kabelkrant.vercel.app/preview"
+        $preview_url= "http://localhost:5173/preview";
+        switch ($site_url) {
+            case 'https://rtvkrimpenerwaard.com':
+                $preview_url = "https://kabelkrant.vercel.app/preview";
                 break;
             
-            case 'https://www.staging.rtvkrimpenerwaard.com':
-                $preview_url = "https://kabelkrant.vercel.app/preview"
+            case 'https://staging.rtvkrimpenerwaard.nl':
+                $preview_url = "https://staging-kabelkrant.vercel.app/preview";
                 break;
         }
     
-        ?> <iframe src="http://localhost:5173/preview" id="kabelkrant-preview" style="aspect-ratio:16/10;width:100%" ></iframe>  <?php
+        ?> <iframe src="<?php echo $preview_url ?>" id="kabelkrant-preview" style="aspect-ratio:16/10;width:100%" ></iframe>   <?php
          if (false){
             echo json_encode($value);
             echo json_encode($fieldOfCategory);	
