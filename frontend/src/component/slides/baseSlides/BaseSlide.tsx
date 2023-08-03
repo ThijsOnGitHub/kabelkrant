@@ -3,7 +3,6 @@ import {FC, forwardRef, ReactElement, ReactNode, useEffect, useImperativeHandle,
 import {Subject, SubjectProps} from "../../slideUtilities/Subject";
 import {useCurrentTime} from "../../../hooks/utilities/useCurrentTime";
 import {Bar} from "../../slideUtilities/bar";
-import {useTimer} from "../../../hooks/utilities/useTimer";
 
 export interface BaseSlideProps {
     backgroundImage:string

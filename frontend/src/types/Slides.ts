@@ -1,6 +1,5 @@
 import {WPMedia} from "wordpress-api-client";
 import {PostSlide} from "./transformedType";
-import {WPPost} from "../wordpress-package";
 
 export type IndexedMedia = { [key: string]: WPMedia }
 
@@ -32,34 +31,45 @@ export type VoidSlide = {
     type: SlideTypes.VOID
 } & globalSlideData
 
+
+type timespanObject = {
+    days: string,
+    hours: string
+}
+
+export type globalTimespanObject = ( {hasTimespan: true, timespan: timespanObject} | {hasTimespan: false, timespan?: timespanObject})
+
 export type globalSlideData = {
     menuOrder: number
     fromDate: null | string
     toDate: null | string
-    hasTimespan: boolean
-    timespan: {
-        days: string,
-        hours: string
- 
-    }    
-}
+} & globalTimespanObject
+
 
 export type Slide = (ImageSlide | PostBlockSlide | TextSlide | VoidSlide)
 
-export type WPSlide = WPPost<{
-    type: SlideTypes,
+export type WPPostBlockSlide = {
+    type: SlideTypes.POSTBLOCK,
     [SlideTypes.POSTBLOCK]: {
         category: number[],
         standardLength: number
         standardImageLength: number
         mixSlides: boolean
     }
+}
+
+export type WPImageSlide = {
+    type: SlideTypes.IMAGE,
     [SlideTypes.IMAGE]: {
         images: number[],
         text: string,
         textOnlyFirstImage: boolean,
         length: number
     }
+}
+
+export type WPTextSlide = {
+    type: SlideTypes.TEXT_SLIDE,
     [SlideTypes.TEXT_SLIDE]: {
         backgroundImage: number,
         showCategory: boolean,
@@ -71,5 +81,9 @@ export type WPSlide = WPPost<{
         imageLength: number
         text: string;
         title: string;
-    }   
-} & globalSlideData>
+    }  
+}
+
+export type WPSlidesTypes = WPPostBlockSlide | WPImageSlide | WPTextSlide
+
+export type WPSlide = {acf:WPSlidesTypes & globalSlideData, menu_order: number}

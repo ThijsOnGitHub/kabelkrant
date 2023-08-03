@@ -2,17 +2,25 @@ import {useContext, useEffect, useState} from "react";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {PostCategory, PostSlideWithoutLength} from "../types/transformedType";
 import {useTimer} from "./utilities/useTimer";
-import {ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData} from "../types/Slides";
+import {ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData, globalTimespanObject} from "../types/Slides";
 import {ImageContext} from "../context/imageContext";
 import _ from "lodash";
 
 export function getGlobalSlideData(slide: WPSlide): globalSlideData{
+    let timespanObject: globalTimespanObject = {
+        hasTimespan: false
+    }
+    if(slide.acf.hasTimespan){
+        timespanObject = {
+            hasTimespan: true,
+            timespan: slide.acf.timespan
+        }
+    }
     return {
         menuOrder: slide.menu_order as number,
-        hasTimespan: slide.acf.hasTimespan,
         fromDate: slide.acf.fromDate,
         toDate: slide.acf.toDate,
-        timespan: slide.acf.timespan
+        ...timespanObject
     }
 }
 

@@ -1,12 +1,13 @@
 import {TextSlide, TextSlideProps, TextSlideRef} from "./TextSlide";
-import {FC, useCallback, useEffect, useRef, useState} from "react";
+import {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {BREAK_TYPE, measureTextHeight, paginateTextBySize} from "../../functions/splitText";
 import styles from "../slideBlocks/TextBlock.module.scss";
 import {useTimer} from "../../hooks/utilities/useTimer";
-import { set } from "lodash";
+import { NextPrevContext } from "../../context/nextContext";
 
 export type NewsSlideProps= Omit<TextSlideProps,'seconds'> & {
     onCompleted: () => void
+    onBack?: () => void
 }
 
 export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
@@ -14,19 +15,42 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
     const [contentArray,setContentArray] = useState<string[]>([])
 
     const textSlideRef = useRef<TextSlideRef>(null)
+    const PrevNextContext = useContext(NextPrevContext)
 
-    const nextSlide = () => {
+    const nextSlide = useCallback(() => {
         if(index < contentArray.length-1) {
             setIndex((index)=>index + 1)
-            resetTimer()
+            if(PrevNextContext.autoGoNext) resetTimer()
         } else {
             props.onCompleted()
         }
-    }
+    },[index,contentArray])
+
+    const prevSlide = useCallback(() => {
+        if(index > 0) {
+            setIndex((index)=>index - 1)
+        } else {
+            props.onBack?.()
+        }
+    },[index])
+
 
     const {seconds, resetAndStartTimer:resetTimer} = useTimer(props.duration,nextSlide)
 
 
+
+    useEffect(() => {
+        PrevNextContext.setNext(()=>{
+            nextSlide()
+        })
+    },[nextSlide])
+
+    useEffect(() => {
+        PrevNextContext.setPrev(()=>{
+            prevSlide()
+        })
+    },[prevSlide])
+    
 
     function setHeight(){
         // Check if fonts are loaded

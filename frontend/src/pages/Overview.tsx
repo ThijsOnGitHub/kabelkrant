@@ -63,7 +63,6 @@ export const Overview: FC<OverviewProps> = (props) => {
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 20, padding: 30 }}>
                 {filteredSlides.map((slide) => {
-            
                     return <div style={{overflow: "hidden", background: "white", color: "black",borderRadius: 10,width: 340, cursor: "pointer"}} onClick={()=>setSelectedSlide(slide)}> 
                         <div style={{ background: "black",  }} >
                             <FitToScreen rerender={false} element={"container"} baseHeight={1080} baseWidth={1920}  >{
@@ -76,9 +75,7 @@ export const Overview: FC<OverviewProps> = (props) => {
                                 slide.type === SlideTypes.POSTBLOCK ?
                                 <ul>{slide.slides.map(item => <li><strong>{item.category.subject?.subject}</strong>: {item.title} </li>)}</ul>: ""
                             }
-                            
                         </div>
-                        
                     </div>
                 })}
             </div>

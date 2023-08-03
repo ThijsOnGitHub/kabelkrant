@@ -6,13 +6,13 @@ export interface ACFPost {
         title: string;
         category: number
         end_date: string;
-        images: number[] | string;
+        images: number[] | string | false;
         titleOnlyFirstImage: boolean;
-        length: number | string;
+        length: number | string | false;
         text: string;
-        imageLength: number | string;
+        imageLength: number | string | false;
     }
 }
 export type WordpressPost = WPPost<ACFPost>;
 
-export type RequiredWordpressPost=  Pick<WordpressPost,'acf'|'title'>
+export type RequiredWordpressPost=  Pick<WordpressPost, 'acf'|'title'>

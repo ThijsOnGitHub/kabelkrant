@@ -27,7 +27,7 @@ export async function transformWordpressPost(post:  RequiredWordpressPost,catego
         imageUrl = category.image[random(0,category.image.length-1)]
     }
 
-    let postImageUrl =typeof acfFields.tv_settings.images == "string" ? []  : await Promise.all(acfFields.tv_settings.images.map(async image => await getImages(image)))   ?? "" 
+    let postImageUrl =typeof acfFields.tv_settings.images == "string" || acfFields.tv_settings.images === false  ? []  : await Promise.all(acfFields.tv_settings.images.map(async image => await getImages(image)))   ?? "" 
 
   
     return {
@@ -35,10 +35,10 @@ export async function transformWordpressPost(post:  RequiredWordpressPost,catego
         content: acfFields.tv_settings.text,
         title: acfFields.tv_settings.title != "" ? acfFields.tv_settings.title : convert(post.title.rendered),
         postImage: postImageUrl,
-        length: acfFields.tv_settings.length,
+        length: acfFields.tv_settings.length === false ? "" : acfFields.tv_settings.length ,
         categoryImage: imageUrl,
         titleOnlyFirstImage: acfFields.tv_settings.titleOnlyFirstImage,
-        imageLength: acfFields.tv_settings.imageLength,
+        imageLength: acfFields.tv_settings.imageLength === false ? "" : acfFields.tv_settings.imageLength,
         endDate: acfFields.tv_settings.end_date ? new Date(acfFields.tv_settings.end_date) : undefined
     }
 }

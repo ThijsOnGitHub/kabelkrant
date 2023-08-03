@@ -1,19 +1,34 @@
 import "./ImageSlide.scss"
 import RTVLogo from "../../assets/rtvLogoK.svg"
-import {useEffect} from "react";
+import {useContext, useEffect} from "react";
 import {useTimer} from "../../hooks/utilities/useTimer";
+import { NextPrevContext } from "../../context/nextContext";
+import { set } from "lodash";
 export interface ImageSlideProps {
     backgroundImageURL: string
     title: string
     length?: number
-    onCompleted?: () => void
+    setPrevNext?: boolean
+    onNext?: () => void
+    onPrev?: () => void
 }
-export const ImageSlide: React.FC<ImageSlideProps> = ({backgroundImageURL,title,onCompleted,length, ...props}) => {
+export const ImageSlide: React.FC<ImageSlideProps> = ({backgroundImageURL,title,onNext,length,setPrevNext = true, ...props}) => {
+    const PrevNextContext = useContext(NextPrevContext)
 
-    const {resetAndStartTimer}=  useTimer(length ?? 0,onCompleted)
+    const {resetAndStartTimer}=  useTimer(length ?? 0,onNext)
 
     useEffect(() => {
-        resetAndStartTimer()
+        if(PrevNextContext.autoGoNext){
+            resetAndStartTimer()
+        }
+        if(setPrevNext){
+            PrevNextContext.setNext(() =>  {
+                console.log("Image next")
+                if(onNext != null){
+                    onNext()
+                }
+            })
+        }
     },[backgroundImageURL,title,length])
 
     return (

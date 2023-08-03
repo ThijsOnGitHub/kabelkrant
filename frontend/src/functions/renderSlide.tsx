@@ -8,7 +8,7 @@ export const renderSlide = (slide: Slide, onComplete: ()=> void = ()=>{}) => {
         case SlideTypes.POSTBLOCK:
             return <PostBlockSlide posts={slide.slides} onCompleted={onComplete} />
         case SlideTypes.IMAGE:
-            return <ImageSlide title={slide.text} backgroundImageURL={slide.imageUrl} length={slide.length} onCompleted={onComplete} />
+            return <ImageSlide title={slide.text} backgroundImageURL={slide.imageUrl} length={slide.length} onNext={onComplete} />
         case SlideTypes.TEXT_SLIDE:
             return <NewsItem post={slide} nextSlide={onComplete} />
         case SlideTypes.VOID:

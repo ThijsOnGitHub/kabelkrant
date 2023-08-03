@@ -5,6 +5,8 @@ import {getImageUrlByBaseUrl, ImageContext} from './context/imageContext';
 import {WPMedia} from "./wordpress-package";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Overview } from './pages/Overview';
+import { Preview } from './pages/Preview';
+import { NextPrevProvider } from './component/NextPrevProvider';
 
 const router = createBrowserRouter([
     {
@@ -15,6 +17,10 @@ const router = createBrowserRouter([
     {
         path: '/overview',
         element: <Overview />
+    },
+    {
+        path: '/preview',
+        element: <Preview />
     }
 ])
 
@@ -44,10 +50,13 @@ function App() {
     }
 
   return (
-      <ImageContext.Provider value={imageContext}>
-        <RouterProvider router={router}/>
-      </ImageContext.Provider>
+    <NextPrevProvider>
+        <ImageContext.Provider value={imageContext}>
+            <RouterProvider router={router}/>
+        </ImageContext.Provider>
+    </NextPrevProvider>
   )
+
 }
 
 export default App
