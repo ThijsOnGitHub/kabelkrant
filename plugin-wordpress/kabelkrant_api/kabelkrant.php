@@ -8,11 +8,13 @@
  */
 // import code from CustomPostApi.php
 require_once 'CustomPostApi.php';
+require_once 'MetaBox.php';
 
 
 // Create a new instance of the class
 $kabelkrant_api = new KabelkrantAPI();
 new CustomPostApi();
+new MetaBox();
 
 /**
  * This class is used to register the custom post type 'slide' and load the ACF fields
