@@ -9,7 +9,7 @@ export interface useNextPrevHookProps {
 export const NextPrevProvider: FC<useNextPrevHookProps> = ({children}) => {
     const [next, setNext] = useState<() => void>(() => {console.log("next not set")})
     const [prev, setPrev] = useState<() => void>(() => {console.log("prev not set")})
-    const [autoGoNext, setAutoGoNext] = useState(false)
+    const [autoGoNext, setAutoGoNext] = useState(true)
 
     function setNextFunction(next: () => void) {
         setNext(() => next)
