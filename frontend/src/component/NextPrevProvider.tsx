@@ -3,14 +3,13 @@ import { NextPrevContext } from "../context/nextContext";
 
 
 export interface useNextPrevHookProps {
-    children: ReactElement[] | ReactElement,
-    defaultAutoGoNext?: boolean
+    children: ReactElement
 }
 
-export const NextPrevProvider: FC<useNextPrevHookProps> = ({children,defaultAutoGoNext = true}) => {
+export const NextPrevProvider: FC<useNextPrevHookProps> = ({children}) => {
     const [next, setNext] = useState<() => void>(() => {console.log("next not set")})
     const [prev, setPrev] = useState<() => void>(() => {console.log("prev not set")})
-    const [autoGoNext, setAutoGoNext] = useState(defaultAutoGoNext)
+    const [autoGoNext, setAutoGoNext] = useState(true)
 
     function setNextFunction(next: () => void) {
         setNext(() => next)
