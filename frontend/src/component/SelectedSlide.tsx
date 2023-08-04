@@ -1,7 +1,10 @@
+import { useContext, useEffect } from "react"
 import { renderSlide } from "../functions/renderSlide"
 import { translateTypes } from "../pages/Overview"
 import { Slide, SlideTypes } from "../types/Slides"
 import { FitToScreen } from "./slideUtilities/fitToScreen"
+import { NextPrevContext } from "../context/nextContext"
+import { NextPrevButtonsBar } from "./utilities/NextPrevButtonsBar"
 
 export interface selectedSlideProps {
     slide: Slide
@@ -10,7 +13,11 @@ export interface selectedSlideProps {
 
 
 export const SelectedSlide: React.FC<selectedSlideProps> = ({ slide, onClose }) => {
+    const PrevNextContext = useContext(NextPrevContext)
 
+    useEffect(()=>{
+        PrevNextContext.setAutoGoNext(false)
+    })
     const renderData = () => {
         switch (slide.type) {
             case SlideTypes.POSTBLOCK:
@@ -65,6 +72,7 @@ export const SelectedSlide: React.FC<selectedSlideProps> = ({ slide, onClose }) 
                 {renderData()}
                 <button onClick={onClose}>Terug</button>
             </div>
+            <NextPrevButtonsBar/>
             <FitToScreen baseHeight={1080} baseWidth={1920}>
                 {renderSlide(slide, ()=>{})}
             </FitToScreen>

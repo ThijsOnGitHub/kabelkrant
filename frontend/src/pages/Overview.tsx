@@ -7,6 +7,8 @@ import { filterSlides } from "./Kabelkrant"
 import { format } from "date-fns"
 import { SelectedSlide } from "../component/SelectedSlide"
 import { renderSlide } from "../functions/renderSlide"
+import { NextPrevContext } from "../context/nextContext"
+import { NextPrevProvider } from "../component/NextPrevProvider"
 
 export interface OverviewProps {
 }
@@ -52,7 +54,10 @@ export const Overview: FC<OverviewProps> = (props) => {
 
 
     if(selectedSlide != null){
-        return <SelectedSlide slide={selectedSlide} onClose={() => setSelectedSlide(null)} />
+        return <NextPrevProvider>
+            <SelectedSlide slide={selectedSlide} onClose={() => setSelectedSlide(null)} />
+        </NextPrevProvider>
+        
     }
 
     return (
