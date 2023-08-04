@@ -15,7 +15,8 @@ export function useWordpressPostData(){
         resetTimer()
     },900000,"postdata")
 
-    const { posts,categories} = useProcessWordpressPostData(wordpressPosts.filter(post => post != null) as WordpressPost[],wordpressCategories)
+    const filteredWordpressPosts = useMemo( ()=>wordpressPosts.filter(post => post != null) as WordpressPost[], [wordpressPosts]) 
+    const { posts,categories} = useProcessWordpressPostData(filteredWordpressPosts,wordpressCategories)
 
     function loadPosts(){
         const wordpressClient = new WordpressClient();
