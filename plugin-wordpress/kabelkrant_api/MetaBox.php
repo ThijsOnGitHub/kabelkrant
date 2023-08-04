@@ -32,7 +32,7 @@ class MetaBox{
         $site_url = get_site_url();
         $preview_url= "http://localhost:5173/preview";
         switch ($site_url) {
-            case 'https://rtvkrimpenerwaard.com':
+            case 'https://www.rtvkrimpenerwaard.nl/site':
                 $preview_url = "https://kabelkrant.vercel.app/preview";
                 break;
             
