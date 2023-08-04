@@ -13,7 +13,7 @@ import { useProcessWordpressSlides } from "./useProcessWordpressSlides";
 export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: PostCategory[]){
     const [wpSlides, setWpSlides] = useState<WPSlide[]>([])
 
-    const {resetAndStartTimer,stopTimer} =  useTimer(120, ()=> {
+    const {resetAndStartTimer,stopTimer} =  useTimer(900000, ()=> {
         loadSlides()
         resetAndStartTimer()
     }, 900000,"slides")

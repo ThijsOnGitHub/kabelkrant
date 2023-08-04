@@ -10,7 +10,7 @@ export function useWordpressPostData(){
     const [wordpressCategories, setWordpressCategories] = useState<WordpressCategory[]>([])
 
 
-    const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(120, ()=>{
+    const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(900000, ()=>{
         loadPosts()
         resetTimer()
     },900000,"postdata")
