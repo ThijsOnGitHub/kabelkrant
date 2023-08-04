@@ -70,7 +70,7 @@ export const SelectedSlide: React.FC<selectedSlideProps> = ({ slide, onClose }) 
             </div>
             <NextPrevButtonsBar/>
             <FitToScreen baseHeight={1080} baseWidth={1920}>
-                {renderSlide(slide, ()=>{})}
+                {renderSlide(slide, ()=>{}, ()=>{})}
             </FitToScreen>
         </div>
     )
