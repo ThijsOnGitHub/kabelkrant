@@ -7,6 +7,7 @@ import { useProcessWordpressSlides } from "../hooks/useProcessWordpressSlides";
 import { FitToScreen } from "../component/slideUtilities/fitToScreen";
 import { SlideTypes, WPSlide } from "../types/Slides";
 import { NextPrevContext } from "../context/nextContext";
+import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar";
 
 export interface PreviewProps {
 }
@@ -75,10 +76,7 @@ export function Preview(props: PreviewProps) {
             <FitToScreen baseHeight={1080} baseWidth={1920} >
                 {renderSlide(slides[0])}
             </FitToScreen>
-            <div style={{display:"flex", justifyContent: "space-between", alignContent: "center", margin: "2px 10px"}}>
-                <button onClick={PrevNextContext.prev}>{"<"}</button>
-                <button onClick={PrevNextContext.next}>{">"}</button>
-            </div>
+            <NextPrevButtonsBar/>
             
         </div>
     )
