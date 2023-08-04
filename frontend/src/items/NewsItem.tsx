@@ -3,19 +3,18 @@ import {NewsSlide} from "../component/slides/NewsSlide";
 import {PostSlide} from "../types/transformedType";
 import {ImageSlide} from "../component/slides/ImageSlide";
 import { useTimer } from "../hooks/utilities/useTimer";
-import { set } from "lodash";
 import { NextPrevContext } from "../context/nextContext";
 
 
 interface NewsItemsProps {
     post: PostSlide
-
+    prevSlide: () => void
     nextSlide: () => void
 }
 
-export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
+export const NewsItem: FC<NewsItemsProps> = ({post, prevSlide,...props}) => {
     const [currentPost,setCurrentPost] = useState(post)
-    const [showImage,setShowImage] = useState(false)
+    const [showImage,setShowImage] = useState(post.postImage.length > 0)
     const [imageIndex,setImageIndex] = useState(0)
 
     const PrevNextContext = useContext(NextPrevContext)
@@ -38,13 +37,19 @@ export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
     const {seconds, resetAndStartTimer:resetTimer} = useTimer(post.imageLength,nextImage,post.imageLength)
 
     const prevImage = useCallback(()=>{
-        if(post.postImage.length == 0) return
+        if(post.postImage.length == 0) {
+            prevSlide()
+            return
+        }
         if(!showImage){
             setShowImage(true)
             PrevNextContext.setNext(()=>{nextImage()})
             return
         }
-        if(imageIndex == 0) {return}
+        if(imageIndex == 0) {
+            prevSlide()
+            return
+        }
         setImageIndex(imageIndex-1)
     },[imageIndex,showImage])
 
@@ -54,22 +59,34 @@ export const NewsItem: FC<NewsItemsProps> = ({post,...props}) => {
             setImageIndex(0)
             if(PrevNextContext.autoGoNext){
                 resetTimer()
-            }           
+            }       
         }else{
+            setShowImage(false)
             setCurrentPost(post)
         }
+        setNext()
+        setPrev()
     },[post])
 
-    useEffect(() => {
+    function setNext(){
         PrevNextContext.setNext(()=>{
+            console.log("newitem next")
             nextImage()
         })
-    },[nextImage])
+    }
 
-    useEffect(() => {
+    function setPrev(){
         PrevNextContext.setPrev(()=>{
             prevImage()
         })
+    }
+
+    useEffect(() => {
+        setNext()
+    },[nextImage])
+
+    useEffect(() => {
+        setPrev()
     },[prevImage])
 
 

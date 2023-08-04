@@ -54,7 +54,7 @@ export const Overview: FC<OverviewProps> = (props) => {
 
 
     if(selectedSlide != null){
-        return <NextPrevProvider>
+        return <NextPrevProvider autoGoNextDefault={false}>
             <SelectedSlide slide={selectedSlide} onClose={() => setSelectedSlide(null)} />
         </NextPrevProvider>
         

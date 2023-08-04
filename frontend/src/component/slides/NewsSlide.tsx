@@ -20,7 +20,7 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
     const nextSlide = useCallback(() => {
         if(index < contentArray.length-1) {
             setIndex((index)=>index + 1)
-            if(PrevNextContext.autoGoNext) resetTimer()
+            if(PrevNextContext.autoGoNext) { resetTimer() }
         } else {
             props.onCompleted()
         }
@@ -41,12 +41,14 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
 
     useEffect(() => {
         PrevNextContext.setNext(()=>{
+            console.log("next NewsSlide")
             nextSlide()
         })
     },[nextSlide])
 
     useEffect(() => {
         PrevNextContext.setPrev(()=>{
+            console.log("prev NewsSlide")
             prevSlide()
         })
     },[prevSlide])
@@ -62,7 +64,7 @@ export const NewsSlide: FC<NewsSlideProps> = ({title,text,...props}) => {
         const titleHeight = measureTextHeight(title, width+"px", {}, styles.title)
         const height = parentHeight - titleHeight // measureTextHeight(title ?? '', "1000px", {},styles.title)
         const array = paginateTextBySize(width ?? 1000, height,{color:"white"}, styles.content,BREAK_TYPE.SENTENCE)(text,title)
-        resetTimer()
+        if(PrevNextContext.autoGoNext) resetTimer()
         setIndex(0)
         setContentArray(array)
     }

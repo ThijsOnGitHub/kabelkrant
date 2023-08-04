@@ -13,11 +13,7 @@ export interface selectedSlideProps {
 
 
 export const SelectedSlide: React.FC<selectedSlideProps> = ({ slide, onClose }) => {
-    const PrevNextContext = useContext(NextPrevContext)
 
-    useEffect(()=>{
-        PrevNextContext.setAutoGoNext(false)
-    })
     const renderData = () => {
         switch (slide.type) {
             case SlideTypes.POSTBLOCK:
