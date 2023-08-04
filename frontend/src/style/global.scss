@@ -1,6 +1,6 @@
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-@import "modules/fonts.scss";
-@import "modules/flex.scss";
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons&family=Inter:wght@500;600;700;800;900");
+@import "variables";
+@import "modules";
 body,html{
   background: black;
   margin: 0;
