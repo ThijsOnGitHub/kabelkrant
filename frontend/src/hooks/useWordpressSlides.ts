@@ -1,11 +1,10 @@
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useMemo, useState} from "react";
 import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {PostCategory, PostSlideWithoutLength} from "../types/transformedType";
 import {useTimer} from "./utilities/useTimer";
-import {ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData} from "../types/Slides";
+import { WPSlide} from "../types/Slides";
 import {ImageContext} from "../context/imageContext";
 import _ from "lodash";
-import { useProcessWordpressPostData } from "./useProcessWordpressPostData";
 import { useProcessWordpressSlides } from "./useProcessWordpressSlides";
 
 
@@ -19,7 +18,6 @@ export function useWordpressSlides(posts: PostSlideWithoutLength[], categories: 
     }, 900000,"slides")
 
     const {slides} = useProcessWordpressSlides(posts,categories,wpSlides)
-
     const {getImageMediaObject,getImageUrl:getImages} = useContext(ImageContext)
 
     async function loadSlides(){
