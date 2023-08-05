@@ -53,6 +53,7 @@ export function Preview(props: PreviewProps) {
 
     function procesMessage(e:MessageEvent){
         const message = e.data as MessageData
+        console.log("incomming data iframe", message)
         if(message.type === MessageType.NEW_DATA){
             setData(message.data)
         }
