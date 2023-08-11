@@ -59,10 +59,14 @@ export function Preview(props: PreviewProps) {
         }
     }
 
+    function readyForMessage(){
+        window.postMessage({type: "send-message"}, "*")
+    }
+
     useEffect(()=>{
         PrevNextContext.setAutoGoNext(false)
+        readyForMessage()
         window.addEventListener("message", procesMessage)
-        console.log("Preview site is listening for messages")
         return () => {
             window.removeEventListener("message", procesMessage)
         }

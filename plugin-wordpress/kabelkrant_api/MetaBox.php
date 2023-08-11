@@ -63,7 +63,6 @@ class MetaBox{
         $encoded_data = json_encode($data);
         ?> <script>
             var iframe = document.getElementById('kabelkrant-preview');
-            
             iframe.onload = function() {
                 console.log('iframe loaded',<?php echo $encoded_data; ?>);
                 try{
@@ -71,6 +70,12 @@ class MetaBox{
                 } catch (e){
                     console.log(e);
                 }
+                iframe.addEventlistener('message', function(event){
+                    if(event.data.type == 'send_message'){
+                        console.log("sending messge",<?php echo $encoded_data; ?>)
+                        iframe.contentWindow.postMessage( {'type': "new_preview_data", data : <?php echo $encoded_data; ?> } , '*');
+                    }
+                });
             };
         </script> <?php
 
