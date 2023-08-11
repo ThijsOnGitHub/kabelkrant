@@ -62,6 +62,7 @@ export function Preview(props: PreviewProps) {
     useEffect(()=>{
         PrevNextContext.setAutoGoNext(false)
         window.addEventListener("message", procesMessage)
+        console.log("Preview site is listening for messages")
         return () => {
             window.removeEventListener("message", procesMessage)
         }
