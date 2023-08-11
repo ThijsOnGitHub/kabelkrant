@@ -60,6 +60,7 @@ export function Preview(props: PreviewProps) {
     }
 
     function readyForMessage(){
+        console.log("ready for message")
         window.parent.postMessage({type: "send_message"}, "*")
     }
 
