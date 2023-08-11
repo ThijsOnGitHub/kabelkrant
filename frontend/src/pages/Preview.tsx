@@ -60,7 +60,7 @@ export function Preview(props: PreviewProps) {
     }
 
     function readyForMessage(){
-        window.postMessage({type: "send-message"}, "*")
+        window.postMessage({type: "send_message"}, "*")
     }
 
     useEffect(()=>{
