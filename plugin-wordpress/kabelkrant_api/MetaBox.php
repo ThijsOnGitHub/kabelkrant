@@ -64,9 +64,13 @@ class MetaBox{
         ?> <script>
             var iframe = document.getElementById('kabelkrant-preview');
             
-            iframe.onload= function() {
+            iframe.onload = function() {
                 console.log('iframe loaded',<?php echo $encoded_data; ?>);
-                iframe.contentWindow.postMessage( {'type': "new_preview_data", data : <?php echo $encoded_data; ?> } , '*');
+                try{
+                    iframe.contentWindow.postMessage( {'type': "new_preview_data", data : <?php echo $encoded_data; ?> } , '*');
+                } catch (e){
+                    console.log(e);
+                }
             };
         </script> <?php
 
