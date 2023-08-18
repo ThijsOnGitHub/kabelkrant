@@ -1,8 +1,8 @@
 export interface VideoItem{
-    type: "file" | "folder"
-    play: "all" | number
+    id: string
     path: string
-    startingTime: string
+    days: string[]
+    startingTime: string[]
 }
 
 export type VideoItems = VideoItem[]

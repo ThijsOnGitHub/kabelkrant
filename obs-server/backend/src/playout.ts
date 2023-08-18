@@ -4,8 +4,7 @@ import path from 'path';
 import { VideoItem, VideoItems } from './types/dataStructure.js';
 import { fileURLToPath } from 'url';
 import { isBefore, isAfter, subSeconds } from 'date-fns';
-import { playVideo } from './player.js';
-import { fi } from 'date-fns/locale';
+import { ObsPlayer } from './player.js';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -13,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const jsonFolder = path.join(__dirname, '../json');
 const programPath = path.join(jsonFolder, '/program.json');
 const hasPlayedPath = path.join(jsonFolder, '/hasPlayed.json');
-const VIDEOS_FILE_PATH = path.join(__dirname, 'video');
+const VIDEOS_FILE_PATH = path.join(__dirname, '../video');
 console.log(jsonFolder,programPath)
 
 export function startCron(){
@@ -67,9 +66,21 @@ function writePlay(path:string){
     }
     let jsonData: {[key:string]:Date} = JSON.parse(fs.readFileSync(hasPlayedPath, 'utf8'))	
     jsonData = {...jsonData,[path]: new Date()}
-
     console.log("write play", JSON.stringify(jsonData)) 
     fs.writeFileSync(hasPlayedPath, JSON.stringify(jsonData),{encoding:'utf8',flag:'w'})
+}
+
+function isVideoItemInTimeRange(video : VideoItem, now:Date, start:Date){
+    const time = video.startingTime
+    const timeDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(time.split(":")[0]), parseInt(time.split(":")[1]), parseInt(time.split(":")[2]))
+    return isBefore(timeDate, now) && isAfter(timeDate, start)
+}
+
+function playVideoItem(videoItem: VideoItem){
+    console.log("play video", videoItem.path)
+    const totalVideoPath = getVideoPath(videoItem)
+    console.log("total video path",totalVideoPath)
+    ObsPlayer.playVideo(totalVideoPath)
 }
 
 export function checkIfVideoMustPlay(){
@@ -77,13 +88,8 @@ export function checkIfVideoMustPlay(){
     const now = new Date()
     const start = subSeconds(now, 1)
     videos.some(video => {
-        const time = video.startingTime
-        const timeDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(time.split(":")[0]), parseInt(time.split(":")[1]), parseInt(time.split(":")[2]))
-        if(isBefore(timeDate, now) && isAfter(timeDate, start)){
-            console.log("play video", video.path)
-            const totalVideoPath = getVideoPath(video)
-            console.log("total video path",totalVideoPath)
-            playVideo(totalVideoPath)
+        if(isVideoItemInTimeRange(video, now, start)){
+            playVideoItem(video)
             return true
         }
     })
