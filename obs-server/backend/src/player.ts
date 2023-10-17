@@ -18,10 +18,6 @@ async function wait(ms: number) {
 }
 export async function startObsConnector(){
 
-    
-
-
-
     // Connect to obs-ws running on 192.168.0.4
     await obs.connect('ws://localhost:4455', 'rtvserver');
 
@@ -35,95 +31,106 @@ export async function startObsConnector(){
         await obs.call('SetCurrentProgramScene', {
             sceneName: KABELKRANT_SCENE
         })
-        await fadeVolume(RADIO_INPUT, 2000, true)
+        await ObsPlayer.fadeVolume(RADIO_INPUT, 2000, true)
     })
 }
 
-async function fadeVolume(sourceName:string, duration:number, buildUp:boolean){
-    for(let i =1 ; i < 11; i++){
-        console.log("volume" ,1 - i/10)
-        await wait(duration/ 10)
-        await obs.call("SetInputVolume",{
-            inputName: RADIO_INPUT,
-            inputVolumeMul: buildUp ? i/10 :1 - i/10
-        })
-    }
+function log(data:any){
+    console.log(data)
 }
-
-
-
-export async function playVideo(filePath:string, playoutScene:string=PLAYOUT_SCENE, mediaSourceName:string=KABELKRANT_MEDIA_SOURCE){
-    await obs.call("SetInputSettings",{
-        inputName: mediaSourceName,
-        inputSettings: {
-            local_file: filePath
+export module ObsPlayer {
+    export async function fadeVolume(sourceName:string, duration:number, buildUp:boolean){
+        for(let i =1 ; i < 11; i++){
+            console.log("volume" ,1 - i/10)
+            await wait(duration/ 10)
+            await obs.call("SetInputVolume",{
+                inputName: RADIO_INPUT,
+                inputVolumeMul: buildUp ? i/10 :1 - i/10
+            })
         }
-    })
-
-
-    await obs.call("SetCurrentPreviewScene",{
-        sceneName: playoutScene
-    })
-
-
-    const itemId= await obs.call("GetSceneItemId",{
-        sceneName: playoutScene,
-        sourceName: mediaSourceName,
-    })
-
-
-    await obs.call("TriggerMediaInputAction", {
-        inputName: mediaSourceName,
-        mediaAction: "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_STOP",
-    })
-
-
-    console.log('start')
-    await wait(200)
-    await obs.call("TriggerMediaInputAction", {
-        inputName: mediaSourceName,
-        mediaAction: "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_RESTART",
-    })
-    await wait(200)
-    console.log('end')
-    const {sceneItemTransform:transform} = await obs.call("GetSceneItemTransform",{
-        sceneName: playoutScene,
-        sceneItemId: itemId.sceneItemId
-    })
-
-    const object = {
-        transform,
-        itemId,
-        scaleX:  1920 / (transform.sourceWidth as number) ,
-        scaleY: 1080/ (transform.sourceHeight as number) ,
     }
-
-    console.log(object)
-
-
-    if(object.scaleX != Infinity && object.scaleY != Infinity){
-        console.log("scale", object.scaleX, object.scaleY)
-        await obs.call("SetSceneItemTransform",{
-            sceneName: playoutScene,
-            sceneItemId: itemId.sceneItemId,
-            sceneItemTransform: {
-                positionX: 0,
-                positionY: 0,
-                scaleX:  object.scaleX,
-                scaleY: object.scaleY,
+    
+    
+    
+    export async function playVideo(filePath:string, playoutScene:string=PLAYOUT_SCENE, mediaSourceName:string=KABELKRANT_MEDIA_SOURCE){
+        log("input settings")
+        await obs.call("SetInputSettings",{
+            inputName: mediaSourceName,
+            inputSettings: {
+                local_file: filePath
             }
         })
+    
+        log("preview scene")
+        await obs.call("SetCurrentPreviewScene",{
+            sceneName: playoutScene
+        })
+    
+    
+        log("get item id")
+        const itemId= await obs.call("GetSceneItemId",{
+            sceneName: playoutScene,
+            sourceName: mediaSourceName,
+        })
+    
+    
+        log("stop video")
+        await obs.call("TriggerMediaInputAction", {
+            inputName: mediaSourceName,
+            mediaAction: "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_STOP",
+        })
+    
+    
+        log("start video")
+        await wait(200)
+        await obs.call("TriggerMediaInputAction", {
+            inputName: mediaSourceName,
+            mediaAction: "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_RESTART",
+        })
+        await wait(200)
+        log("get transform")
+        const {sceneItemTransform:transform} = await obs.call("GetSceneItemTransform",{
+            sceneName: playoutScene,
+            sceneItemId: itemId.sceneItemId
+        })
+    
+        
+        const object = {
+            transform,
+            itemId,
+            scaleX:  1920 / (transform.sourceWidth as number) ,
+            scaleY: 1080/ (transform.sourceHeight as number) ,
+        }
+    
+        console.log(object)
+    
+    
+        if(object.scaleX != Infinity && object.scaleY != Infinity){
+            console.log("scale", object.scaleX, object.scaleY)
+            await obs.call("SetSceneItemTransform",{
+                sceneName: playoutScene,
+                sceneItemId: itemId.sceneItemId,
+                sceneItemTransform: {
+                    positionX: 0,
+                    positionY: 0,
+                    scaleX:  object.scaleX,
+                    scaleY: object.scaleY,
+                }
+            })
+        }
+    
+        await fadeVolume(RADIO_INPUT, 2000, false)
+    
+        console.log(`play ${filePath} on ${KABELKRANT_MEDIA_SOURCE} in ${PLAYOUT_SCENE}`)
+        await obs.call("SetCurrentProgramScene",{
+            sceneName: playoutScene
+        })
+        await wait(2000)
+        await obs.call("SetInputVolume",{
+            inputName: RADIO_INPUT,
+            inputVolumeMul: 1
+        })
     }
-
-    await fadeVolume(RADIO_INPUT, 2000, false)
-
-    console.log(`play ${filePath} on ${KABELKRANT_MEDIA_SOURCE} in ${PLAYOUT_SCENE}`)
-    await obs.call("SetCurrentProgramScene",{
-        sceneName: playoutScene
-    })
-    await wait(2000)
-    await obs.call("SetInputVolume",{
-        inputName: RADIO_INPUT,
-        inputVolumeMul: 1
-    })
+    
 }
+

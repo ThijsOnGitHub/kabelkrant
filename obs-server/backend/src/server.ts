@@ -1,7 +1,4 @@
 import Express from "express";
-import { playVideo } from "./player.js";
-
-
 export function startServer(){
     /*const app = Express()
     const port = 3002

@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { VideoItem, VideoItems } from './types/dataStructure.js';
 import { fileURLToPath } from 'url';
-import { isBefore, isAfter, subSeconds } from 'date-fns';
+import { isBefore, isAfter, subSeconds, getDay } from 'date-fns';
 import { ObsPlayer } from './player.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -37,9 +37,6 @@ function getVideos(){
 }
 
 function getVideoPath(videoItem: VideoItem):string{
-    if(videoItem.type == "file"){
-        return path.join(VIDEOS_FILE_PATH, videoItem.path)
-    }
     const files = fs.readdirSync(path.join(VIDEOS_FILE_PATH, videoItem.path))
     const playedFiles = getPlayedVideos()
     const mappedFiles = files.map(file => {
@@ -70,10 +67,15 @@ function writePlay(path:string){
     fs.writeFileSync(hasPlayedPath, JSON.stringify(jsonData),{encoding:'utf8',flag:'w'})
 }
 
-function isVideoItemInTimeRange(video : VideoItem, now:Date, start:Date){
-    const time = video.startingTime
+function isTimeInTimeRange(time: string, now: Date, start: Date){
     const timeDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(time.split(":")[0]), parseInt(time.split(":")[1]), parseInt(time.split(":")[2]))
     return isBefore(timeDate, now) && isAfter(timeDate, start)
+}
+
+function shouldVideoPlay(video : VideoItem, currentDay: number, currentDate: Date, prevCheckDate: Date){
+    return video.planning.some(planning => {
+        return planning.days.some(day => day == currentDay) && planning.time.some(time => isTimeInTimeRange(time, currentDate, prevCheckDate)) 
+    })
 }
 
 function playVideoItem(videoItem: VideoItem){
@@ -87,8 +89,9 @@ export function checkIfVideoMustPlay(){
     const videos = getVideos()
     const now = new Date()
     const start = subSeconds(now, 1)
+    const currentDay = getDay(now)
     videos.some(video => {
-        if(isVideoItemInTimeRange(video, now, start)){
+        if(shouldVideoPlay(video,currentDay, now, start)){
             playVideoItem(video)
             return true
         }
