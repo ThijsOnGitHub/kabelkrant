@@ -1,9 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import path from 'path';
-import { EventKeys, Events } from './events';
-import fs from "fs"
 import { startPlayoutServer } from './server';
-import { getFilesInFolder } from './server/getFilesInFolder';
+import { handleEvents } from './server/events/functionHandler';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -11,12 +9,6 @@ if (require('electron-squirrel-startup')) {
 }
 
 let tray
-function handleEvent<EventName extends keyof Events>(event: EventName, callback: Events[EventName]) {
-  ipcMain.handle(event, (_, ...args: Parameters<Events[EventName]>) => {
-    //@ts-ignore
-    return callback(...args);
-  });
-}
 
 const createWindow = () => {
   // allow only one window to be open
@@ -49,28 +41,8 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 
-const programJSONPath = path.join(app.getPath("userData"), "settings.json")
-const hasPlayedJSONPath = path.join(app.getPath("userData"), "hasPlayed.json")
-
-function handleEvents(){
-  handleEvent(EventKeys.SELECT_FOLDER, () => dialog.showOpenDialogSync({properties: ['openDirectory']})?.[0] || "")
-  handleEvent(EventKeys.SAVE_PROGRAMS, (newSettings) => {
-    console.log("Save new programs", newSettings)
-    // Save data in settings json file
-    const settingsPath = programJSONPath
-    fs.writeFileSync(settingsPath, newSettings)
-  })
-  handleEvent(EventKeys.GET_PROGRAMS, () => {
-    // Read data from settings json file
-    const settingsPath = programJSONPath
-    if (!fs.existsSync(settingsPath)) return ""
-    return fs.readFileSync(settingsPath, "utf-8")
-  } )
-  handleEvent(EventKeys.GET_VIDEOS, (path) => {
-    // Read data from settings json file
-    return getFilesInFolder(path)
-  })
-}
+export const programJSONPath = path.join(app.getPath("userData"), "settings.json")
+export const hasPlayedJSONPath = path.join(app.getPath("userData"), "hasPlayed.json") 
 
 function prepairTray(){
   const iconPath = path.join(__dirname, "../../src/images/logo-kabelkrant-manager.png")

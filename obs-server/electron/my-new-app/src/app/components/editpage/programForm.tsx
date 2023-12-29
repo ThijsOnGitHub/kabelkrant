@@ -2,23 +2,24 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import { Trash2 } from "lucide-react"
+import { FileVideo, Trash2 } from "lucide-react"
 import { FormItem } from "../formItem"
 import { FormField } from "../ui/form"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { Checkbox } from "../ui/checkbox"
 import { TimesEditor } from "./timesEditor"
 import { ProgrammaFormSchema, schema } from "../../type/programFormName"
 import { days } from "../../type/days"
 import { useEffect, useState } from "react"
-import { FilesWithMetadata } from "../../../events"
+import { FilesWithMetadata } from "src/global/types/FileMetaTypes"
+import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command"
 
 export interface ProgramFormProps {
     value: ProgrammaFormSchema
     onSubmit: (data: ProgrammaFormSchema) => void
 }
 
-export const ProgramForm: React.FC<ProgramFormProps> = ({value, onSubmit}) => {
+export const ProgramForm: React.FC<ProgramFormProps> = ({ value, onSubmit }) => {
     const { register, handleSubmit, control, setValue, watch, reset } = useForm<ProgrammaFormSchema>({
         resolver: value ? zodResolver(schema) : undefined,
     })
@@ -27,16 +28,16 @@ export const ProgramForm: React.FC<ProgramFormProps> = ({value, onSubmit}) => {
     useEffect(() => {
         setTimeout(() => {
             reset(value)
-        },1)
+        }, 1)
     }, [value])
 
     async function getFiles() {
         const files = await window.electronApi.getFilesInFolder(watch().path)
-            console.log(files)
-            setFilesWithMetadata(files)
+        setFilesWithMetadata(files)
     }
 
     useEffect(() => {
+        if (!watch().path) return
         getFiles()
     }, [watch().path])
 
@@ -91,26 +92,26 @@ export const ProgramForm: React.FC<ProgramFormProps> = ({value, onSubmit}) => {
                                             <Input {...register(`planning.${index}.end` as const)} />
                                         </FormItem>*/}
                                         <FormItem labelWidth={width} label="Dagen">
-                                                <FormField control={control}  name={`planning.${index}.days`} render={
-                                                    ({ field }) => (
-                                                        <div className="flex flex-row gap-2">
-                                                            { days.map((day) => {
-                                                                return (
-                                                                    <div key={day.name} className="flex items-center gap-2">
-                                                                        <Checkbox checked={ field?.value?.includes(day?.value)} onCheckedChange={(checked) =>{
-                                                                            if(checked){
-                                                                                field.onChange([...field.value,day.value])
-                                                                                return
-                                                                            }
-                                                                            field.onChange(field.value.filter((v:number) => v !== day.value))
-                                                                        } } />
-                                                                        <div>{day.name}</div>
-                                                                    </div>
-                                                                )
-                                                            })}
-                                                        </div>
-                                                    )
-                                                } />
+                                            <FormField control={control} name={`planning.${index}.days`} render={
+                                                ({ field }) => (
+                                                    <div className="flex flex-row gap-2">
+                                                        {days.map((day) => {
+                                                            return (
+                                                                <div key={day.name} className="flex items-center gap-2">
+                                                                    <Checkbox checked={field?.value?.includes(day?.value)} onCheckedChange={(checked) => {
+                                                                        if (checked) {
+                                                                            field.onChange([...field.value, day.value])
+                                                                            return
+                                                                        }
+                                                                        field.onChange(field.value.filter((v: number) => v !== day.value))
+                                                                    }} />
+                                                                    <div>{day.name}</div>
+                                                                </div>
+                                                            )
+                                                        })}
+                                                    </div>
+                                                )
+                                            } />
                                         </FormItem>
                                         <FormItem labelWidth={width} label="Tijden">
                                             <TimesEditor index={index} control={control} />
@@ -130,10 +131,23 @@ export const ProgramForm: React.FC<ProgramFormProps> = ({value, onSubmit}) => {
                 </CardFooter>
             </Card>
             <Button onClick={save}>Save</Button>
-            <div>
-                {JSON.stringify(filesWithMetadata)}
-            </div>
-            {watch() && <pre>{JSON.stringify(watch(), null, 2)}</pre>}
+            <CardTitle>Video's</CardTitle>
+            <Command>
+                <CommandList >
+                    <CommandGroup>
+                        {
+                            filesWithMetadata.map((file) => {
+                                return (
+                                    <CommandItem key={file.name}>
+                                        <FileVideo className="mr-2 h-4 w-4" />
+                                        <span>{file.name}</span>
+                                    </CommandItem>
+                                )
+                            })
+                        }
+                    </CommandGroup>
+                </CommandList>
+            </Command>
         </div>
     )
 }

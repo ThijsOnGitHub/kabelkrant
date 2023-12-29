@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { VideoItem, VideoItems } from './types/dataStructure.js';
 import { isBefore, isAfter, subSeconds, getDay } from 'date-fns';
-import { ObsPlayer } from './player.js';
+import { ObsPlayer } from './obsManager.js';
 
 
 const jsonFolder = path.join(__dirname, '../json');
