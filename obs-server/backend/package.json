@@ -8,7 +8,6 @@
     "start": "cd dist && nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "module",
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -19,9 +18,9 @@
     "@types/node": "^20.1.4",
     "@types/node-cron": "^3.0.8",
     "date-fns": "^2.30.0",
-    "express": "^4.18.2",
     "node-cron": "^3.0.2",
-    "nodemon": "^2.0.22",
-    "obs-websocket-js": "^5.0.2"
+    "obs-websocket-js": "^5.0.2",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
   }
 }
