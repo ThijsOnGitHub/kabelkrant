@@ -1,6 +1,6 @@
 {
-  "name": "my-new-app",
-  "productName": "my-new-app",
+  "name": "kabelkrant-manager",
+  "productName": "Kabelkrant Manager",
   "version": "1.0.1",
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
