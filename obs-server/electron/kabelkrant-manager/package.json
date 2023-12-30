@@ -12,6 +12,7 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."
   },
+  "repository": "ThijsOnGitHub/kabelkrant",
   "keywords": [],
   "author": {
     "name": "ThijsOnGitHub",
