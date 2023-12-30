@@ -1,0 +1,34 @@
+name: App deploy
+
+on:
+  push:
+    branches: 
+      - main
+      - staging
+env:
+  APP_FOLDER: obs-server/electron/kabelkrant-manager
+
+jobs: 
+  deploy-application:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.1.0
+      - name: Setup Node.js environment
+        if: false
+        uses: actions/setup-node@v3.5.1
+      - name: Bumb package version
+        working-directory: ${{ env.APP_FOLDER }}
+        run: |
+          npm version patch
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "Bumb package version bot"
+          git commit -m "Update package.json version" -a
+          git push
+      - name: Generate executable and deploy
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        working-directory: ${{ env.APP_FOLDER }}
+        run: |
+          npm install
+          npm run publish
