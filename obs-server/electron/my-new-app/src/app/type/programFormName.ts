@@ -1,6 +1,8 @@
+import { VideoItem } from "../../global/types/VideoItem"
 import { z } from "zod"
 
 export const schema = z.object({
+    id: z.string(),
     programName: z.string(),
     path: z.string(),
     planning: z.array(z.object({
@@ -12,4 +14,4 @@ export const schema = z.object({
     }]),
 })
 
-export type ProgrammaFormSchema = z.infer<typeof schema>
+export type ProgrammaFormSchema = z.infer<typeof schema> & VideoItem

@@ -76,6 +76,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "eslint-plugin-storybook": "^0.6.13",
+    "get-video-duration": "^4.1.0",
     "node-cron": "^3.0.2",
     "obs-websocket-js": "^5.0.3",
     "postcss": "^8.4.31",

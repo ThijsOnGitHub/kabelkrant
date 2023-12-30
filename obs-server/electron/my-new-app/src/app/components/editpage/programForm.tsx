@@ -5,14 +5,15 @@ import { Button } from "../ui/button"
 import { FileVideo, Trash2 } from "lucide-react"
 import { FormItem } from "../formItem"
 import { FormField } from "../ui/form"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { Checkbox } from "../ui/checkbox"
 import { TimesEditor } from "./timesEditor"
 import { ProgrammaFormSchema, schema } from "../../type/programFormName"
 import { days } from "../../type/days"
 import { useEffect, useState } from "react"
-import { FilesWithMetadata } from "src/global/types/FileMetaTypes"
+import { FilesWithMetadata, VideoFile } from "src/global/types/FileMetaTypes"
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command"
+import { formatDuration } from "../../function/formatDuration"
 
 export interface ProgramFormProps {
     value: ProgrammaFormSchema
@@ -137,12 +138,23 @@ export const ProgramForm: React.FC<ProgramFormProps> = ({ value, onSubmit }) => 
                     <CommandGroup>
                         {
                             filesWithMetadata.map((file) => {
+                                if(file.type == "video"){
+                                    return (
+                                        <CommandItem key={file.name}>
+                                            <FileVideo className="mr-2 h-4 w-4" />
+                                            <span>{file.name}</span> - 
+                                            <span>{file.type} - { formatDuration(((file as VideoFile).duration ?? 0) * 1000) }</span>
+
+                                        </CommandItem>
+                                    )
+                                }
                                 return (
                                     <CommandItem key={file.name}>
-                                        <FileVideo className="mr-2 h-4 w-4" />
-                                        <span>{file.name}</span>
-                                    </CommandItem>
+                                            <FileVideo className="mr-2 h-4 w-4" />
+                                            <span>{file.name}</span>
+                                        </CommandItem>
                                 )
+                                
                             })
                         }
                     </CommandGroup>

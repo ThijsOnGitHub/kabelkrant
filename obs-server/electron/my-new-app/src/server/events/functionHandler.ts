@@ -21,9 +21,9 @@ export function handleEvents(){
       if (!fs.existsSync(settingsPath)) return ""
       return fs.readFileSync(settingsPath, "utf-8")
     } )
-    handleFunction(FunctionKeys.GET_VIDEOS, (path) => {
+    handleFunction(FunctionKeys.GET_VIDEOS, async (path) => {
       // Read data from settings json file
-      return getFilesInFolder(path)
+      return await getFilesInFolder(path)
     })
     handleFunction(FunctionKeys.CHECK_OBS_IS_RUNNING, () => {
       // Read data from settings json file

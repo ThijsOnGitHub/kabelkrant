@@ -5,6 +5,7 @@ import { ProgramForm } from './components/editpage/programForm'
 import { ProgrammaFormSchema } from './type/programFormName'
 import { Button } from './components/ui/button'
 import { EventKeys } from 'src/global/events'
+import { v4 } from 'uuid'
 
 function App() {
   const [programs, setPrograms] = useState<ProgrammaFormSchema[]>([])
@@ -66,6 +67,7 @@ function App() {
       <div className='flex gap-5 '>
         <Sidebar items={programs} onAddBlock={() => {
           setPrograms([...programs, {
+            id: v4(),
             path: '',
             programName: 'nieuw programma',
             planning: []

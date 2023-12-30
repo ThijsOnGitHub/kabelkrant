@@ -13,6 +13,7 @@ export default defineConfig({
         'node-cron',
         'crypto',
         'path',
+        'get-video-duration'
       ]
     }
   },

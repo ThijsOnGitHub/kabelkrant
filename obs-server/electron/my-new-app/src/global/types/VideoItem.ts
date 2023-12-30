@@ -1,4 +1,5 @@
 export interface VideoItem{
+    id:string
     programName: string
     path: string
     planning: Planning[]
