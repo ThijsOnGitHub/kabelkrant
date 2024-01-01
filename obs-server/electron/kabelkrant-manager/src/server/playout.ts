@@ -1,9 +1,9 @@
 import * as NodeCron from 'node-cron';
 import fs from 'fs';
 import path from 'path';
-import { VideoItem, VideoItems } from './types/dataStructure.js';
 import { isBefore, isAfter, subSeconds, getDay } from 'date-fns';
 import { ObsPlayer } from './obsManager.js';
+import { VideoItem, VideoItems } from '../global/types/VideoItem';
 
 
 const jsonFolder = path.join(__dirname, '../json');

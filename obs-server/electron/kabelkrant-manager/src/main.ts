@@ -3,6 +3,7 @@ import path from 'path';
 import { startPlayoutServer } from './server';
 import { handleEvents } from './server/events/functionHandler';
 import { updateElectronApp } from 'update-electron-app';
+import fs from 'fs';
 updateElectronApp();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -22,6 +23,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    icon: path.join(__dirname, "../../src/images/icon.png"),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -60,7 +62,17 @@ function prepairTray(){
   tray.setToolTip("Kabelkrant Manager")
 }
 
+function createFiles(){
+  if (!fs.existsSync(programJSONPath)){
+    fs.writeFileSync(programJSONPath, JSON.stringify([]))
+  }
+  if (!fs.existsSync(hasPlayedJSONPath)){
+    fs.writeFileSync(hasPlayedJSONPath, JSON.stringify([]))
+  }
+}
+
 app.whenReady().then(() => {
+  createFiles()
   startPlayoutServer(programJSONPath, hasPlayedJSONPath)
   prepairTray()
   handleEvents()
