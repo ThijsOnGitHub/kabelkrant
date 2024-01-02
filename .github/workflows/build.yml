@@ -14,6 +14,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3.1.0
+      - name: Bumb package version
+        working-directory: ${{ env.APP_FOLDER }}
+        run: |
+          npm version patch
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "Bumb package version bot"
+          git commit -m "Update package.json version" -a
+          git push
       - name: Generate executable and deploy
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
