@@ -3,7 +3,9 @@ import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 
 const config: ForgeConfig = {
-  rebuildConfig: {},
+  packagerConfig: {
+    icon : './logo.ico',
+  },
   makers: [new MakerSquirrel({})],
   publishers: [
     {
