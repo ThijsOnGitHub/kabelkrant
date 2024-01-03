@@ -8,7 +8,6 @@ const config: ForgeConfig = {
     icon : './assets/logo.ico',
   },
   makers: [new MakerSquirrel({
-    iconUrl: './assets/logo.ico',
     setupIcon: './assets/logo.ico',
   })],
   publishers: [
