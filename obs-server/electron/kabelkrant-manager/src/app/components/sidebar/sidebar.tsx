@@ -18,7 +18,7 @@ export const Sidebar: FC<SidebarProps> = ({selectedItem, setSelectedItem, items,
         <div className="sidebar__header">Blokken </div>
         {
             items.map((item,index) => {
-                return <SidebarItem key={item.programName} onDelete={() => onDeleteItem(item, index) }  showDelete onClick={() => setSelectedItem(index)} isSelected={index== selectedItem }>{item.programName}</SidebarItem>
+                return <SidebarItem key={item.id} onDelete={() => onDeleteItem(item, index) }  showDelete onClick={() => setSelectedItem(index)} isSelected={index== selectedItem }>{item.programName}</SidebarItem>
             })
         }
         <SidebarItem isAdd={true} onClick={onAddBlock}>Voeg nieuw programma toe</SidebarItem>

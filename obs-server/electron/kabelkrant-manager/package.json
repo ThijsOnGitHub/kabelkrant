@@ -5,7 +5,7 @@
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron-forge start -- --trace-warnings",
+    "start": "electron-forge start",
     "debug": "npm run start -- --inspect-brk-electron",
     "package": "electron-forge package",
     "make": "electron-forge make",

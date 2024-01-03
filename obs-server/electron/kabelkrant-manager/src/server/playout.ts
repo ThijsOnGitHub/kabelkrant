@@ -2,8 +2,9 @@ import * as NodeCron from 'node-cron';
 import fs from 'fs';
 import path from 'path';
 import { isBefore, isAfter, subSeconds, getDay } from 'date-fns';
-import { ObsPlayer } from './obsManager.js';
+import { ObsPlayer, videoPlaylist } from './obsManager.js';
 import { VideoItem, VideoItems } from '../global/types/VideoItem';
+import { sortFilesWithNumbers } from '../global/sortFunction.js';
 
 
 const jsonFolder = path.join(__dirname, '../json');
@@ -32,13 +33,12 @@ function getVideos(programFilePath: string){
     return program
 }
 
-function getVideoPath(hasPlayedPath:string,videoItem: VideoItem):string{
+
+function getSingleVideoPath(files:string[], hasPlayedPath:string,videoItem: VideoItem):string{
     console.log("playvide", videoItem)
-    const files = fs.readdirSync(videoItem.path)
     const playedFiles = getPlayedVideos(hasPlayedPath)
-    if(files.length == 0) return "No files found"
     const mappedFiles = files.map(file => {
-        const filePath =path.join(videoItem.path,file)
+        const filePath = file
         const lastPlayed = playedFiles[filePath]
         return {path: file, date: lastPlayed == undefined ? undefined : new Date(lastPlayed)} 
     })
@@ -80,10 +80,15 @@ function shouldVideoPlay(video : VideoItem, currentDay: number, currentDate: Dat
 
 function playVideoItem(hasPlayedPath:string,videoItem: VideoItem){
     console.log("play video", videoItem)
-    const totalVideoPath = getVideoPath(hasPlayedPath,videoItem)
-    if(totalVideoPath == "No files found") return
-    console.log("total video path",totalVideoPath)
-    ObsPlayer.playVideo(totalVideoPath)
+    let videos = fs.readdirSync(videoItem.path)
+        .sort(sortFilesWithNumbers)
+        .map(file => path.join(videoItem.path,file))
+    if(videos.length == 0) return
+    if(!videoItem.playAll){
+        videos = [getSingleVideoPath(videos,hasPlayedPath,videoItem)]
+    }
+    console.log("play videos",videos)
+    videoPlaylist.addVideos(videos)
 }
 
 export function checkIfVideoMustPlay(programFilePath: string, hasPlayedPath:string){

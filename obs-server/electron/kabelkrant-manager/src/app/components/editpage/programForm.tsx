@@ -1,4 +1,4 @@
-import { useFieldArray, useForm } from "react-hook-form"
+import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
@@ -14,6 +14,7 @@ import { useEffect, useState } from "react"
 import { FilesWithMetadata, VideoFile } from "src/global/types/FileMetaTypes"
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command"
 import { formatDuration } from "../../function/formatDuration"
+import { sortFilesWithNumbers } from  "../../../global/sortFunction"
 
 export interface ProgramFormProps {
     value: ProgrammaFormSchema
@@ -22,7 +23,8 @@ export interface ProgramFormProps {
 
 export const ProgramForm: React.FC<ProgramFormProps> = ({ value, onSubmit }) => {
     const { register, handleSubmit, control, setValue, watch, reset } = useForm<ProgrammaFormSchema>({
-        resolver: value ? zodResolver(schema) : undefined,
+        resolver:  zodResolver(schema),
+        defaultValues: value
     })
     const [filesWithMetadata, setFilesWithMetadata] = useState<FilesWithMetadata[]>([])
 
@@ -34,7 +36,7 @@ export const ProgramForm: React.FC<ProgramFormProps> = ({ value, onSubmit }) => 
 
     async function getFiles() {
         const files = await window.electronApi.getFilesInFolder(watch().path)
-        setFilesWithMetadata(files)
+        setFilesWithMetadata(files.sort((a,b) => sortFilesWithNumbers(a.name, b.name)))
     }
 
     useEffect(() => {
@@ -66,6 +68,11 @@ export const ProgramForm: React.FC<ProgramFormProps> = ({ value, onSubmit }) => 
                 <FormItem labelWidth={width} label="Map">
                     <Input {...register("path")} readOnly />
                     <Button style={{ width: "fit-content" }} color="primary" className="" onClick={selectFolder}>Map kiezen</Button>
+                </FormItem>
+                <FormItem labelWidth={width} label="Speel als blok">
+                    <Controller name="playAll" control={control} render={({field}) =>
+                        <Checkbox checked={field.value} onCheckedChange={(checked) => field.onChange(checked)} />
+                    }/>
                 </FormItem>
             </div>
             <Card>
@@ -160,6 +167,7 @@ export const ProgramForm: React.FC<ProgramFormProps> = ({ value, onSubmit }) => 
                     </CommandGroup>
                 </CommandList>
             </Command>
+            <div>{JSON.stringify(watch())}</div>
         </div>
     )
 }

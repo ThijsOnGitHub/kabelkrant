@@ -2,11 +2,16 @@ import type { ForgeConfig } from '@electron-forge/shared-types';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 
+
 const config: ForgeConfig = {
   packagerConfig: {
     icon : './logo.ico',
   },
-  makers: [new MakerSquirrel({})],
+  makers: [new MakerSquirrel({
+    iconUrl: './logo.ico',
+    setupIcon: './logo.ico',
+    
+  })],
   publishers: [
     {
       name: '@electron-forge/publisher-github',

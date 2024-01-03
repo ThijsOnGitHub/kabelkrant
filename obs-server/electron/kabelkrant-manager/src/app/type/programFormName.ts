@@ -4,6 +4,7 @@ import { z } from "zod"
 export const schema = z.object({
     id: z.string(),
     programName: z.string(),
+    playAll: z.boolean(),
     path: z.string(),
     planning: z.array(z.object({
         days: z.array(z.number()),

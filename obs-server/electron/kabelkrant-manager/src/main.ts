@@ -1,8 +1,9 @@
-import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Tray } from 'electron';
+import { app, BrowserWindow, Menu, nativeImage, Tray } from 'electron';
 import path from 'path';
 import { startPlayoutServer } from './server';
 import { handleEvents } from './server/events/functionHandler';
 import { updateElectronApp } from 'update-electron-app';
+import logo from './images/logo.png'
 import fs from 'fs';
 updateElectronApp();
 
@@ -23,7 +24,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: path.join(__dirname, "../../src/images/icon.png"),
+    icon: logo,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -36,6 +37,9 @@ const createWindow = () => {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
+
+  // open devtools only when in dev mode
+  
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();

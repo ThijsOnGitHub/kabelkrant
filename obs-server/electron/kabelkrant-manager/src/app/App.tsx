@@ -3,8 +3,6 @@ import { TopBar } from './components/topBar'
 import { Sidebar } from './components/sidebar/sidebar'
 import { ProgramForm } from './components/editpage/programForm'
 import { ProgrammaFormSchema } from './type/programFormName'
-import { Button } from './components/ui/button'
-import { EventKeys } from 'src/global/events'
 import { v4 } from 'uuid'
 
 function App() {
@@ -70,7 +68,8 @@ function App() {
             id: v4(),
             path: '',
             programName: 'nieuw programma',
-            planning: []
+            planning: [],
+            playAll: true
           }])
         }} onDeleteItem={(_, index) => deleteItem(index)} selectedItem={selectedIndex} setSelectedItem={(index) => {
           setSelectedIndex(index)
