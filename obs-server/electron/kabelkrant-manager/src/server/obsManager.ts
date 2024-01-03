@@ -172,10 +172,11 @@ export module ObsPlayer {
         })
     }
     
-    export async function playVideo(filePath:string, playout:Playout){
+    export async function playVideo(filePath:string, playout:Playout, shouldFadeMusic:boolean = true){
 
-        await fadeVolume(RADIO_INPUT, 2000, false)
-    
+        if(shouldFadeMusic){
+            await fadeVolume(RADIO_INPUT, 2000, false)
+        }
         console.log(`play ${filePath} on ${playout.videoSource} in ${playout.videoSource}`)
         await obs.call("SetCurrentProgramScene",{
             sceneName: playout.sceneName
