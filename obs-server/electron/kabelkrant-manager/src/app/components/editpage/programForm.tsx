@@ -167,7 +167,6 @@ export const ProgramForm: React.FC<ProgramFormProps> = ({ value, onSubmit }) => 
                     </CommandGroup>
                 </CommandList>
             </Command>
-            <div>{JSON.stringify(watch())}</div>
         </div>
     )
 }
