@@ -5,12 +5,11 @@ import { VitePlugin } from '@electron-forge/plugin-vite';
 
 const config: ForgeConfig = {
   packagerConfig: {
-    icon : './logo.ico',
+    icon : './assets/logo.ico',
   },
   makers: [new MakerSquirrel({
-    iconUrl: './logo.ico',
-    setupIcon: './logo.ico',
-    
+    iconUrl: './assets/logo.ico',
+    setupIcon: './assets/logo.ico',
   })],
   publishers: [
     {
