@@ -6,7 +6,7 @@ on:
       - main
       - staging
 env:
-  APP_FOLDER: obs-server/electron/kabelkrant-manager
+  APP_FOLDER: kabelkrant-manager
 
 jobs: 
   deploy-application:
