@@ -100,6 +100,10 @@ export module ObsPlayer {
     }
     
     export async function prepairVideo(filePath:string, playout: Playout){
+        await obs.call("SetStudioModeEnabled",{
+            studioModeEnabled: true
+        })
+
         log("input settings")
         await obs.call("SetInputSettings",{
             inputName: playout.videoSource,
