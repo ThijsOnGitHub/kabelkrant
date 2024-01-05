@@ -14,7 +14,7 @@ if (require('electron-squirrel-startup')) {
 
 let tray
 
-const createWindow = () => {
+const openWindow = () => {
   // allow only one window to be open
   if (BrowserWindow.getAllWindows().length > 0) {
     BrowserWindow.getAllWindows()[0].show()
@@ -44,6 +44,16 @@ const createWindow = () => {
   // Open the DevTools.
 };
 
+const gotTheLock = app.requestSingleInstanceLock()
+
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on("second-instance", () => {
+    openWindow()
+  })
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -57,11 +67,11 @@ function prepairTray(){
   tray = new Tray(icon)
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: "Open", click: () => createWindow() },
+    { label: "Open", click: () => openWindow() },
     { label: "Quit", click: () => app.quit() }
   ])
   tray.setContextMenu(contextMenu)
-  tray.on("click", () => createWindow())
+  tray.on("click", () => openWindow())
   tray.setToolTip("Kabelkrant Manager")
 }
 
@@ -79,7 +89,7 @@ app.whenReady().then(() => {
   startPlayoutServer(programJSONPath, hasPlayedJSONPath)
   prepairTray()
   handleEvents()
-  createWindow()
+  openWindow()
 })
 
 
@@ -97,7 +107,7 @@ app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    openWindow();
   }
 });
 
