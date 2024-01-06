@@ -1,10 +1,11 @@
 import { app, BrowserWindow, Menu, nativeImage, Tray } from 'electron';
 import path from 'path';
-import { startPlayoutServer } from './server';
-import { handleEvents } from './server/events/functionHandler';
+import { startPlayoutServer } from './obs';
+import { handleEvents } from './obs/events/functionHandler';
 import { updateElectronApp } from 'update-electron-app';
 import logo from './images/logo.png'
 import fs from 'fs';
+import { startServer } from './server/server';
 updateElectronApp();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -87,6 +88,7 @@ function createFiles(){
 app.whenReady().then(() => {
   createFiles()
   startPlayoutServer(programJSONPath, hasPlayedJSONPath)
+  startServer(programJSONPath)
   prepairTray()
   handleEvents()
   openWindow()
