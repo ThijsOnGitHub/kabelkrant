@@ -25,7 +25,7 @@ export function startCron(programFilePath: string, hasPlayedPath:string){
 
 }
 
-function getVideos(programFilePath: string){
+export function getVideos(programFilePath: string){
     // read json file
     const json = fs.readFileSync(programFilePath)
     const program: VideoItems = JSON.parse(json.toString())
