@@ -188,7 +188,7 @@ export module ObsPlayer {
         await wait(2000)
         await obs.call("SetInputVolume",{
             inputName: RADIO_INPUT,
-            inputVolumeMul: 1
+            inputVolumeMul: 0
         })
     }
     
