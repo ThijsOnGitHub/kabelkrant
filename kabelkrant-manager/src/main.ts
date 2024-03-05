@@ -5,7 +5,7 @@ import { handleEvents } from './obs/events/functionHandler';
 import { updateElectronApp } from 'update-electron-app';
 import logo from './images/logo.png'
 import fs from 'fs';
-import * as Sentry from "@sentry/electron";
+import * as Sentry from "@sentry/electron/main";
 import { startServer } from './server/server';
 updateElectronApp();
 

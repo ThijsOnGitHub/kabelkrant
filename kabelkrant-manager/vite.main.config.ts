@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from 'vite';
 // https://vitejs.dev/config
 export default defineConfig({
@@ -6,6 +7,7 @@ export default defineConfig({
     browserField: false,
     mainFields: ['module', 'jsnext:main', 'jsnext']
   },
+
   build: {
     sourcemap: true,
     rollupOptions: {
@@ -17,4 +19,9 @@ export default defineConfig({
       ]
     }
   },
+
+  plugins: [sentryVitePlugin({
+    org: "thijs-r2",
+    project: "electron"
+  })]
 });
