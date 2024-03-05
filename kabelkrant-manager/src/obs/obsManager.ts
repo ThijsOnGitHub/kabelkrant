@@ -87,6 +87,16 @@ export module ObsPlayer {
         await ObsPlayer.fadeVolume(RADIO_INPUT, 2000, true)
     }
 
+    export async function clearVideoPlayer(data: {inputName: string}){
+        console.log("clear video player", data)
+        await obs.call("SetInputSettings",{
+            inputName: data.inputName,
+            inputSettings: {
+                local_file: ""
+            }
+        })
+    }
+
 
     export async function fadeVolume(sourceName:string, duration:number, buildUp:boolean){
         for(let i =1 ; i < 11; i++){
@@ -194,4 +204,4 @@ export module ObsPlayer {
     
 }
 
-export let videoPlaylist: VideoPlaylist = new VideoPlaylist(ObsPlayer.playVideo, ObsPlayer.prepairVideo, ObsPlayer.goToKabelkrant, Playout)
+export let videoPlaylist: VideoPlaylist = new VideoPlaylist(ObsPlayer.playVideo,ObsPlayer.clearVideoPlayer, ObsPlayer.prepairVideo, ObsPlayer.goToKabelkrant, Playout)
