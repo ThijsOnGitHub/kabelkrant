@@ -5,6 +5,7 @@ import { handleEvents } from './obs/events/functionHandler';
 import { updateElectronApp } from 'update-electron-app';
 import logo from './images/logo.png'
 import fs from 'fs';
+import * as Sentry from "@sentry/electron";
 import { startServer } from './server/server';
 updateElectronApp();
 
@@ -12,6 +13,11 @@ updateElectronApp();
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+
+
+Sentry.init({
+  dsn: "https://d28d7bf99eac503fda338df87d1ae5a6@o4506860416401408.ingest.us.sentry.io/4506860428197888",
+});
 
 let tray
 
