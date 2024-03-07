@@ -10,9 +10,8 @@ export function useWordpressPostData(){
     const [wordpressCategories, setWordpressCategories] = useState<WordpressCategory[]>([])
 
 
-    const { resetAndStartTimer:resetTimer, stopTimer }= useTimer(900000, ()=>{
+    const { resetAndStartTimer, stopTimer }= useTimer(false, ()=>{
         loadPosts()
-        resetTimer()
     },900000,"postdata")
 
     const filteredWordpressPosts = useMemo( ()=>wordpressPosts.filter(post => post != null) as WordpressPost[], [wordpressPosts]) 
@@ -20,6 +19,7 @@ export function useWordpressPostData(){
 
     function loadPosts(){
         const wordpressClient = new WordpressClient();
+        console.log("Loading posts")
         // Create all the promises
         wordpressClient.post()
             .find(new URLSearchParams({"tv-filter": "true"})).then(result =>{
@@ -34,7 +34,7 @@ export function useWordpressPostData(){
 
     useEffect(() => {
         loadPosts()
-        resetTimer()
+        resetAndStartTimer()
         return () => {
             stopTimer()
         }
