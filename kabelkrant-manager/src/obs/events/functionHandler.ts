@@ -4,7 +4,7 @@ import { dialog } from "electron"
 import { getFilesInFolder } from "../getFilesInFolder"
 import fs from "fs"
 import { programJSONPath } from "../../main"
-import { obsIsRunning } from "../obsManager"
+import { obsIsRunning, videoPlaylist } from "../obsManager"
 
 
 export function handleEvents(){
@@ -28,5 +28,9 @@ export function handleEvents(){
     handleFunction(FunctionKeys.CHECK_OBS_IS_RUNNING, () => {
       // Read data from settings json file
       return obsIsRunning
+    })
+    handleFunction(FunctionKeys.GET_PLAYLIST, () => {
+      // Read data from settings json file
+      return videoPlaylist.videos
     })
 }

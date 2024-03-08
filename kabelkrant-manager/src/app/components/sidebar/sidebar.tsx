@@ -2,25 +2,55 @@ import { FC } from "react"
 import { SidebarItem } from "./sidebarItem"
 import { ProgrammaFormSchema } from "../../type/programFormName";
 
-export interface SidebarProps {
-    items: ProgrammaFormSchema[]
-    onAddBlock: () => void;
-    selectedItem?: number
-    setSelectedItem: (index: number) => void;
-    onDeleteItem: (item: ProgrammaFormSchema, index: number) => void;
+export enum SidebarItemTypes {
+    PROGRAM = "program",
+    BUTTON = "button",
 }
 
-export const Sidebar: FC<SidebarProps> = ({selectedItem, setSelectedItem, items, onAddBlock, onDeleteItem}) => {
+export type SidebarItemProgram = {
+    type: SidebarItemTypes.PROGRAM
+    value: ProgrammaFormSchema
+    onSelected: () => void;
+    isSelected: boolean;
+    onClick: () => void;
+    onDelete?: () => void;
+}
 
+export type SidebarItemButton = {
+    type: SidebarItemTypes.BUTTON
+    text: string
+    isAdd?: boolean;
+    isSelected?: boolean;
+    onClick: () => void;
+}
 
+export type SidebarItem = SidebarItemProgram | SidebarItemButton
 
+export type SidebarItems = {[category: string] : SidebarItem[]} 
+
+export interface SidebarProps {
+    items: SidebarItems
+}
+
+export const Sidebar: FC<SidebarProps> = ({items}) => {
     return <div className="sidebar__container">
-        <div className="sidebar__header">Blokken </div>
         {
-            items.map((item,index) => {
-                return <SidebarItem key={item.id} onDelete={() => onDeleteItem(item, index) }  showDelete onClick={() => setSelectedItem(index)} isSelected={index== selectedItem }>{item.programName}</SidebarItem>
+            Object.entries(items).map(([category, items]) => {
+                return <>
+                <div className="sidebar__header">{category}</div>
+                {
+                    items.map((item,index) => {
+                        if(item.type == SidebarItemTypes.BUTTON){
+                            return <SidebarItem key={index} isAdd={item.isAdd} isSelected={item.isSelected} onClick={item.onClick} >{item.text}</SidebarItem>
+                        }
+                        if(item.type == SidebarItemTypes.PROGRAM){
+                            return <SidebarItem key={item.value.id} onDelete={item.onDelete} showDelete={item.onDelete != null} onClick={item.onClick} isSelected={item.isSelected}>{item.value.programName}</SidebarItem>
+                        }
+                        return <></>
+                    })
+                }
+                </>
             })
         }
-        <SidebarItem isAdd={true} onClick={onAddBlock}>Voeg nieuw programma toe</SidebarItem>
     </div>
 }

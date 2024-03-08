@@ -68,6 +68,13 @@ export async function startObsConnector(){
     obs.on('MediaInputPlaybackEnded', async (data) => {
         videoPlaylist.playNextVideo(data)
     })
+
+    obs.on('CurrentProgramSceneChanged', async (data) => {
+        if(Playout.some(playout => playout.sceneName.toLowerCase() == data.sceneName.toLowerCase())){
+            return
+        }
+        videoPlaylist.removeItemsFromPlaylist()
+    })
 }
 
 function log(data:any){
