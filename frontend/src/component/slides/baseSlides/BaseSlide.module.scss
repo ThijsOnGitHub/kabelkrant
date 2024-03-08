@@ -1,5 +1,6 @@
 .sideBar{
-  background: white;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(30.5615px);
   padding: 70px 45px 32px;
   border-radius: 10px 0 0 10px;
   width: 450px;
@@ -34,8 +35,7 @@
   display: none;
 }
 .body{
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(30.5615px);
+  background: white;
   width: 100%;
   border-radius: 0 10px 10px 0;
   height: 100%;
