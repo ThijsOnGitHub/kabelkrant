@@ -6,7 +6,7 @@ import { EventKeys, Events, FunctionKeys, Functions } from "./global/events";
 import { ca } from "date-fns/locale";
 
 const invoke = <EventName extends keyof Functions>(event: EventName) => 
-    (...args: Parameters<Functions[EventName]>): Promise<ReturnType<Functions[EventName]>>  => ipcRenderer.invoke(event, ...args)
+    (...args: Parameters<Functions[EventName]>): Promise<Awaited<ReturnType<Functions[EventName]>>>  => ipcRenderer.invoke(event, ...args)
 
 const listenForEvent = <EventName extends keyof Events>(event: EventName) => (callback: ( ...args: Events[EventName]) => void) =>{
     const callbackEvent = (_:IpcRendererEvent, ...args: Events[EventName]) => {
@@ -23,7 +23,8 @@ const api = {
     getPrograms: invoke(FunctionKeys.GET_PROGRAMS),
     getFilesInFolder: invoke(FunctionKeys.GET_VIDEOS),
     getObsIsRunning: invoke(FunctionKeys.CHECK_OBS_IS_RUNNING),
-    onObsStatusChange: listenForEvent<keyof Events>(EventKeys.OBS_STATUS_CHANGE)
+    onObsStatusChange: listenForEvent<keyof Events>(EventKeys.OBS_STATUS_CHANGE),
+    getPlaylist: invoke(FunctionKeys.GET_PLAYLIST)
 }
 
 

@@ -37,7 +37,7 @@ export class VideoPlaylist {
         this.videos.push(...videoPath);
         console.log("Playing videos", this.videos)
         if(this.videos.length > 1){
-            await this.prepairVideo(videoPath[1], this.getNextPlayout())
+            await this.prepairVideo(this.videos[1], this.getNextPlayout())
         }
     }
 
@@ -54,9 +54,13 @@ export class VideoPlaylist {
         this.setNextPlayout();
         console.log("Playing videos", this.videos)
         await this.playFirstVideo(this.videos[0], this.getCurrentPlayout(), false);
-        await this.clearVideoPlayer(data);
+        await this.clearVideoPlayer({inputName: this.getNextPlayout().videoSource});
         if (this.videos.length > 1) {
             await this.prepairVideo(this.videos[1], this.getNextPlayout())
         }
+    }
+
+    removeItemsFromPlaylist() {
+        this.videos = [];
     }
 }
