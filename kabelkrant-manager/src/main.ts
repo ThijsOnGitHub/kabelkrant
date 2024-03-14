@@ -96,7 +96,7 @@ app.whenReady().then(() => {
   startPlayoutServer(programJSONPath, hasPlayedJSONPath)
   startServer(programJSONPath)
   prepairTray()
-  handleEvents()
+  handleEvents(hasPlayedJSONPath)
   openWindow()
 })
 

@@ -78,7 +78,7 @@ function shouldVideoPlay(video : VideoItem, currentDay: number, currentDate: Dat
     })
 }
 
-function playVideoItem(hasPlayedPath:string,videoItem: VideoItem){
+export function playVideoItem(hasPlayedPath:string,videoItem: VideoItem){
     console.log("play video", videoItem)
     let videos = fs.readdirSync(videoItem.path)
         .sort(sortFilesWithNumbers)

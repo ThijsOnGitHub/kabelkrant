@@ -15,6 +15,7 @@ import { FilesWithMetadata, VideoFile } from "src/global/types/FileMetaTypes"
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command"
 import { formatDuration } from "../../function/formatDuration"
 import { sortFilesWithNumbers } from  "../../../global/sortFunction"
+import { ConfirmDialog } from "../ConfirmDialog/ConfirmDialog"
 
 export interface ProgramFormProps {
     value: ProgrammaFormSchema
@@ -167,6 +168,7 @@ export const ProgramForm: React.FC<ProgramFormProps> = ({ value, onSubmit }) => 
                     </CommandGroup>
                 </CommandList>
             </Command>
+            <ConfirmDialog buttonText="Nu afspelen op TV" onConfirm={() => window.electronApi.playVideoItem(value)} />
         </div>
     )
 }

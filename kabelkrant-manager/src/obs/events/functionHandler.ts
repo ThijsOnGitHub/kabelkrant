@@ -5,9 +5,10 @@ import { getFilesInFolder } from "../getFilesInFolder"
 import fs from "fs"
 import { programJSONPath } from "../../main"
 import { obsIsRunning, videoPlaylist } from "../obsManager"
+import { playVideoItem } from "../playout"
 
 
-export function handleEvents(){
+export function handleEvents(hasPlayedJSONPath: string){
     handleFunction(FunctionKeys.SELECT_FOLDER, () => dialog.showOpenDialogSync({properties: ['openDirectory']})?.[0] || "")
     handleFunction(FunctionKeys.SAVE_PROGRAMS, (newSettings) => {
       console.log("Save new programs", newSettings)
@@ -32,5 +33,8 @@ export function handleEvents(){
     handleFunction(FunctionKeys.GET_PLAYLIST, () => {
       // Read data from settings json file
       return videoPlaylist.videos
+    })
+    handleFunction(FunctionKeys.PLAY_VIDEO_ITEM, (videos) => {
+      return playVideoItem(hasPlayedJSONPath, videos)
     })
 }

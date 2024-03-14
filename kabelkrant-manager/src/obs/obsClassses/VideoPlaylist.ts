@@ -62,5 +62,7 @@ export class VideoPlaylist {
 
     removeItemsFromPlaylist() {
         this.videos = [];
+        this.clearVideoPlayer({inputName:this.getCurrentPlayout().videoSource} )
+        this.clearVideoPlayer({inputName:this.getNextPlayout().videoSource})
     }
 }

@@ -3,7 +3,6 @@
 
 import { IpcRendererEvent, contextBridge, ipcRenderer } from "electron";
 import { EventKeys, Events, FunctionKeys, Functions } from "./global/events";
-import { ca } from "date-fns/locale";
 
 const invoke = <EventName extends keyof Functions>(event: EventName) => 
     (...args: Parameters<Functions[EventName]>): Promise<Awaited<ReturnType<Functions[EventName]>>>  => ipcRenderer.invoke(event, ...args)
@@ -24,7 +23,8 @@ const api = {
     getFilesInFolder: invoke(FunctionKeys.GET_VIDEOS),
     getObsIsRunning: invoke(FunctionKeys.CHECK_OBS_IS_RUNNING),
     onObsStatusChange: listenForEvent<keyof Events>(EventKeys.OBS_STATUS_CHANGE),
-    getPlaylist: invoke(FunctionKeys.GET_PLAYLIST)
+    getPlaylist: invoke(FunctionKeys.GET_PLAYLIST),
+    playVideoItem: invoke(FunctionKeys.PLAY_VIDEO_ITEM)
 }
 
 
