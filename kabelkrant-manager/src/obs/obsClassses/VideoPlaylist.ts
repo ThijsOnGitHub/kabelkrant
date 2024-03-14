@@ -30,13 +30,14 @@ export class VideoPlaylist {
     }
 
     async addVideos(videoPath: string[]) {
-        if (this.videos.length == 0) {
+        const oldLength = this.videos.length;
+        this.videos.push(...videoPath);
+        if (oldLength == 0) {
             await this.prepairVideo(videoPath[0], this.getCurrentPlayout())
             await this.playFirstVideo(videoPath[0],this.getCurrentPlayout(), true);
         }
-        this.videos.push(...videoPath);
         console.log("Playing videos", this.videos)
-        if(this.videos.length > 1){
+        if(this.videos.length > 1 && oldLength < 2){
             await this.prepairVideo(this.videos[1], this.getNextPlayout())
         }
     }
