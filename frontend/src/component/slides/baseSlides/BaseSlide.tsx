@@ -9,6 +9,7 @@ export interface BaseSlideProps {
     subject?: SubjectProps
     children?: ReactNode
     percentageDone: number
+    sidebarExtra?: React.ReactNode
 }
 
 export interface BaseSlideRef {
@@ -35,6 +36,7 @@ export const BaseSlide = forwardRef<BaseSlideRef,BaseSlideProps>((props, ref) =>
                     props.subject &&
                     <Subject subject={props.subject.subject} icon={props.subject.icon} />
                 }
+                {props.sidebarExtra}
                 <div className={styles.sideBarBottom}>
                     <div className={styles.sideBarBottomBar}><Bar percentage={props.percentageDone}/></div>
                     <div ref={contentRef} className={styles.sideBarBottomTime}>{currentTime.toLocaleTimeString('NL-nl',{hour:"2-digit",minute:"2-digit"})}</div>

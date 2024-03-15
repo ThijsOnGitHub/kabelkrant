@@ -15,4 +15,4 @@ export interface ACFPost {
 }
 export type WordpressPost = WPPost<ACFPost>;
 
-export type RequiredWordpressPost=  Pick<WordpressPost, 'acf'|'title'>
+export type RequiredWordpressPost=  Pick<WordpressPost, 'acf'|'title'| 'featured_media'>

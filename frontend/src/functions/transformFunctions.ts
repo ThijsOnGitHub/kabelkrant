@@ -37,6 +37,7 @@ export async function transformWordpressPost(post:  RequiredWordpressPost,catego
         postImage: postImageUrl,
         length: acfFields.tv_settings.length === false ? "" : acfFields.tv_settings.length ,
         categoryImage: imageUrl,
+        featuredImage:  post.featured_media != null ? await getImages(post?.featured_media) : undefined,
         titleOnlyFirstImage: acfFields.tv_settings.titleOnlyFirstImage,
         imageLength: acfFields.tv_settings.imageLength === false ? "" : acfFields.tv_settings.imageLength,
         endDate: acfFields.tv_settings.end_date ? new Date(acfFields.tv_settings.end_date) : undefined

@@ -31,5 +31,5 @@ export const PostBlockSlide: FC<TextBlockSlideProps> = ({posts,onCompleted}) => 
         setCurrentPost(posts[0])
     }, [posts])
 
-    return <NewsItem key={currentPost.title} post={currentPost} nextSlide={nextSlide} prevSlide={prevSlide}  />
+    return <NewsItem key={currentPost.title}  post={currentPost} nextSlide={nextSlide} prevSlide={prevSlide}  />
 }

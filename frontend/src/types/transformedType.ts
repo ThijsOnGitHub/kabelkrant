@@ -7,6 +7,7 @@ export interface PostSlide {
     content: string,
     postImage: string[],
     titleOnlyFirstImage: boolean;
+    featuredImage?: string,
     length: number,
     categoryImage:string,
     categoryId: number,

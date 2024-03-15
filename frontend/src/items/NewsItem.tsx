@@ -4,7 +4,7 @@ import {PostSlide} from "../types/transformedType";
 import {ImageSlide} from "../component/slides/ImageSlide";
 import { useTimer } from "../hooks/utilities/useTimer";
 import { NextPrevContext } from "../context/nextContext";
-
+import './NewsItem.scss'
 
 interface NewsItemsProps {
     post: PostSlide
@@ -92,6 +92,6 @@ export const NewsItem: FC<NewsItemsProps> = ({post, prevSlide,...props}) => {
 
     return showImage ?
         <ImageSlide backgroundImageURL={post.postImage[imageIndex]} title={post.titleOnlyFirstImage && imageIndex > 0 ? "" :post.title } setPrevNext={false} /> :
-        <NewsSlide backgroundImage={currentPost.categoryImage ?? "white"} subject={currentPost.category?.subject} duration={currentPost.length} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onBack={prevImage} onCompleted={nextSlide} />
+        <NewsSlide sidebarExtra={<div className="news-item__container"><img className="news-item__image" src={post.featuredImage} /></div>} backgroundImage={currentPost.categoryImage ?? "white"} subject={currentPost.category?.subject} duration={currentPost.length} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onBack={prevImage} onCompleted={nextSlide} />
 
 }
