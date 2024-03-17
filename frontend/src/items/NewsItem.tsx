@@ -32,7 +32,7 @@ export const NewsItem: FC<NewsItemsProps> = ({post, prevSlide,...props}) => {
         }
         setShowImage(false)
         setCurrentPost(post)
-    },[imageIndex])
+    },[imageIndex, post])
 
     const {seconds, resetAndStartTimer:resetTimer} = useTimer(post.imageLength,nextImage,post.imageLength)
 
