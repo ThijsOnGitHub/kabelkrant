@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
+    "dev:middenholland": "vite --host --mode middenholland",
     "dev:staging": "vite --host --mode staging",
     "dev:production": "vite --host --mode live --port 3000",
     "build": "tsc && vite build",
