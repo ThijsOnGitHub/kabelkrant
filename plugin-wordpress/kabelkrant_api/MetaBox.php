@@ -40,7 +40,6 @@ class MetaBox{
         }
     
         ?> 
-            
             <iframe src="<?php echo $preview_url ?>" id="kabelkrant-preview" style="aspect-ratio:16/10;width:100%" ></iframe>   
             <div id="kabelkrant-disabled" >Deze post wordt niet op de kabelkrant weergegeven</div>
         <?php
@@ -85,12 +84,15 @@ class MetaBox{
 
                 
                 // get input element 
-                var title =document.getElementById('title')
-                title.addEventListener('input', function(){
-                    acfField.post.title.rendered = title.value;
-                    let data = {'type': "new_preview_data", data: acfField }
-                    iframe.contentWindow.postMessage( data , '*');
-                });
+                var title =document.getElementsByClassName('editor-post-title__input')[0];
+                if(title != undefined){
+                    title.addEventListener('input', function(){
+                        acfField.post.title.rendered = title.value;
+                        let data = {'type': "new_preview_data", data: acfField }
+                        iframe.contentWindow.postMessage( data , '*');
+                    });
+                }
+               
 
 
                 // updat ecf title 
