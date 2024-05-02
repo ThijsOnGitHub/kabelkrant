@@ -18,6 +18,7 @@ export async function getFilesInFolder(path: string): Promise<FilesWithMetadata[
                 console.log(`${path}/${file}`)
                 const readableStream = fs.createReadStream(`${path}\\${file}`)
                 const duration = await getVideoDurationInSeconds(readableStream)
+                readableStream.close()
                 console.log(duration)
                 return {
                     path : `${path}/${file}`,
