@@ -3,7 +3,7 @@ import RTVLogo from "../../assets/rtvLogoK.svg"
 import {useContext, useEffect} from "react";
 import {useTimer} from "../../hooks/utilities/useTimer";
 import { NextPrevContext } from "../../context/nextContext";
-import { set } from "lodash";
+
 export interface ImageSlideProps {
     backgroundImageURL: string
     title: string

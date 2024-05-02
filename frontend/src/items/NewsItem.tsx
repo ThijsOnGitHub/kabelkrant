@@ -4,6 +4,7 @@ import {PostSlide} from "../types/transformedType";
 import {ImageSlide} from "../component/slides/ImageSlide";
 import { useTimer } from "../hooks/utilities/useTimer";
 import { NextPrevContext } from "../context/nextContext";
+import { SlideTransition } from "../component/animations/SlideTransition";
 
 
 interface NewsItemsProps {
@@ -90,8 +91,13 @@ export const NewsItem: FC<NewsItemsProps> = ({post, prevSlide,...props}) => {
     },[prevImage])
 
 
-    return showImage ?
-        <ImageSlide backgroundImageURL={post.postImage[imageIndex]} title={post.titleOnlyFirstImage && imageIndex > 0 ? "" :post.title } setPrevNext={false} /> :
-        <NewsSlide backgroundImage={currentPost.categoryImage ?? "white"} subject={currentPost.category?.subject} duration={currentPost.length} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onBack={prevImage} onCompleted={nextSlide} />
+    return <SlideTransition divKey={post.postImage[imageIndex]+showImage}>
+            {
+                showImage ? 
+                    <ImageSlide key={JSON.stringify(post.postImage)} backgroundImageURL={post.postImage[imageIndex]} title={post.titleOnlyFirstImage && imageIndex > 0 ? "" :post.title } setPrevNext={false} /> :
+                    <NewsSlide key={currentPost.title} backgroundImage={currentPost.categoryImage ?? "white"} subject={currentPost.category?.subject} duration={currentPost.length} title={currentPost.title ?? ""} text={currentPost.content ?? ""} onBack={prevImage} onCompleted={nextSlide} />
+            }
+    </SlideTransition>
+       
 
 }
