@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion"
+import { FC } from "react"
 
 export interface SlideTransitionProps {
     children: React.ReactNode,
@@ -6,11 +7,7 @@ export interface SlideTransitionProps {
     type?: "slide" | "fade" | false
 }
 
-export function SlideTransition({ children, divKey, type = "fade" }: SlideTransitionProps) {
-    if (type === false) {
-        return <>{children}</>
-    }
-
+export const SlideTransition: FC<SlideTransitionProps> = ({ children, divKey, type = false }: SlideTransitionProps) => {
     if (type === "fade") {
         return (
         <AnimatePresence mode="popLayout" initial={false}>
@@ -24,15 +21,19 @@ export function SlideTransition({ children, divKey, type = "fade" }: SlideTransi
         </AnimatePresence>
     )}
 
-    return (
-        <AnimatePresence mode="popLayout" initial={false}>
-            <motion.div key={divKey}
-                initial={{ x: "-100%" }} transition={{
-                    bounce: 0.15,
-                    duration: 0.75,
-                }} animate={{ x: 0 }} exit={{ x: "100%" }}>
-                {children}
-            </motion.div>
-        </AnimatePresence>
-    )
+    if(type === "slide"){
+        return (
+            <AnimatePresence mode="popLayout" initial={false}>
+                <motion.div key={divKey}
+                    initial={{ x: "-100%" }} transition={{
+                        bounce: 0.15,
+                        duration: 0.75,
+                    }} animate={{ x: 0 }} exit={{ x: "100%" }}>
+                    {children}
+                </motion.div>
+            </AnimatePresence>
+        )
+    }
+
+    return <>{children}</>
 }
