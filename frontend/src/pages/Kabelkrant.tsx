@@ -66,7 +66,7 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
 
 
     return <FitToScreen baseWidth={1920} baseHeight={1080}>
-        <SlideTransition divKey={JSON.stringify(currentSlide)}>
+        <SlideTransition type="fade" divKey={JSON.stringify(currentSlide)}>
             {currentSlide ? renderSlide(currentSlide,nextSlide) : <div style={{color: "white"}}>Loading... </div>}
         </SlideTransition>
     </FitToScreen>
