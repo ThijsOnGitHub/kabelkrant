@@ -1,7 +1,8 @@
 import { PostSlide } from "../../types/transformedType";
 import { FC, useEffect, useState } from "react";
 import { NewsItem } from "../../items/NewsItem";
-import { SlideTransition } from "../animations/SlideTransition";
+import { AnimatePresence } from "framer-motion";
+
 
 export interface TextBlockSlideProps {
     posts: PostSlide[]
@@ -32,11 +33,9 @@ export const PostBlockSlide: FC<TextBlockSlideProps> = ({ posts, onCompleted }) 
         setCurrentPost(posts[0])
     }, [posts])
 
-    return <SlideTransition  divKey={JSON.stringify(currentPost)}>
+    return <AnimatePresence mode="wait">
         <NewsItem key={currentPost.title} post={currentPost} nextSlide={nextSlide} prevSlide={prevSlide} />
-    </SlideTransition> 
-            
-
-
+    </AnimatePresence>
+    
 
 }
