@@ -1,29 +1,31 @@
-import {PostSlide} from "../../types/transformedType";
-import {FC, useEffect, useState} from "react";
-import {NewsItem} from "../../items/NewsItem";
+import { PostSlide } from "../../types/transformedType";
+import { FC, useEffect, useState } from "react";
+import { NewsItem } from "../../items/NewsItem";
+import { AnimatePresence } from "framer-motion";
+
 
 export interface TextBlockSlideProps {
     posts: PostSlide[]
     onCompleted: () => void
 }
 
-export const PostBlockSlide: FC<TextBlockSlideProps> = ({posts,onCompleted}) => {
-    const [currentPost,setCurrentPost] = useState<PostSlide>(posts[0])
-    const [index,setIndex] = useState<number>(0)
+export const PostBlockSlide: FC<TextBlockSlideProps> = ({ posts, onCompleted }) => {
+    const [currentPost, setCurrentPost] = useState<PostSlide>(posts[0])
+    const [index, setIndex] = useState<number>(0)
 
     function nextSlide() {
-        if(index < posts.length-1){
-            setIndex(index+1)
-            setCurrentPost(posts[index+1])
+        if (index < posts.length - 1) {
+            setIndex(index + 1)
+            setCurrentPost(posts[index + 1])
             return
         }
         onCompleted()
     }
 
-    function prevSlide(){
-        if(index == 0) return
-        setIndex(index-1)
-        setCurrentPost(posts[index-1])
+    function prevSlide() {
+        if (index == 0) return
+        setIndex(index - 1)
+        setCurrentPost(posts[index - 1])
     }
 
     useEffect(() => {
@@ -31,5 +33,9 @@ export const PostBlockSlide: FC<TextBlockSlideProps> = ({posts,onCompleted}) => 
         setCurrentPost(posts[0])
     }, [posts])
 
-    return <NewsItem key={currentPost.title} post={currentPost} nextSlide={nextSlide} prevSlide={prevSlide}  />
+    return <AnimatePresence mode="wait">
+        <NewsItem key={currentPost.title} post={currentPost} nextSlide={nextSlide} prevSlide={prevSlide} />
+    </AnimatePresence>
+    
+
 }
