@@ -9,6 +9,7 @@ import { SelectedSlide } from "../component/SelectedSlide"
 import { renderSlide } from "../functions/renderSlide"
 import { NextPrevProvider } from "../component/NextPrevProvider"
 import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar"
+import { useSearchParams } from "react-router-dom"
 
 export interface OverviewProps {
 }
@@ -29,7 +30,8 @@ export function translateTypes(type: SlideTypes){
 }
 
 export const Overview: FC<OverviewProps> = (props) => {
-    const { posts, categories } = useWordpressPostData()
+    let [searchParams] = useSearchParams()
+    const { posts, categories } = useWordpressPostData(searchParams.get("omroep") ?? undefined)
     const { slides } = useWordpressSlides(posts, categories)
     const [date, setDate] = useState(new Date())
     const [selectedSlide, setSelectedSlide] = useState<Slide | null | "kabelkrant">()
@@ -91,7 +93,7 @@ export const Overview: FC<OverviewProps> = (props) => {
                             Type: {translateTypes(slide.type)}
                             {
                                 slide.type === SlideTypes.POSTBLOCK ?
-                                <ul>{slide.slides.map(item => <li><strong>{item.category.subject?.subject}</strong>: {item.title} </li>)}</ul>: ""
+                                <ul>{slide.slides.map(item => <li><strong>{item.category?.subject?.subject}</strong>: {item.title} </li>)}</ul>: ""
                             }
                         </div>
                     </div>
