@@ -1,13 +1,11 @@
 import {FC, useEffect, useState} from "react";
 import {useWordpressPostData} from "../hooks/useWordpressPostData";
-import {NewsItem} from "../items/NewsItem";
 import {useWordpressSlides} from "../hooks/useWordpressSlides";
-import {ImageSlide} from "../component/slides/ImageSlide";
-import {PostBlockSlide} from "../component/slides/PostBlockSlide";
-import { Slide, SlideTypes} from "../types/Slides";
-import { getDate, getDay, getHours } from "date-fns";
+import { Slide} from "../types/Slides";
+import { getDay, getHours } from "date-fns";
 import { FitToScreen } from "../component/slideUtilities/fitToScreen";
 import { renderSlide } from "../functions/renderSlide";
+import { SlideTransition } from "../component/animations/SlideTransition";
 import { useParams, useSearchParams } from "react-router-dom";
 
 export interface TextBlockSlideProps {
@@ -69,9 +67,10 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
     }, [slides])
 
 
-
-    return<FitToScreen baseWidth={1920} baseHeight={1080}>
-        {currentSlide ? renderSlide(currentSlide,nextSlide) : <div style={{color: "white"}}>Loading... </div>}
+    return <FitToScreen baseWidth={1920} baseHeight={1080}>
+        <SlideTransition type="fade" divKey={JSON.stringify(currentSlide)}>
+            {currentSlide ? renderSlide(currentSlide,nextSlide) : <div style={{color: "white"}}>Loading... </div>}
+        </SlideTransition>
     </FitToScreen>
     
 }
