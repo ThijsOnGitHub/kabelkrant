@@ -8,7 +8,7 @@ import { format } from "date-fns"
 import { SelectedSlide } from "../component/SelectedSlide"
 import { renderSlide } from "../functions/renderSlide"
 import { NextPrevContext } from "../context/nextContext"
-import { NextPrevProvider } from "../component/NextPrevProvider"
+import { NextPrevProvider } from "../component/contextProviders/NextPrevProvider"
 
 export interface OverviewProps {
 }

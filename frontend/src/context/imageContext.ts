@@ -4,7 +4,7 @@ import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import axios from "axios";
 
 export type getImageMediaObject = (ids: number) => Promise<WPMedia | null>
-export interface ImageContext{
+export interface ImageContextType{
     getImageMediaObject: getImageMediaObject
     getImageUrl: (imageId:number) => Promise<string>
 }
@@ -44,7 +44,7 @@ export async function getImageUrlByBaseUrl(imageId:number, cacheObject: {[key:nu
 }
 
 
-export const ImageContext = createContext<ImageContext>(
+export const ImageContext = createContext<ImageContextType>(
     {
         getImageMediaObject,
         getImageUrl: async (id)=>getImageUrlByBaseUrl(id)

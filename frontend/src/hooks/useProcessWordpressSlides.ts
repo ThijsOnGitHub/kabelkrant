@@ -1,7 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import {PostCategory, PostSlideWithoutLength} from "../types/transformedType";
-import {useTimer} from "./utilities/useTimer";
 import {ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData, globalTimespanObject} from "../types/Slides";
 import {ImageContext} from "../context/imageContext";
 import _ from "lodash";
