@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './style/global.scss'
 import {Kabelkrant} from "./pages/Kabelkrant";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -6,6 +5,10 @@ import { Overview } from './pages/Overview';
 import { Preview } from './pages/Preview';
 import { NextPrevProvider } from './component/contextProviders/NextPrevProvider';
 import { ImageContextProvider } from './component/contextProviders/imageContextProvider';
+import { OmroepContextProvider } from './component/contextProviders/OmroepContextProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 
 const router = createBrowserRouter([
     {
@@ -22,14 +25,20 @@ const router = createBrowserRouter([
         element: <Preview />
     }
 ])
+const queryClient = new QueryClient()
 
 function App() {
   return (
-    <NextPrevProvider>
-        <ImageContextProvider>
-            <RouterProvider router={router}/>
-        </ImageContextProvider>
-    </NextPrevProvider>
+    <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
+        <NextPrevProvider>
+            <ImageContextProvider>
+                <OmroepContextProvider>
+                    <RouterProvider router={router}/>
+                </OmroepContextProvider>
+            </ImageContextProvider>
+        </NextPrevProvider>
+    </QueryClientProvider>
   )
 
 }
