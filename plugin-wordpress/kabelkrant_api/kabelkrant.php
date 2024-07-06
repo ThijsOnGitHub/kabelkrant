@@ -68,6 +68,15 @@ class KabelkrantAPI {
                 )
             );
         }
+        if(isset($request['omroep'])){
+            $args['tax_query'] = [
+                [
+                    'taxonomy' => 'tax-omroep',
+                    'field' => 'slug',
+                    'terms' => $request['omroep']
+                ]
+            ];
+        }
         return $args;
     }
 

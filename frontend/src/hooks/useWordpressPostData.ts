@@ -5,7 +5,7 @@ import { WordpressClient } from "../types/wordpressTypes/WorpressClient"
 import { WordpressPost } from "../types/wordpressTypes/wordpressPost"
 import { WordpressCategory } from "../types/wordpressTypes/wordPressCategories"
 
-export function useWordpressPostData(){
+export function useWordpressPostData(omroep: string | undefined){
     const [wordpressPosts, setWordpressPosts] = useState<(WordpressPost | null)[]>([])
     const [wordpressCategories, setWordpressCategories] = useState<WordpressCategory[]>([])
 
@@ -21,8 +21,11 @@ export function useWordpressPostData(){
         const wordpressClient = new WordpressClient();
         console.log("Loading posts")
         // Create all the promises
+        const baseQuery = {"tv-filter": "true"}
+        const omroepQuery: {omroep: string} |{} = omroep ? {"omroep": omroep} : {}
+        const query = {...baseQuery,...omroepQuery}
         wordpressClient.post()
-            .find(new URLSearchParams({"tv-filter": "true"})).then(result =>{
+            .find(new URLSearchParams(query)).then(result =>{
                 setWordpressPosts(result)
             });
         wordpressClient.postCategory().dangerouslyFindAll()
