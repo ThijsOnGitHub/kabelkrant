@@ -4,10 +4,12 @@ import { useTimer } from "./utilities/useTimer"
 import { WordpressClient } from "../types/wordpressTypes/WorpressClient"
 import { WordpressPost } from "../types/wordpressTypes/wordpressPost"
 import { WordpressCategory } from "../types/wordpressTypes/wordPressCategories"
+import { WordpressKabelkrantCategory } from "../types/wordpressTypes/wordpresskabelkrantCategory"
 
 export function useWordpressPostData(omroep: string | undefined){
     const [wordpressPosts, setWordpressPosts] = useState<(WordpressPost | null)[]>([])
     const [wordpressCategories, setWordpressCategories] = useState<WordpressCategory[]>([])
+    const [wordpressKabelkrantCategories, setKabelkrantCategories] = useState<WordpressKabelkrantCategory[]>([])
 
 
     const { resetAndStartTimer, stopTimer }= useTimer(false, ()=>{
@@ -15,7 +17,7 @@ export function useWordpressPostData(omroep: string | undefined){
     },900000,"postdata")
 
     const filteredWordpressPosts = useMemo( ()=>wordpressPosts.filter(post => post != null) as WordpressPost[], [wordpressPosts]) 
-    const { posts,categories} = useProcessWordpressPostData(filteredWordpressPosts,wordpressCategories)
+    const { posts,categories,kabelkrantCategories } = useProcessWordpressPostData(filteredWordpressPosts,wordpressCategories, wordpressKabelkrantCategories)
 
     function loadPosts(){
         const wordpressClient = new WordpressClient();
@@ -32,6 +34,10 @@ export function useWordpressPostData(omroep: string | undefined){
             .then(result =>{
                 setWordpressCategories(result)
             });
+        wordpressClient.kabelkrantCategorie().dangerouslyFindAll()
+            .then(result =>{
+                setKabelkrantCategories(result)
+            })
     }
 
 
@@ -43,5 +49,5 @@ export function useWordpressPostData(omroep: string | undefined){
         }
     },[])
 
-    return { posts, categories}
+    return { posts, categories, kabelkrantCategories, wordpressKabelkrantCategories}
 }

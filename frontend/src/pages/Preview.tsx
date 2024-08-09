@@ -8,6 +8,7 @@ import { FitToScreen } from "../component/slideUtilities/fitToScreen";
 import { SlideTypes, WPSlide } from "../types/Slides";
 import { NextPrevContext } from "../context/nextContext";
 import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar";
+import { useWordpressPostData } from "../hooks/useWordpressPostData";
 
 export interface PreviewProps {
 }
@@ -32,7 +33,8 @@ export function Preview(props: PreviewProps) {
     const catObject = useMemo(()=> data?.category != null ? [data.category] : [],[data])
     const PrevNextContext = useContext(NextPrevContext)
 
-    const {posts,categories} = useProcessWordpressPostData(postObject,catObject)
+    const {kabelkrantCategories, wordpressKabelkrantCategories} = useWordpressPostData('')
+    const {posts,categories} = useProcessWordpressPostData(postObject,catObject, wordpressKabelkrantCategories)
     const sideProgram: WPSlide[] = useMemo(() => ([{
         menu_order:1,
         acf: {
@@ -40,7 +42,7 @@ export function Preview(props: PreviewProps) {
             hasTimespan: false,
             type: SlideTypes.POSTBLOCK,
             postblock:{
-                category: [data?.post.acf.tv_settings.category ?? 0],
+                category: [data?.post.acf.tv_settings.category[0] ?? 0],
                 mixSlides: false,
                 standardImageLength: 5,
                 standardLength: 30
@@ -49,7 +51,7 @@ export function Preview(props: PreviewProps) {
             toDate: null
         }
     }] ),[data])
-    const {slides} = useProcessWordpressSlides(posts,categories,sideProgram )
+    const {slides} = useProcessWordpressSlides(posts,categories,kabelkrantCategories,sideProgram) 
 
     function procesMessage(e:MessageEvent){
         const message = e.data as MessageData

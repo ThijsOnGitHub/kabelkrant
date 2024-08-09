@@ -8,7 +8,7 @@ import { format } from "date-fns"
 import { SelectedSlide } from "../component/SelectedSlide"
 import { renderSlide } from "../functions/renderSlide"
 import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar"
-import { useSearchParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { NextPrevProvider } from "../component/contextProviders/NextPrevProvider"
 
 export interface OverviewProps {
@@ -30,9 +30,9 @@ export function translateTypes(type: SlideTypes){
 }
 
 export const Overview: FC<OverviewProps> = (props) => {
-    let [searchParams] = useSearchParams()
-    const { posts, categories } = useWordpressPostData(searchParams.get("omroep") ?? undefined)
-    const { slides } = useWordpressSlides(posts, categories)
+    let {omroep} = useParams<{omroep:string}>()
+    const { posts, categories, kabelkrantCategories} = useWordpressPostData(omroep)
+    const { slides } = useWordpressSlides(omroep,posts, categories, kabelkrantCategories)
     const [date, setDate] = useState(new Date())
     const [selectedSlide, setSelectedSlide] = useState<Slide | null | "kabelkrant">()
 

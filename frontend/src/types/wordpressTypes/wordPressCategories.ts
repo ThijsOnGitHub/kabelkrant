@@ -1,10 +1,5 @@
-import {WPCategory} from "../../wordpress-package";
+import { WPCategory } from "wordpress-api-client"
 
-export interface ACFCategory {
-    tv_background: number[]
-    icon: string
-}
+export type WordpressCategory = WPCategory
 
-export type WordpressCategory = WPCategory<ACFCategory>
-
-export type RequiredWordpressCategory = Pick<WordpressCategory,'acf'|'name'|'id'>
+export type RequiredWordpressCategory = WordpressCategory

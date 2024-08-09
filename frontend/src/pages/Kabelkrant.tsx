@@ -6,7 +6,7 @@ import { getDay, getHours } from "date-fns";
 import { FitToScreen } from "../component/slideUtilities/fitToScreen";
 import { renderSlide } from "../functions/renderSlide";
 import { SlideTransition } from "../component/animations/SlideTransition";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export interface TextBlockSlideProps {
 
@@ -23,10 +23,10 @@ export function filterSlides(slides: Slide[], date: Date){
     })
 }
 export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
-    let [searchParams] = useSearchParams()
+    let {omroep} = useParams<{omroep:string}>()
     const [index,setIndex] = useState<number>(0)
-    const {posts,categories} = useWordpressPostData(searchParams.get("omroep") ?? undefined)
-    const {slides} = useWordpressSlides(posts, categories)
+    const {posts,categories,kabelkrantCategories} = useWordpressPostData(omroep)
+    const {slides} = useWordpressSlides(omroep, posts, categories, kabelkrantCategories)
 
 
     const [currentSlides,setCurrentSlides] = useState(filterSlides(slides,new Date()))
