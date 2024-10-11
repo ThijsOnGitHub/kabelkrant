@@ -4,7 +4,7 @@ import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
 import axios from "axios";
 
 export type getImageMediaObject = (ids: number) => Promise<WPMedia | null>
-export interface ImageContext{
+export interface ImageContextType{
     getImageMediaObject: getImageMediaObject
     getImageUrl: (imageId:number) => Promise<string>
 }
@@ -16,10 +16,12 @@ async function getImageMediaObject(imageId:number){
 
 export async function getImageUrlByBaseUrl(imageId:number, cacheObject: {[key:number]:string} = {}, setCacheObject: (cacheObject: {[key:number]:string})=>void = ()=>{}){
     // add no cors to the request
+    console.log(cacheObject)
     if(cacheObject.hasOwnProperty(imageId)){
         return cacheObject[imageId]
     }
     let imageUrl = import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId
+    console.log(import.meta.env.VITE_CACHE_IMAGES)
     if(import.meta.env.VITE_CACHE_IMAGES === "true"){
         try{
             const result = await axios.get(import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId,{
@@ -44,7 +46,7 @@ export async function getImageUrlByBaseUrl(imageId:number, cacheObject: {[key:nu
 }
 
 
-export const ImageContext = createContext<ImageContext>(
+export const ImageContext = createContext<ImageContextType>(
     {
         getImageMediaObject,
         getImageUrl: async (id)=>getImageUrlByBaseUrl(id)

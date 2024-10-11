@@ -1,8 +1,9 @@
 import styles from './BaseSlide.module.scss'
-import {FC, forwardRef, ReactElement, ReactNode, useEffect, useImperativeHandle, useRef, useState} from "react";
+import {FC, forwardRef, ReactElement, ReactNode, useContext, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {Subject, SubjectProps} from "../../slideUtilities/Subject";
 import {useCurrentTime} from "../../../hooks/utilities/useCurrentTime";
 import {Bar} from "../../slideUtilities/bar";
+import { OmroepContext } from '../../../context/omroepContext';
 
 export interface BaseSlideProps {
     backgroundImage:string
@@ -17,6 +18,7 @@ export interface BaseSlideRef {
 
 // eslint-disable-next-line react/display-name
 export const BaseSlide = forwardRef<BaseSlideRef,BaseSlideProps>((props, ref) => {
+    const omroepContext = useContext(OmroepContext)
     const backgroundStyle ={backgroundImage: `url(${props.backgroundImage})`}
     const currentTime = useCurrentTime()
     const contentRef = useRef<HTMLDivElement>(null)
@@ -30,7 +32,7 @@ export const BaseSlide = forwardRef<BaseSlideRef,BaseSlideProps>((props, ref) =>
     return (
         <div className={styles.slide} style={backgroundStyle} >
             <div className={styles.sideBar}>
-                <img className={styles.logo} src="/logo/logoBig.svg" alt="Next.js" />
+                <img className="w-[360px]" src={omroepContext.logo} alt="Next.js" />
                 {
                     props.subject &&
                     <Subject subject={props.subject.subject} icon={props.subject.icon} />

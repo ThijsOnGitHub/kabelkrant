@@ -1,11 +1,12 @@
-import {FC, useEffect, useState} from "react";
-import {useWordpressPostData} from "../hooks/useWordpressPostData";
-import {useWordpressSlides} from "../hooks/useWordpressSlides";
-import { Slide} from "../types/Slides";
 import { getDay, getHours } from "date-fns";
+import { FC, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { SlideTransition } from "../component/animations/SlideTransition";
 import { FitToScreen } from "../component/slideUtilities/fitToScreen";
 import { renderSlide } from "../functions/renderSlide";
-import { SlideTransition } from "../component/animations/SlideTransition";
+import { useWordpressPostData } from "../hooks/useWordpressPostData";
+import { useWordpressSlides } from "../hooks/useWordpressSlides";
+import { Slide } from "../types/Slides";
 
 export interface TextBlockSlideProps {
 
@@ -22,9 +23,10 @@ export function filterSlides(slides: Slide[], date: Date){
     })
 }
 export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
+    let {omroep} = useParams<{omroep:string}>()
     const [index,setIndex] = useState<number>(0)
-    const {posts,categories} = useWordpressPostData()
-    const {slides} = useWordpressSlides(posts, categories)
+    const {posts,categories,kabelkrantCategories} = useWordpressPostData(omroep)
+    const {slides} = useWordpressSlides(omroep, posts, categories, kabelkrantCategories)
 
 
     const [currentSlides,setCurrentSlides] = useState(filterSlides(slides,new Date()))

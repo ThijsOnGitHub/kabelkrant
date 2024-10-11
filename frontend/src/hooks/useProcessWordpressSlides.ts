@@ -1,7 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import {WordpressClient} from "../types/wordpressTypes/WorpressClient";
-import {PostCategory, PostSlideWithoutLength} from "../types/transformedType";
-import {useTimer} from "./utilities/useTimer";
+import {KabelkrantCategory, PostCategory, PostSlideWithoutLength} from "../types/transformedType";
 import {ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData, globalTimespanObject} from "../types/Slides";
 import {ImageContext} from "../context/imageContext";
 import _ from "lodash";
@@ -24,7 +22,7 @@ export function getGlobalSlideData(slide: WPSlide): globalSlideData{
     }
 }
 
-export function useProcessWordpressSlides(posts: PostSlideWithoutLength[], categories: PostCategory[], wpSlides: WPSlide[]){
+export function useProcessWordpressSlides(posts: PostSlideWithoutLength[], categories: PostCategory[],kabelkrantCategories: KabelkrantCategory[] , wpSlides: WPSlide[]){
     const [slides, setSlides] = useState<Slide[]>([])
 
     const {getImageMediaObject,getImageUrl:getImages} = useContext(ImageContext)
@@ -57,7 +55,7 @@ export function useProcessWordpressSlides(posts: PostSlideWithoutLength[], categ
                             subject: textSlide.category.text,
                             icon: textSlide.category.icon
                         } : undefined,
-                        image: []
+                        images: []
                     },
                     content: textSlide.text,
                     postImage: [],
@@ -74,7 +72,7 @@ export function useProcessWordpressSlides(posts: PostSlideWithoutLength[], categ
                 ...post,
                 length:  typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
                 imageLength: typeof post.imageLength === "number" ? post.imageLength :acfSlide[SlideTypes.POSTBLOCK].standardImageLength,
-                category: categories.find(category => category.id === post.categoryId) as PostCategory
+                category: kabelkrantCategories.find(category => category.id === post.categoryId) as KabelkrantCategory,
             })})
             
             return [{

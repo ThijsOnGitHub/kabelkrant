@@ -1,61 +1,69 @@
-import { useState } from 'react'
 import './style/global.scss'
-import {Kabelkrant} from "./pages/Kabelkrant";
-import {getImageUrlByBaseUrl, ImageContext} from './context/imageContext';
-import {WPMedia} from "./wordpress-package";
+import { Kabelkrant } from "./pages/Kabelkrant";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Overview } from './pages/Overview';
 import { Preview } from './pages/Preview';
-import { NextPrevProvider } from './component/NextPrevProvider';
+import { NextPrevProvider } from './component/contextProviders/NextPrevProvider';
+import { ImageContextProvider } from './component/contextProviders/imageContextProvider';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { BaseLayout } from './pages/baseLayout/baseLayout';
+import { WordpressClient } from './types/wordpressTypes/WorpressClient';
+import React from 'react';
+
+const ReactQueryDevtoolsProduction = React.lazy(() =>
+    import('@tanstack/react-query-devtools/build/modern/production.js').then(
+        (d) => ({
+            default: d.ReactQueryDevtools,
+        }),
+    ),
+)
+
+export const wordpressClient = new WordpressClient();
 
 const router = createBrowserRouter([
     {
-        path: '/',
-        element: <Kabelkrant />
+        path: "/",
+        element: <BaseLayout />,
+        children: [
+            {
+                path: '/:omroep',
+                element: <Kabelkrant />
 
-    },
-    {
-        path: '/overview',
-        element: <Overview />
-    },
-    {
-        path: '/preview',
-        element: <Preview />
+            },
+            {
+                path: '/:omroep/overview',
+                element: <Overview />
+            },
+            {
+                path: '/preview',
+                element: <Preview />
+            }
+        ]
     }
 ])
 
 function App() {
-    const [cashedImages,setCashedImages] = useState<{[key:string]:string}>({})
+    const [showDevtools, setShowDevtools] = React.useState(false)
+    React.useEffect(() => {
+        // @ts-expect-error
+        window.toggleDevtools = () => setShowDevtools((old) => !old)
+    }, [])
 
-    /*async function getImage(imageId:number){
-        if(cashedImages.hasOwnProperty(imageId)){
-            return cashedImages[imageId]
-        }
-        const wordPressClient = new WordpressClient()
-        const image = (await wordPressClient.media().find(imageId))[0]
-        if(image != null){
-            setCashedImages((indexedImages) => ({...indexedImages,[imageId]:image}))
-        }
-        return image
-    }*/
-
-    const imageContext: ImageContext = {
-        async getImageMediaObject(imageId:number){
-            return {
-                source_url: import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId,
-                id: imageId
-            } as WPMedia
-        },
-        getImageUrl: (id:number) => getImageUrlByBaseUrl(id,cashedImages,setCashedImages)
-    }
-
-  return (
-    <NextPrevProvider>
-        <ImageContext.Provider value={imageContext}>
-            <RouterProvider router={router}/>
-        </ImageContext.Provider>
-    </NextPrevProvider>
-  )
+    return (
+        <>
+            {showDevtools && (
+                <React.Suspense fallback={null}>
+                    <ReactQueryDevtoolsProduction />
+                </React.Suspense>
+            )}
+            <ReactQueryDevtools />
+            <NextPrevProvider>
+                <ImageContextProvider>
+                    <RouterProvider router={router} />
+                </ImageContextProvider>
+            </NextPrevProvider>
+        </>
+    )
 
 }
 

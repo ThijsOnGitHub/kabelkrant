@@ -3,11 +3,31 @@
     "title": "Categorie instellingen",
     "fields": [
         {
+            "key": "field_66b670c22a7cb",
+            "label": "Weergave naam",
+            "name": "display_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_63dab1655e239",
             "label": "Achtergrond Afbeelding",
             "name": "tv_background",
             "aria-label": "",
-            "type": "post_object",
+            "type": "relationship",
             "instructions": "",
             "required": 1,
             "conditional_logic": 0,
@@ -19,11 +39,19 @@
             "post_type": [
                 "attachment"
             ],
+            "post_status": "",
             "taxonomy": "",
-            "return_format": "id",
-            "multiple": 1,
-            "allow_null": 0,
-            "ui": 1
+            "filters": [
+                "search"
+            ],
+            "return_format": "object",
+            "min": 1,
+            "max": 1,
+            "elements": [
+                "featured_image"
+            ],
+            "bidirectional": 0,
+            "bidirectional_target": []
         },
         {
             "key": "field_645e8ce038af3",
@@ -49,9 +77,9 @@
     "location": [
         [
             {
-                "param": "taxonomy",
+                "param": "post_type",
                 "operator": "==",
-                "value": "category"
+                "value": "kabelkrant-categorie"
             }
         ]
     ],
@@ -64,5 +92,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "modified": 1688225520
+    "modified": 1723232492
 }

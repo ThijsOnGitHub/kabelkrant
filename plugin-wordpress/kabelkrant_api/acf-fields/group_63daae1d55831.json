@@ -113,23 +113,31 @@
                     "label": "Categorie",
                     "name": "category",
                     "aria-label": "",
-                    "type": "taxonomy",
+                    "type": "relationship",
                     "instructions": "",
-                    "required": 1,
+                    "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
                         "class": "",
                         "id": ""
                     },
-                    "taxonomy": "category",
-                    "add_term": 1,
-                    "save_terms": 1,
-                    "load_terms": 1,
-                    "return_format": "id",
-                    "field_type": "select",
-                    "allow_null": 0,
-                    "multiple": 0
+                    "post_type": [
+                        "kabelkrant-categorie"
+                    ],
+                    "post_status": [
+                        "publish"
+                    ],
+                    "taxonomy": "",
+                    "filters": [
+                        "search"
+                    ],
+                    "return_format": "object",
+                    "min": "",
+                    "max": "",
+                    "elements": "",
+                    "bidirectional": 0,
+                    "bidirectional_target": []
                 },
                 {
                     "key": "field_640c816c9818c",
@@ -169,7 +177,7 @@
                     "label": "Afbeeldingen",
                     "name": "images",
                     "aria-label": "",
-                    "type": "post_object",
+                    "type": "relationship",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
@@ -181,11 +189,21 @@
                     "post_type": [
                         "attachment"
                     ],
+                    "post_status": "",
                     "taxonomy": "",
-                    "return_format": "id",
-                    "multiple": 1,
-                    "allow_null": 0,
-                    "ui": 1
+                    "filters": [
+                        "search",
+                        "post_type",
+                        "taxonomy"
+                    ],
+                    "return_format": "object",
+                    "min": "",
+                    "max": "",
+                    "elements": [
+                        "featured_image"
+                    ],
+                    "bidirectional": 0,
+                    "bidirectional_target": []
                 },
                 {
                     "key": "field_6470b95799973",
@@ -246,7 +264,7 @@
                     "display_format": "Y-m-d H:i:s",
                     "return_format": "Y-m-d H:i:s",
                     "first_day": 1,
-                    "default_value": "20230708"
+                    "default_value": "20240816"
                 }
             ]
         }
@@ -269,5 +287,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "modified": 1688225805
+    "modified": 1723227404
 }

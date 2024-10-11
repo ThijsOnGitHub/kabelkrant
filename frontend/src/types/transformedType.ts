@@ -10,7 +10,7 @@ export interface PostSlide {
     length: number,
     categoryImage:string,
     categoryId: number,
-    category: PostCategory
+    category:  KabelkrantCategory,
     imageLength: number,
     endDate?: Date,
 }
@@ -18,7 +18,12 @@ export interface PostSlide {
 export type PostSlideWithoutLength = Omit<PostSlide, 'length' | 'category' | 'imageLength'> & {length: string | number, imageLength: (string | number)} 
 
 export interface PostCategory {
+    id: number
+}
+
+
+export interface KabelkrantCategory {
     id: number,
     subject?: SubjectProps,
-    image: string[]
+    images: string[]
 }

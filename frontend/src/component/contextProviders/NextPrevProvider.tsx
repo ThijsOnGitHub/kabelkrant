@@ -1,5 +1,5 @@
 import { FC, ReactElement, useState } from "react";
-import { NextPrevContext } from "../context/nextContext";
+import { NextPrevContext } from "../../context/nextContext";
 
 
 export interface useNextPrevHookProps {

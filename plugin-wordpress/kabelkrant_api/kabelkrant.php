@@ -33,11 +33,63 @@ class KabelkrantAPI {
 
         add_filter('rest_post_query', [$this, 'filterPosts'], 10, 2);
 
+        add_filter('rest_slide_query', [$this, 'filterSlides'], 10, 2);
+
         add_filter('acf/load_field/name=end_date', function ($field) {
             // set defualt value to next week  
             $field['default_value'] = date('Ymd', strtotime('+1 week'));
             return $field;
         });
+
+        add_filter( 'upload_mimes', [$this, 'allow_svg_type'] );
+
+
+        if ($this->getenv_docker('DEBUG_SITE', '') === "kabelkrant") {
+            add_filter('acf/settings/save_json', [$this, 'acf_json_save_point']);
+        }
+       
+        
+    }
+
+
+    function getenv_docker($env, $default) {
+        if ($fileEnv = getenv($env . '_FILE')) {
+            return rtrim(file_get_contents($fileEnv), "\r\n");
+        }
+        else if (($val = getenv($env)) !== false) {
+            return $val;
+        }
+        else {
+            return $default;
+        }
+    }
+ 
+
+
+    public function acf_json_save_point($path) {
+        $path = plugin_dir_path(__FILE__) . '/acf-fields';
+        return $path;
+    }
+
+    function allow_svg_type( $mimes ) {
+        if (current_user_can('administrator')) {
+            $mimes['svg'] = 'image/svg+xml';
+        }
+        return $mimes;
+    }
+    
+
+    function filterSlides($args, $request) {
+        if(isset($request['omroep'])){
+            $args['tax_query'] = [
+                [
+                    'taxonomy' => 'tax-omroep',
+                    'field' => 'slug',
+                    'terms' => $request['omroep']
+                ]
+            ];
+        }
+        return $args;
     }
 
     function filterPosts($args, $request) {
@@ -67,6 +119,15 @@ class KabelkrantAPI {
                     )
                 )
             );
+        }
+        if(isset($request['omroep'])){
+            $args['tax_query'] = [
+                [
+                    'taxonomy' => 'tax-omroep',
+                    'field' => 'slug',
+                    'terms' => $request['omroep']
+                ]
+            ];
         }
         return $args;
     }
@@ -112,6 +173,9 @@ class KabelkrantAPI {
             'has_archive' => false,  // it shouldn't have archive page
             'rewrite' => false,  // it shouldn't have rewrite rules
         ));
+
+        // Set taxonomotie to omroep
+
 
         // Add sorting to the post type order property
         $this->addSorting($post_type_name);

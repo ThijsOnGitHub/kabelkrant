@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState} from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Returns a timer that counts up to maxSeconds and then calls onComplete

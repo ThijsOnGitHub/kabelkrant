@@ -3,6 +3,7 @@ import RTVLogo from "../../assets/rtvLogoK.svg"
 import {useContext, useEffect} from "react";
 import {useTimer} from "../../hooks/utilities/useTimer";
 import { NextPrevContext } from "../../context/nextContext";
+import { OmroepContext } from "../../context/omroepContext";
 
 export interface ImageSlideProps {
     backgroundImageURL: string
@@ -14,6 +15,7 @@ export interface ImageSlideProps {
 }
 export const ImageSlide: React.FC<ImageSlideProps> = ({backgroundImageURL,title,onNext,length,setPrevNext = true, ...props}) => {
     const PrevNextContext = useContext(NextPrevContext)
+    const omroepContext = useContext(OmroepContext)
 
     const {resetAndStartTimer}=  useTimer(length ?? 0,onNext)
 
@@ -35,7 +37,7 @@ export const ImageSlide: React.FC<ImageSlideProps> = ({backgroundImageURL,title,
         <div className="image-slide" style={{backgroundImage:`url(${backgroundImageURL})`}}>
             { title != "" &&
                 <div className="image-slide__text-bar">
-                    <img className="image-slide__text-bar-image" src={RTVLogo}/>
+                    <img className="image-slide__text-bar-image" src={omroepContext.titleBarLogo}/>
                     <div className="image-slide__text-bar-text">{title}</div>
                 </div>
             }

@@ -1,44 +1,51 @@
-import { useEffect, useMemo, useState } from "react"
-import { useProcessWordpressPostData } from "./useProcessWordpressPostData"
-import { useTimer } from "./utilities/useTimer"
-import { WordpressClient } from "../types/wordpressTypes/WorpressClient"
+import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
+import { wordpressClient } from "../App"
 import { WordpressPost } from "../types/wordpressTypes/wordpressPost"
-import { WordpressCategory } from "../types/wordpressTypes/wordPressCategories"
+import { useProcessWordpressPostData } from "./useProcessWordpressPostData"
 
-export function useWordpressPostData(){
-    const [wordpressPosts, setWordpressPosts] = useState<(WordpressPost | null)[]>([])
-    const [wordpressCategories, setWordpressCategories] = useState<WordpressCategory[]>([])
+const refreshInterval = 1000 * 60 * 5
 
 
-    const { resetAndStartTimer, stopTimer }= useTimer(false, ()=>{
-        loadPosts()
-    },900000,"postdata")
+export function useWordpressPostData(omroep: string | undefined){
+
+    const baseQuery = useMemo(() => ({"tv-filter": "true"}) , [])
+    const omroepQuery: {omroep: string} |{} = omroep ? {"omroep": omroep} : {}
+    const query = useMemo(() => ({...baseQuery,...omroepQuery}), [baseQuery, omroepQuery]) 
+
+    
+    const {data: wordpressPosts} = useQuery({
+        queryKey: ["posts", {omroep}],
+        queryFn: async () => {
+            return wordpressClient
+            .post()
+            .find(new URLSearchParams(query))
+        },
+        initialData: [],
+        refetchInterval: refreshInterval
+    })
+
+    const {data: wordpressCategories} = useQuery({
+        queryKey: ["categories",{omroep}],
+        queryFn: async () => {
+            return  wordpressClient.postCategory().dangerouslyFindAll()
+        },
+        initialData: [],
+        refetchInterval: refreshInterval
+    })
+
+    const {data: wordpressKabelkrantCategories} = useQuery({
+        queryKey: ["kabelkrantCategories",{omroep}],
+        queryFn: async () => {
+            return  wordpressClient.kabelkrantCategorie().dangerouslyFindAll()
+        },
+        initialData: [],
+        refetchInterval: refreshInterval
+    })
 
     const filteredWordpressPosts = useMemo( ()=>wordpressPosts.filter(post => post != null) as WordpressPost[], [wordpressPosts]) 
-    const { posts,categories} = useProcessWordpressPostData(filteredWordpressPosts,wordpressCategories)
-
-    function loadPosts(){
-        const wordpressClient = new WordpressClient();
-        console.log("Loading posts")
-        // Create all the promises
-        wordpressClient.post()
-            .find(new URLSearchParams({"tv-filter": "true"})).then(result =>{
-                setWordpressPosts(result)
-            });
-        wordpressClient.postCategory().dangerouslyFindAll()
-            .then(result =>{
-                setWordpressCategories(result)
-            });
-    }
+    const { posts,categories,kabelkrantCategories } = useProcessWordpressPostData(filteredWordpressPosts,wordpressCategories, wordpressKabelkrantCategories)
 
 
-    useEffect(() => {
-        loadPosts()
-        resetAndStartTimer()
-        return () => {
-            stopTimer()
-        }
-    },[])
-
-    return { posts, categories}
+    return { posts, categories, kabelkrantCategories, wordpressKabelkrantCategories}
 }

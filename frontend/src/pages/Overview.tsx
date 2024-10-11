@@ -1,14 +1,15 @@
+import { format } from "date-fns"
 import { FC, useMemo, useState } from "react"
+import { useParams } from "react-router-dom"
+import { NextPrevProvider } from "../component/contextProviders/NextPrevProvider"
+import { SelectedSlide } from "../component/SelectedSlide"
+import { FitToScreen } from "../component/slideUtilities/fitToScreen"
+import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar"
+import { renderSlide } from "../functions/renderSlide"
 import { useWordpressPostData } from "../hooks/useWordpressPostData"
 import { useWordpressSlides } from "../hooks/useWordpressSlides"
 import { Slide, SlideTypes } from "../types/Slides"
-import { FitToScreen } from "../component/slideUtilities/fitToScreen"
 import { Kabelkrant, filterSlides } from "./Kabelkrant"
-import { format } from "date-fns"
-import { SelectedSlide } from "../component/SelectedSlide"
-import { renderSlide } from "../functions/renderSlide"
-import { NextPrevProvider } from "../component/NextPrevProvider"
-import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar"
 
 export interface OverviewProps {
 }
@@ -29,8 +30,9 @@ export function translateTypes(type: SlideTypes){
 }
 
 export const Overview: FC<OverviewProps> = (props) => {
-    const { posts, categories } = useWordpressPostData()
-    const { slides } = useWordpressSlides(posts, categories)
+    let {omroep} = useParams<{omroep:string}>()
+    const { posts, categories, kabelkrantCategories} = useWordpressPostData(omroep)
+    const { slides } = useWordpressSlides(omroep,posts, categories, kabelkrantCategories)
     const [date, setDate] = useState(new Date())
     const [selectedSlide, setSelectedSlide] = useState<Slide | null | "kabelkrant">()
 
@@ -91,7 +93,7 @@ export const Overview: FC<OverviewProps> = (props) => {
                             Type: {translateTypes(slide.type)}
                             {
                                 slide.type === SlideTypes.POSTBLOCK ?
-                                <ul>{slide.slides.map(item => <li><strong>{item.category.subject?.subject}</strong>: {item.title} </li>)}</ul>: ""
+                                <ul>{slide.slides.map(item => <li><strong>{item.category?.subject?.subject}</strong>: {item.title} </li>)}</ul>: ""
                             }
                         </div>
                     </div>

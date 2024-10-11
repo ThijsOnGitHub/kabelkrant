@@ -1,4 +1,5 @@
 import { FilesWithMetadata } from "./types/FileMetaTypes"
+import { VideoItem } from "./types/VideoItem"
 
 export enum FunctionKeys {
     SELECT_FOLDER = "select-folder",
@@ -7,6 +8,7 @@ export enum FunctionKeys {
     GET_VIDEOS = "get-videos",
     GET_PLAYLIST = "get-playlist",
     CHECK_OBS_IS_RUNNING = "check-obs-is-running",
+    PLAY_VIDEO_ITEM = "play-video-item",
 }
 
 
@@ -17,6 +19,7 @@ export type Functions  = {
     [FunctionKeys.GET_VIDEOS] : (path:string) => Promise<FilesWithMetadata[]>
     [FunctionKeys.CHECK_OBS_IS_RUNNING] : () => boolean
     [FunctionKeys.GET_PLAYLIST] : () => string[]
+    [FunctionKeys.PLAY_VIDEO_ITEM] : (videoItem:VideoItem) => void
 }
 
 

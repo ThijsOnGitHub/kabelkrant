@@ -4,7 +4,7 @@ export interface ACFPost {
     show_on_tv: boolean;
     tv_settings:{
         title: string;
-        category: number
+        category: number[]
         end_date: string;
         images: number[] | string | false;
         titleOnlyFirstImage: boolean;

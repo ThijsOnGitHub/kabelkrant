@@ -10,10 +10,5 @@ export default defineConfig({
         localsConvention: 'camelCaseOnly',
         scopeBehaviour: 'local'
     },
-    postcss: {
-      plugins: [
-        autoprefixer({}) // add options if needed
-      ],
-    }
   }
 })
