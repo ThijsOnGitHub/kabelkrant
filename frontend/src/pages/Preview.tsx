@@ -1,14 +1,14 @@
 import { useContext, useEffect, useMemo, useState } from "react";
+import { FitToScreen } from "../component/slideUtilities/fitToScreen";
+import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar";
+import { NextPrevContext } from "../context/nextContext";
+import { renderSlide } from "../functions/renderSlide";
+import { useProcessWordpressPostData } from "../hooks/useProcessWordpressPostData";
+import { useProcessWordpressSlides } from "../hooks/useProcessWordpressSlides";
+import { useWordpressPostData } from "../hooks/useWordpressPostData";
+import { SlideTypes, WPSlide } from "../types/Slides";
 import { RequiredWordpressCategory } from "../types/wordpressTypes/wordPressCategories";
 import { RequiredWordpressPost } from "../types/wordpressTypes/wordpressPost";
-import { useProcessWordpressPostData } from "../hooks/useProcessWordpressPostData";
-import { renderSlide } from "../functions/renderSlide";
-import { useProcessWordpressSlides } from "../hooks/useProcessWordpressSlides";
-import { FitToScreen } from "../component/slideUtilities/fitToScreen";
-import { SlideTypes, WPSlide } from "../types/Slides";
-import { NextPrevContext } from "../context/nextContext";
-import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar";
-import { useWordpressPostData } from "../hooks/useWordpressPostData";
 
 export interface PreviewProps {
 }

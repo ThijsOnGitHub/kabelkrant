@@ -68,6 +68,7 @@ class MetaBox{
                     'name' => $category != null ? $category->name : "",
                     'id' => $category != null ? $category->term_id : "",
                 ],
+                
             ];
          }else {
             $data = null;

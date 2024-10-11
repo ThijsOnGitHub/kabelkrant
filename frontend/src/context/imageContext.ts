@@ -27,7 +27,6 @@ export async function getImageUrlByBaseUrl(imageId:number, cacheObject: {[key:nu
             const result = await axios.get(import.meta.env.VITE_API_URL+ "?attachment_id=" + imageId,{
                 responseType: 'arraybuffer',
             })
-            console.log(result)
             let blob = new Blob(
                 [result.data], 
                 { type: result.headers['content-type'] }

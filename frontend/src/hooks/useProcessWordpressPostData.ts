@@ -5,8 +5,6 @@ import {getImageUrlByBaseUrl } from "../context/imageContext";
 import { transFormWordpressCategory, transformWordpressKabelkrantCategory, transformWordpressPost } from "../functions/transformFunctions";
 import { RequiredWordpressCategory } from "../types/wordpressTypes/wordPressCategories";
 import { WordpressKabelkrantCategory } from "../types/wordpressTypes/wordpresskabelkrantCategory";
-import { ka } from "date-fns/locale";
-import { set } from "lodash";
 
 export function useProcessWordpressPostData(wordPressPosts: RequiredWordpressPost[], wordPressCategories: RequiredWordpressCategory[], wordpressKabelkrantCategories: WordpressKabelkrantCategory[] ) {
     const [posts, setPosts] = useState<PostSlideWithoutLength[]>([])

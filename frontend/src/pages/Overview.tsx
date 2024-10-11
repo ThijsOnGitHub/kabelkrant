@@ -1,15 +1,15 @@
+import { format } from "date-fns"
 import { FC, useMemo, useState } from "react"
+import { useParams } from "react-router-dom"
+import { NextPrevProvider } from "../component/contextProviders/NextPrevProvider"
+import { SelectedSlide } from "../component/SelectedSlide"
+import { FitToScreen } from "../component/slideUtilities/fitToScreen"
+import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar"
+import { renderSlide } from "../functions/renderSlide"
 import { useWordpressPostData } from "../hooks/useWordpressPostData"
 import { useWordpressSlides } from "../hooks/useWordpressSlides"
 import { Slide, SlideTypes } from "../types/Slides"
-import { FitToScreen } from "../component/slideUtilities/fitToScreen"
 import { Kabelkrant, filterSlides } from "./Kabelkrant"
-import { format } from "date-fns"
-import { SelectedSlide } from "../component/SelectedSlide"
-import { renderSlide } from "../functions/renderSlide"
-import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar"
-import { useParams, useSearchParams } from "react-router-dom"
-import { NextPrevProvider } from "../component/contextProviders/NextPrevProvider"
 
 export interface OverviewProps {
 }

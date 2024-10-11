@@ -1,12 +1,12 @@
-import {FC, useEffect, useState} from "react";
-import {useWordpressPostData} from "../hooks/useWordpressPostData";
-import {useWordpressSlides} from "../hooks/useWordpressSlides";
-import { Slide} from "../types/Slides";
 import { getDay, getHours } from "date-fns";
+import { FC, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { SlideTransition } from "../component/animations/SlideTransition";
 import { FitToScreen } from "../component/slideUtilities/fitToScreen";
 import { renderSlide } from "../functions/renderSlide";
-import { SlideTransition } from "../component/animations/SlideTransition";
-import { useParams } from "react-router-dom";
+import { useWordpressPostData } from "../hooks/useWordpressPostData";
+import { useWordpressSlides } from "../hooks/useWordpressSlides";
+import { Slide } from "../types/Slides";
 
 export interface TextBlockSlideProps {
 
