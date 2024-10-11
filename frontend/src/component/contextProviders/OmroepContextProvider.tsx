@@ -21,10 +21,15 @@ export function OmroepContextProvider({ children }: OmroepContextProviderProps) 
         queryKey: ['omroepLogo', omroepFetchedData.data?.acf.kabelkrant_logo],
         queryFn: async () => imageContext.getImageUrl(omroepFetchedData.data?.acf.kabelkrant_logo || 0)
     })
+    const omroepTitleBarLogo = useQuery({
+        queryKey: ['omroepTitleBarLogo', omroepFetchedData.data?.acf.kabelkrant_title_bar],
+        queryFn: async () => imageContext.getImageUrl(omroepFetchedData.data?.acf.kabelkrant_title_bar || 0)
+    })
 
     
     const omroepData: OmroepContextType = useMemo(() => ({
             logo: omroepLogo.data || '',
+            titleBarLogo: omroepTitleBarLogo.data || '',
             accentColor: omroepFetchedData.data?.acf.kabelkrant_accent_color || '#000000'
     }), [omroepFetchedData, omroepLogo]);
 
