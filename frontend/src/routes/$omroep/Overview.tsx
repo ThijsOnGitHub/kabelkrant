@@ -1,14 +1,20 @@
-import { getDay, getHours } from 'date-fns'
-import { FC, useEffect, useState } from 'react'
 import { createFileRoute, useParams } from '@tanstack/react-router'
-import { SlideTransition } from '../../component/animations/SlideTransition'
+import { format } from "date-fns"
+import { FC, useMemo, useState } from "react"
+import { filterSlides, Kabelkrant } from '.'
+import { NextPrevProvider } from '../../component/contextProviders/NextPrevProvider'
+import { SelectedSlide } from '../../component/SelectedSlide'
 import { FitToScreen } from '../../component/slideUtilities/fitToScreen'
+import { NextPrevButtonsBar } from '../../component/utilities/NextPrevButtonsBar'
 import { renderSlide } from '../../functions/renderSlide'
 import { useWordpressPostData } from '../../hooks/useWordpressPostData'
 import { useWordpressSlides } from '../../hooks/useWordpressSlides'
-import { Slide, SlideTypes } from '../../types/Slides'
+import { SlideTypes, Slide } from '../../types/Slides'
 
-export interface TextBlockSlideProps {}
+
+export interface OverviewProps {
+}
+
 
 export function translateTypes(type: SlideTypes){
     switch(type){
@@ -23,87 +29,80 @@ export function translateTypes(type: SlideTypes){
     }
 }
 
+export const Overview: FC<OverviewProps> = (props) => {
+    let {omroep} = Route.useParams()
+    const { posts } = useWordpressPostData(omroep)
+    const { slides } = useWordpressSlides(omroep,posts)
+    const [date, setDate] = useState(new Date())
+    const [selectedSlide, setSelectedSlide] = useState<Slide | null | "kabelkrant">()
 
-export function filterSlides(slides: Slide[], date: Date) {
-  return (
-    slides
-      //Filter if slide are in the current hour
-      .filter((slide) => {
-        if (
-          slide.toDate != null &&
-          new Date(slide.toDate).getTime() < date.getTime()
-        )
-          return false
-        if (
-          slide.fromDate != null &&
-          new Date(slide.fromDate).getTime() > date.getTime()
-        )
-          return false
-        if (!slide.hasTimespan) return true
-        return (
-          slide.timespan.days.includes(getDay(date).toString()) &&
-          slide.timespan.hours.includes(getHours(date).toString())
-        )
-      })
-  )
+
+    const filteredSlides = useMemo( ()=> filterSlides(slides, date).map((slide) => {
+      if(slide.type === SlideTypes.POSTBLOCK){
+        return {
+          ...slide,
+          slides: slide.slides.filter((slide) => {
+            if(!slide?.endDate) return true
+            return slide.endDate.getTime() > date.getTime()
+          })
+        }
+      }
+      return slide
+    }).filter(item => {
+        if(!(item.type === SlideTypes.POSTBLOCK)) return true
+        return item.slides.length > 0
+
+    }),[slides,date])
+
+    if(selectedSlide === "kabelkrant"){
+        return <div>
+            <div style={{background: "white", padding: 20}}>
+                <button onClick={()=> setSelectedSlide(null)}>Stop Testen</button>
+            </div>
+        <NextPrevProvider autoGoNextDefault={true}>
+            <>   
+                <NextPrevButtonsBar/>
+                <Kabelkrant />
+            </>
+        </NextPrevProvider>
+        </div>
+    }
+
+    if(selectedSlide != null){
+        return <NextPrevProvider autoGoNextDefault={false}>
+            <SelectedSlide slide={selectedSlide} onClose={() => setSelectedSlide(null)} />
+        </NextPrevProvider>
+    }
+
+    return (
+        <div>
+            <div style={{background: "white", padding: 20}}>
+                <div>Filters</div>
+                <label>Date: <input type="datetime-local" value={format(date,"yyyy-MM-dd")+"T"+format(date,"kk:mm")} onChange={e =>setDate(new Date(e.target.value))}  /></label>
+                <button onClick={()=> setSelectedSlide("kabelkrant")}>Test Kabelkrant</button>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 20, padding: 30 }}>
+                {filteredSlides.map((slide) => {
+                    return <div style={{overflow: "hidden", background: "white", color: "black",borderRadius: 10,width: 340, cursor: "pointer"}} onClick={()=>setSelectedSlide(slide)}> 
+                        <div style={{ background: "black",  }} >
+                            <FitToScreen rerender={false} element={"container"} baseHeight={1080} baseWidth={1920}  >{
+                                renderSlide(slide, () => {})
+                            }</FitToScreen>
+                        </div>
+                        <div style={{padding: 10}}>
+                            Type: {translateTypes(slide.type)}
+                            {
+                                slide.type === SlideTypes.POSTBLOCK ?
+                                <ul>{slide.slides.map(item => <li><strong>{item.category?.subject?.subject}</strong>: {item.title} </li>)}</ul>: ""
+                            }
+                        </div>
+                    </div>
+                })}
+            </div>
+        </div>
+
+    )
 }
-export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
-  let { omroep } = Route.useParams()
-  const [index, setIndex] = useState<number>(0)
-  const { posts } = useWordpressPostData(omroep)
-  const { slides } = useWordpressSlides(omroep, posts)
-
-  const [currentSlides, setCurrentSlides] = useState(
-    filterSlides(slides, new Date()),
-  )
-  const [currentSlide, setCurrentSlide] = useState(currentSlides[index])
-  const [isPaused, setIsPaused] = useState(false)
-
-  function updateCurrentItem(index: number) {
-    if (index == 0) {
-      const filteredSlides = filterSlides(slides, new Date())
-      setCurrentSlides(filteredSlides)
-      setCurrentSlide(filteredSlides[index])
-      return
-    }
-    setCurrentSlide(currentSlides[index])
-  }
-
-  function nextSlide() {
-    if (currentSlides.length < 2) {
-      setIsPaused(true)
-    }
-    setIndex((index) => (index + 1) % currentSlides.length)
-  }
-
-  useEffect(() => {
-    updateCurrentItem(index)
-  }, [index])
-
-  useEffect(() => {
-    if (currentSlides.length < 2) {
-      setCurrentSlides(filterSlides(slides, new Date()))
-      updateCurrentItem(index)
-    }
-    if (currentSlides.length > 1 && isPaused) {
-      setIsPaused(false)
-      nextSlide()
-    }
-  }, [slides])
-
-  return (
-    <FitToScreen baseWidth={1920} baseHeight={1080}>
-      <SlideTransition type="fade" divKey={JSON.stringify(currentSlide)}>
-        {currentSlide ? (
-          renderSlide(currentSlide, nextSlide)
-        ) : (
-          <div style={{ color: 'white' }}>Loading... </div>
-        )}
-      </SlideTransition>
-    </FitToScreen>
-  )
-}
-
 export const Route = createFileRoute('/$omroep/Overview')({
-  component: Kabelkrant,
+  component: Overview,
 })

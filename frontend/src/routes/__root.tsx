@@ -4,9 +4,7 @@ import { OmroepContextProvider } from '../component/contextProviders/OmroepConte
 
 export function RootComponent() {
   return (
-   
     <OmroepContextProvider>
-       Hello!
       <Outlet />
     </OmroepContextProvider>
   )

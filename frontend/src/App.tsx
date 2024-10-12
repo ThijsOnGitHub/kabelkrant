@@ -1,5 +1,5 @@
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { createMemoryHistory, createRouter, RouterProvider } from '@tanstack/react-router';
 import React from 'react';
 import { NextPrevProvider } from './component/contextProviders/NextPrevProvider';
 import { ImageContextProvider } from './component/contextProviders/imageContextProvider';
