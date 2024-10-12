@@ -26,7 +26,7 @@ export const SelectedSlide: React.FC<selectedSlideProps> = ({ slide, onClose }) 
                         {slide.slides.map((newsItem) => {
                             return <li> {newsItem.title}
                                 <ul>
-                                    <li>Categorie: {newsItem.category.subject?.subject}</li>
+                                    <li>Categorie: {newsItem.category?.subject?.subject}</li>
                                     {newsItem.endDate ? <li>Eind datum: {newsItem.endDate.toLocaleDateString()}</li> : null}
                                     {newsItem.postImage ? [<li>Afbeelding lengte: {newsItem.imageLength} Seconden </li>,<li>Afbeelding: {newsItem.postImage}</li>] : null}
                                     <li>Lengte: {newsItem.length} Seconden</li>

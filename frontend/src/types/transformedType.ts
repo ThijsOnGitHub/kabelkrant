@@ -9,7 +9,7 @@ export interface PostSlide {
     titleOnlyFirstImage: boolean;
     length: number,
     categoryId: number,
-    category:  KabelkrantCategory,
+    category?:  KabelkrantCategory,
     categoryImage:string,
     imageLength: number,
     endDate?: Date,
