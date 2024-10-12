@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 const queryClient = new QueryClient()
 
 Sentry.init({
-  dsn: "https://c92f04c49870bcf6a9635bf6986d89bc@o4506860416401408.ingest.us.sentry.io/4508110424440832",
+  dsn: "https://a8ad85fd32ca2ed6a65762d590938ab6@o4508110447181824.ingest.de.sentry.io/4508110456553552",
   integrations: [
     Sentry.browserTracingIntegration(),
     Sentry.replayIntegration(),

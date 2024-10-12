@@ -27,6 +27,7 @@ export function OmroepContextProvider({ children }: OmroepContextProviderProps) 
     })
 
     
+    
     const omroepData: OmroepContextType = useMemo(() => ({
             logo: omroepLogo.data || '',
             titleBarLogo: omroepTitleBarLogo.data || '',

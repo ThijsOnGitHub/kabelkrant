@@ -6,8 +6,8 @@ import autoprefixer from 'autoprefixer'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), sentryVitePlugin({
-    org: "thijs-r2",
-    project: "kabelkrant"
+    org: "thijs-europe",
+    project: "kabelkrant-player"
   })],
 
   css: {

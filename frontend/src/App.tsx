@@ -51,6 +51,7 @@ function App() {
 
     return (
         <>
+        <button onClick={() => methodDoesNotExist()}>Break the world</button>;
             {showDevtools && (
                 <React.Suspense fallback={null}>
                     <ReactQueryDevtoolsProduction />
