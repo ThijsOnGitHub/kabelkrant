@@ -1,8 +1,9 @@
-import {useContext, useEffect, useState} from "react";
-import {KabelkrantCategory, PostCategory, PostSlideWithoutLength} from "../types/transformedType";
-import {ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData, globalTimespanObject} from "../types/Slides";
-import {ImageContext} from "../context/imageContext";
 import _ from "lodash";
+import { useContext, useEffect, useState } from "react";
+import { ImageContext } from "../context/imageContext";
+import { transformPostSlidePreproccedSlideToPostSlide } from "../functions/transformFunctions";
+import { ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData, globalTimespanObject } from "../types/Slides";
+import { KabelkrantCategory, PostCategory, PostSlidePreprocessed } from "../types/transformedType";
 
 export function getGlobalSlideData(slide: WPSlide): globalSlideData{
     let timespanObject: globalTimespanObject = {
@@ -22,7 +23,7 @@ export function getGlobalSlideData(slide: WPSlide): globalSlideData{
     }
 }
 
-export function useProcessWordpressSlides(posts: PostSlideWithoutLength[], categories: PostCategory[],kabelkrantCategories: KabelkrantCategory[] , wpSlides: WPSlide[]){
+export function useProcessWordpressSlides(posts: PostSlidePreprocessed[], categories: PostCategory[],kabelkrantCategories: KabelkrantCategory[] , wpSlides: WPSlide[]){
     const [slides, setSlides] = useState<Slide[]>([])
 
     const {getImageMediaObject,getImageUrl:getImages} = useContext(ImageContext)
@@ -66,14 +67,9 @@ export function useProcessWordpressSlides(posts: PostSlideWithoutLength[], categ
                 return [res]
             }
             const resPosts = posts
-            .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.includes(post.categoryId))
+            .filter(post => acfSlide[SlideTypes.POSTBLOCK].category.some(blockCategory => post.cateogries.map(i => i.categoryId).includes(blockCategory)))
             .map(post => {
-                return ({
-                ...post,
-                length:  typeof post.length === "number" ? post.length :acfSlide[SlideTypes.POSTBLOCK].standardLength,
-                imageLength: typeof post.imageLength === "number" ? post.imageLength :acfSlide[SlideTypes.POSTBLOCK].standardImageLength,
-                category: kabelkrantCategories.find(category => category.id === post.categoryId) as KabelkrantCategory,
-            })})
+                return transformPostSlidePreproccedSlideToPostSlide(post,acfSlide[SlideTypes.POSTBLOCK].category,acfSlide[SlideTypes.POSTBLOCK].standardImageLength,acfSlide[SlideTypes.POSTBLOCK].standardLength)})
             
             return [{
                 type: SlideTypes.POSTBLOCK,

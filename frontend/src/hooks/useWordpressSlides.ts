@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { wordpressClient } from "../App";
-import { KabelkrantCategory, PostCategory, PostSlideWithoutLength } from "../types/transformedType";
+import { KabelkrantCategory, PostCategory, PostSlidePreprocessed } from "../types/transformedType";
 import { useProcessWordpressSlides } from "./useProcessWordpressSlides";
 
 
 
-export function useWordpressSlides(omroepSlug:string | undefined ,posts: PostSlideWithoutLength[], categories: PostCategory[], kabelkrantCategories: KabelkrantCategory[]){
+export function useWordpressSlides(omroepSlug:string | undefined ,posts: PostSlidePreprocessed[], categories: PostCategory[], kabelkrantCategories: KabelkrantCategory[]){
 
     const {data: wpSlides} = useQuery({
         queryKey: ["slides", {omroepSlug}],

@@ -1,4 +1,4 @@
-import {SubjectProps} from "../component/slideUtilities/Subject";
+import { SubjectProps } from "../component/slideUtilities/Subject";
 
 
 
@@ -8,15 +8,24 @@ export interface PostSlide {
     postImage: string[],
     titleOnlyFirstImage: boolean;
     length: number,
-    categoryImage:string,
     categoryId: number,
     category:  KabelkrantCategory,
+    categoryImage:string,
     imageLength: number,
     endDate?: Date,
 }
 
-export type PostSlideWithoutLength = Omit<PostSlide, 'length' | 'category' | 'imageLength'> & {length: string | number, imageLength: (string | number)} 
+export type PostSlideCategory = {
+    categoryId: number,
+    category: KabelkrantCategory,
+    categoryImage: string
+}
 
+export type PostSlidePreprocessed = Omit<PostSlide, 'categoryId' | 'category' | 'categoryImage' | 'imageLength' | 'lenght'> & {
+    cateogries: PostSlideCategory[]
+    length?: number,
+    imageLength?: number
+}
 export interface PostCategory {
     id: number
 }
