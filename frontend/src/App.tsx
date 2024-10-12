@@ -51,8 +51,6 @@ function App() {
 
     return (
         <>
-        {/*@ts-ignore*/}
-        <button onClick={() => methodDoesNotExist()}>Break the world</button>;
             {showDevtools && (
                 <React.Suspense fallback={null}>
                     <ReactQueryDevtoolsProduction />
