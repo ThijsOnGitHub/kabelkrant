@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { ImageContext } from "../context/imageContext";
 import { transformPostSlidePreproccedSlideToPostSlide } from "../functions/transformFunctions";
 import { ImageSlide, Slide, SlideTypes, TextSlide, WPSlide, globalSlideData, globalTimespanObject } from "../types/Slides";
-import { KabelkrantCategory, PostCategory, PostSlidePreprocessed } from "../types/transformedType";
+import { PostSlidePreprocessed } from "../types/transformedType";
 
 export function getGlobalSlideData(slide: WPSlide): globalSlideData{
     let timespanObject: globalTimespanObject = {
@@ -23,10 +23,10 @@ export function getGlobalSlideData(slide: WPSlide): globalSlideData{
     }
 }
 
-export function useProcessWordpressSlides(posts: PostSlidePreprocessed[], categories: PostCategory[],kabelkrantCategories: KabelkrantCategory[] , wpSlides: WPSlide[]){
+export function useProcessWordpressSlides(posts: PostSlidePreprocessed[], wpSlides: WPSlide[]){
     const [slides, setSlides] = useState<Slide[]>([])
 
-    const {getImageMediaObject,getImageUrl:getImages} = useContext(ImageContext)
+    const {getImageUrl:getImages} = useContext(ImageContext)
 
     async function updateSlides(){
         const processedSlides =await Promise.all(wpSlides.map<Promise<Slide[]> >( async slide => {
@@ -85,7 +85,7 @@ export function useProcessWordpressSlides(posts: PostSlidePreprocessed[], catego
 
     useEffect(()=>{
         updateSlides()
-    },[wpSlides,posts,categories])
+    },[wpSlides,posts])
 
     return {slides}
 }

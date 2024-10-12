@@ -30,11 +30,10 @@ export type MessageData = NewData
 export function Preview(props: PreviewProps) {
     const [data, setData] = useState<NewData['data']>()
     const postObject = useMemo(()=> data?.post != null ? [data.post] : [],[data]) 
-    const catObject = useMemo(()=> data?.category != null ? [data.category] : [],[data])
     const PrevNextContext = useContext(NextPrevContext)
 
-    const {kabelkrantCategories, wordpressKabelkrantCategories} = useWordpressPostData('')
-    const {posts,categories} = useProcessWordpressPostData(postObject,catObject, wordpressKabelkrantCategories)
+    const {wordpressKabelkrantCategories} = useWordpressPostData('')
+    const {posts} = useProcessWordpressPostData(postObject, wordpressKabelkrantCategories)
     const sideProgram: WPSlide[] = useMemo(() => ([{
         menu_order:1,
         acf: {
@@ -51,7 +50,7 @@ export function Preview(props: PreviewProps) {
             toDate: null
         }
     }] ),[data])
-    const {slides} = useProcessWordpressSlides(posts,categories,kabelkrantCategories,sideProgram) 
+    const {slides} = useProcessWordpressSlides(posts,sideProgram) 
 
     function procesMessage(e:MessageEvent){
         const message = e.data as MessageData

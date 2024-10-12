@@ -25,8 +25,8 @@ export function filterSlides(slides: Slide[], date: Date){
 export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
     let {omroep} = useParams<{omroep:string}>()
     const [index,setIndex] = useState<number>(0)
-    const {posts,categories,kabelkrantCategories} = useWordpressPostData(omroep)
-    const {slides} = useWordpressSlides(omroep, posts, categories, kabelkrantCategories)
+    const {posts} = useWordpressPostData(omroep)
+    const {slides} = useWordpressSlides(omroep, posts)
 
 
     const [currentSlides,setCurrentSlides] = useState(filterSlides(slides,new Date()))

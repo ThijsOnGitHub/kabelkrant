@@ -31,8 +31,8 @@ export function translateTypes(type: SlideTypes){
 
 export const Overview: FC<OverviewProps> = (props) => {
     let {omroep} = useParams<{omroep:string}>()
-    const { posts, categories, kabelkrantCategories} = useWordpressPostData(omroep)
-    const { slides } = useWordpressSlides(omroep,posts, categories, kabelkrantCategories)
+    const { posts } = useWordpressPostData(omroep)
+    const { slides } = useWordpressSlides(omroep,posts)
     const [date, setDate] = useState(new Date())
     const [selectedSlide, setSelectedSlide] = useState<Slide | null | "kabelkrant">()
 
