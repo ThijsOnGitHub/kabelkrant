@@ -9,6 +9,7 @@ import { useWordpressPostData } from "../hooks/useWordpressPostData";
 import { SlideTypes, WPSlide } from "../types/Slides";
 import { RequiredWordpressCategory } from "../types/wordpressTypes/wordPressCategories";
 import { RequiredWordpressPost } from "../types/wordpressTypes/wordpressPost";
+import { createFileRoute, createRoute } from "@tanstack/react-router";
 
 export interface PreviewProps {
 }
@@ -89,3 +90,7 @@ export function Preview(props: PreviewProps) {
         </div>
     )
 }
+
+export const Route = createFileRoute("/Preview")({
+    component: Preview
+})

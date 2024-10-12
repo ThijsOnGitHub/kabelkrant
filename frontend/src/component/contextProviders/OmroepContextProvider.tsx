@@ -3,7 +3,7 @@ import { OmroepContext, OmroepContextType } from "../../context/omroepContext";
 import { useQuery } from "@tanstack/react-query";
 import { ImageContext } from "../../context/imageContext";
 import { fetchOmroep } from "../../functions/fetchFunctions/fetchOmroep";
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 
 interface OmroepContextProviderProps {
     children: React.ReactNode;
@@ -11,7 +11,9 @@ interface OmroepContextProviderProps {
 
 
 export function OmroepContextProvider({ children }: OmroepContextProviderProps) {
-    let {omroep} = useParams<{omroep:string}>()
+    let {omroep} = useParams({
+        strict: false
+    })
     const imageContext = useContext(ImageContext)
     const omroepFetchedData = useQuery({
         queryKey: ['omroepData', omroep],

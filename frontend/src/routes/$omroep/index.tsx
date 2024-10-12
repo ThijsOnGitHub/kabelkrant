@@ -1,12 +1,13 @@
+import { createFileRoute, useParams } from '@tanstack/react-router'
 import { getDay, getHours } from "date-fns";
 import { FC, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { SlideTransition } from "../component/animations/SlideTransition";
-import { FitToScreen } from "../component/slideUtilities/fitToScreen";
-import { renderSlide } from "../functions/renderSlide";
-import { useWordpressPostData } from "../hooks/useWordpressPostData";
-import { useWordpressSlides } from "../hooks/useWordpressSlides";
-import { Slide } from "../types/Slides";
+import { SlideTransition } from '../../component/animations/SlideTransition';
+import { FitToScreen } from '../../component/slideUtilities/fitToScreen';
+import { renderSlide } from '../../functions/renderSlide';
+import { useWordpressPostData } from '../../hooks/useWordpressPostData';
+import { useWordpressSlides } from '../../hooks/useWordpressSlides';
+import { Slide } from '../../types/Slides';
+
 
 export interface TextBlockSlideProps {
 
@@ -23,7 +24,7 @@ export function filterSlides(slides: Slide[], date: Date){
     })
 }
 export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
-    let {omroep} = useParams<{omroep:string}>()
+    let {omroep} = Route.useParams()
     const [index,setIndex] = useState<number>(0)
     const {posts} = useWordpressPostData(omroep)
     const {slides} = useWordpressSlides(omroep, posts)
@@ -74,3 +75,7 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
     </FitToScreen>
     
 }
+
+export const Route = createFileRoute('/$omroep/')({
+  component: Kabelkrant,
+})

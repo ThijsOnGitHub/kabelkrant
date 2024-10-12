@@ -1,9 +1,7 @@
-import { useContext, useEffect } from "react"
 import { renderSlide } from "../functions/renderSlide"
-import { translateTypes } from "../pages/Overview"
+import { translateTypes } from "../routes/$omroep/Overview"
 import { Slide, SlideTypes } from "../types/Slides"
 import { FitToScreen } from "./slideUtilities/fitToScreen"
-import { NextPrevContext } from "../context/nextContext"
 import { NextPrevButtonsBar } from "./utilities/NextPrevButtonsBar"
 
 export interface selectedSlideProps {

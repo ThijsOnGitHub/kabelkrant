@@ -1,19 +1,21 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import autoprefixer from 'autoprefixer'
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), sentryVitePlugin({
-    org: "thijs-europe",
-    project: "kabelkrant-player"
-  })],
-
+  plugins: [
+    react(),
+    TanStackRouterVite(),
+    sentryVitePlugin({
+      org: "thijs-europe",
+      project: "kabelkrant-player"
+    })],
   css: {
-    modules:{
-        localsConvention: 'camelCaseOnly',
-        scopeBehaviour: 'local'
+    modules: {
+      localsConvention: 'camelCaseOnly',
+      scopeBehaviour: 'local'
     },
   },
   build: {
