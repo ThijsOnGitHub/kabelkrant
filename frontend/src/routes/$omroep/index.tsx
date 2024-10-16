@@ -70,7 +70,7 @@ export const Kabelkrant: FC<TextBlockSlideProps> = ({omroep}) => {
             setIsPaused(false)
             nextSlide()
         }
-    }, [slides])
+    }, [slides, isPaused, currentSlides])
 
 
     return <FitToScreen baseWidth={1920} baseHeight={1080}>
