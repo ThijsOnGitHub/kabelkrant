@@ -18,8 +18,8 @@ export function transformPostSlidePreproccedSlideToPostSlide(preproccesedSlide: 
 
     return {
         ...preproccesedSlide,
-        length: preproccesedSlide.length ?? textlength,
-        imageLength: preproccesedSlide.imageLength ?? imageLength,
+        length: preproccesedSlide?.length ?? textlength,
+        imageLength: preproccesedSlide?.imageLength ?? imageLength,
         ...category
     }
 }
