@@ -1,19 +1,19 @@
+import { createFileRoute, useParams } from '@tanstack/react-router'
 import { format } from "date-fns"
 import { FC, useMemo, useState } from "react"
-import { useParams } from "react-router-dom"
-import { NextPrevProvider } from "../component/contextProviders/NextPrevProvider"
-import { SelectedSlide } from "../component/SelectedSlide"
-import { FitToScreen } from "../component/slideUtilities/fitToScreen"
-import { NextPrevButtonsBar } from "../component/utilities/NextPrevButtonsBar"
-import { renderSlide } from "../functions/renderSlide"
-import { useWordpressPostData } from "../hooks/useWordpressPostData"
-import { useWordpressSlides } from "../hooks/useWordpressSlides"
-import { Slide, SlideTypes } from "../types/Slides"
-import { Kabelkrant, filterSlides } from "./Kabelkrant"
+import { filterSlides, Kabelkrant } from '.'
+import { NextPrevProvider } from '../../component/contextProviders/NextPrevProvider'
+import { SelectedSlide } from '../../component/SelectedSlide'
+import { FitToScreen } from '../../component/slideUtilities/fitToScreen'
+import { NextPrevButtonsBar } from '../../component/utilities/NextPrevButtonsBar'
+import { renderSlide } from '../../functions/renderSlide'
+import { useWordpressPostData } from '../../hooks/useWordpressPostData'
+import { useWordpressSlides } from '../../hooks/useWordpressSlides'
+import { SlideTypes, Slide } from '../../types/Slides'
+
 
 export interface OverviewProps {
 }
-
 
 
 export function translateTypes(type: SlideTypes){
@@ -30,9 +30,9 @@ export function translateTypes(type: SlideTypes){
 }
 
 export const Overview: FC<OverviewProps> = (props) => {
-    let {omroep} = useParams<{omroep:string}>()
-    const { posts, categories, kabelkrantCategories} = useWordpressPostData(omroep)
-    const { slides } = useWordpressSlides(omroep,posts, categories, kabelkrantCategories)
+    let {omroep} = Route.useParams()
+    const { posts } = useWordpressPostData(omroep)
+    const { slides } = useWordpressSlides(omroep,posts)
     const [date, setDate] = useState(new Date())
     const [selectedSlide, setSelectedSlide] = useState<Slide | null | "kabelkrant">()
 
@@ -103,3 +103,6 @@ export const Overview: FC<OverviewProps> = (props) => {
 
     )
 }
+export const Route = createFileRoute('/$omroep/Overview')({
+  component: Overview,
+})

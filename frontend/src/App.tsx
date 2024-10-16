@@ -1,14 +1,11 @@
-import './style/global.scss'
-import { Kabelkrant } from "./pages/Kabelkrant";
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Overview } from './pages/Overview';
-import { Preview } from './pages/Preview';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { createMemoryHistory, createRouter, RouterProvider } from '@tanstack/react-router';
+import React from 'react';
 import { NextPrevProvider } from './component/contextProviders/NextPrevProvider';
 import { ImageContextProvider } from './component/contextProviders/imageContextProvider';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { BaseLayout } from './pages/baseLayout/baseLayout';
+import './style/global.scss';
 import { WordpressClient } from './types/wordpressTypes/WorpressClient';
-import React from 'react';
+import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
 const ReactQueryDevtoolsProduction = React.lazy(() =>
     import('@tanstack/react-query-devtools/build/modern/production.js').then(
@@ -19,28 +16,19 @@ const ReactQueryDevtoolsProduction = React.lazy(() =>
 )
 
 export const wordpressClient = new WordpressClient();
+// Import the generated route tree
+import { routeTree } from './routeTree.gen';
 
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <BaseLayout />,
-        children: [
-            {
-                path: '/:omroep',
-                element: <Kabelkrant />
+// Create a new router instance
+const router = createRouter({ routeTree })
 
-            },
-            {
-                path: '/:omroep/overview',
-                element: <Overview />
-            },
-            {
-                path: '/preview',
-                element: <Preview />
-            }
-        ]
-    }
-])
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
+
 
 function App() {
     const [showDevtools, setShowDevtools] = React.useState(false)
@@ -56,6 +44,7 @@ function App() {
                     <ReactQueryDevtoolsProduction />
                 </React.Suspense>
             )}
+            <TanStackRouterDevtools router={router} />
             <ReactQueryDevtools />
             <NextPrevProvider>
                 <ImageContextProvider>

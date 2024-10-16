@@ -1,9 +1,7 @@
-import { useContext, useEffect } from "react"
 import { renderSlide } from "../functions/renderSlide"
-import { translateTypes } from "../pages/Overview"
+import { translateTypes } from "../routes/$omroep/Overview"
 import { Slide, SlideTypes } from "../types/Slides"
 import { FitToScreen } from "./slideUtilities/fitToScreen"
-import { NextPrevContext } from "../context/nextContext"
 import { NextPrevButtonsBar } from "./utilities/NextPrevButtonsBar"
 
 export interface selectedSlideProps {
@@ -26,7 +24,7 @@ export const SelectedSlide: React.FC<selectedSlideProps> = ({ slide, onClose }) 
                         {slide.slides.map((newsItem) => {
                             return <li> {newsItem.title}
                                 <ul>
-                                    <li>Categorie: {newsItem.category.subject?.subject}</li>
+                                    <li>Categorie: {newsItem.category?.subject?.subject}</li>
                                     {newsItem.endDate ? <li>Eind datum: {newsItem.endDate.toLocaleDateString()}</li> : null}
                                     {newsItem.postImage ? [<li>Afbeelding lengte: {newsItem.imageLength} Seconden </li>,<li>Afbeelding: {newsItem.postImage}</li>] : null}
                                     <li>Lengte: {newsItem.length} Seconden</li>
