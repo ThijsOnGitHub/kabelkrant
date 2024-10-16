@@ -10,7 +10,7 @@ import { Slide } from '../../types/Slides';
 
 
 export interface TextBlockSlideProps {
-
+    omroep: string
 }
 
 export function filterSlides(slides: Slide[], date: Date){
@@ -23,8 +23,13 @@ export function filterSlides(slides: Slide[], date: Date){
         return slide.timespan.days.includes(getDay(date).toString()) && slide.timespan.hours.includes(getHours(date).toString())
     })
 }
-export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
+
+export const KabelkrantPage = () => {
     let {omroep} = Route.useParams()
+    return <Kabelkrant omroep={omroep}/>
+}
+
+export const Kabelkrant: FC<TextBlockSlideProps> = ({omroep}) => {
     const [index,setIndex] = useState<number>(0)
     const {posts} = useWordpressPostData(omroep)
     const {slides} = useWordpressSlides(omroep, posts)
@@ -77,5 +82,5 @@ export const Kabelkrant: FC<TextBlockSlideProps> = (props) => {
 }
 
 export const Route = createFileRoute('/$omroep/')({
-  component: Kabelkrant,
+  component: KabelkrantPage,
 })

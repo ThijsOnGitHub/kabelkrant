@@ -62,7 +62,7 @@ export const Overview: FC<OverviewProps> = (props) => {
         <NextPrevProvider autoGoNextDefault={true}>
             <>   
                 <NextPrevButtonsBar/>
-                <Kabelkrant />
+                <Kabelkrant omroep={omroep} />
             </>
         </NextPrevProvider>
         </div>
